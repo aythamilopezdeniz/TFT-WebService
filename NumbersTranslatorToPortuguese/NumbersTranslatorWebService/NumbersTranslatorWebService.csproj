@@ -62,7 +62,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="NumbersTranslatorWebService.asmx" />
-    <Content Include="Service1.svc" />
+    <Content Include="NumberTranslatorService.svc" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
@@ -70,11 +70,12 @@
       <DependentUpon>NumbersTranslatorWebService.asmx</DependentUpon>
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Service1.svc.cs">
-      <DependentUpon>Service1.svc</DependentUpon>
+    <Compile Include="NumberTranslatorService.svc.cs">
+      <DependentUpon>NumberTranslatorService.svc</DependentUpon>
     </Compile>
-    <Compile Include="IService1.cs" />
+    <Compile Include="NumberTranslatorIService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Entities\Treatment.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
