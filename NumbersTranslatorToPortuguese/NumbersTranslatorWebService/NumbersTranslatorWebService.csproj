@@ -66,6 +66,10 @@
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Entities\Cardinal.cs" />
+    <Compile Include="Rules\CardinalRules.cs" />
+    <Compile Include="Entities\Number.cs" />
+    <Compile Include="Entities\Ordinal.cs" />
     <Compile Include="NumbersTranslatorWebService.asmx.cs">
       <DependentUpon>NumbersTranslatorWebService.asmx</DependentUpon>
       <SubType>Component</SubType>
@@ -76,6 +80,7 @@
     <Compile Include="NumberTranslatorIService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Entities\Treatment.cs" />
+    <Compile Include="Rules\OrdinalRules.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

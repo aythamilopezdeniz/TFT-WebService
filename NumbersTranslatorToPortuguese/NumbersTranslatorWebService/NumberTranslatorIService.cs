@@ -1,4 +1,5 @@
 ﻿using Entities;
+using System.Collections;
 using System.Runtime.Serialization;
 using System.ServiceModel;
 
@@ -18,6 +19,9 @@ namespace NumbersTranslatorWebService
         // TODO: agregue aquí sus operaciones de servicio
         [OperationContract]
         Treatment ValidateText(string text);
+
+        [OperationContract]
+        ArrayList TranslateText(Treatment treatment, string text);
     }
 
 

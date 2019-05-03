@@ -5,6 +5,7 @@ namespace Entities
     public class Treatment
     {
         private string text { get; set; }
+        private bool valideNumber { get; set; }
         private bool integerNumber { get; set; }
         private bool decimalNumber { get; set; }
         private bool fractionalNumber { get; set; }
@@ -17,6 +18,7 @@ namespace Entities
         public Treatment(string text)
         {
             this.text = text;
+            this.valideNumber = false;
             this.integerNumber = false;
             this.decimalNumber = false;
             this.fractionalNumber = false;
@@ -33,6 +35,9 @@ namespace Entities
             this.decimalNumber = checkDecimalNumber(this.text);
             this.fractionalNumber = checkFractionalNumber(this.text);
             this.exponentialNumber = checkExponentialNumber(this.text);
+            if (this.integerNumber.Equals(true) || this.decimalNumber.Equals(true) ||
+                this.fractionalNumber.Equals(true) || this.exponentialNumber.Equals(true))
+                this.valideNumber = true;
         }
 
         private bool checkIntegerNumber(string text)
@@ -58,6 +63,11 @@ namespace Entities
         public string getText()
         {
             return this.text;
+        }
+
+        public bool getValideNumber()
+        {
+            return this.valideNumber;
         }
 
         public bool getIntegerNumber()

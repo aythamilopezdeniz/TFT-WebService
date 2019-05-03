@@ -15,3 +15,12 @@
     padding: 0 30px 30px 30px;
     max-width: 25%;
 }
+
+.input-group > .input-group-prepend {
+    padding-right: 0;
+    padding-left: 0;
+    padding: 0.25rem 0.5rem;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    border-radius: 0.2rem;
+}

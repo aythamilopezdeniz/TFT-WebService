@@ -1,11 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.Serialization;
-using System.ServiceModel;
-using System.ServiceModel.Web;
-using System.Text;
+using System.Collections;
 using Entities;
+using NumbersTranslatorWebService.Entities;
 
 namespace NumbersTranslatorWebService
 {
@@ -36,6 +32,24 @@ namespace NumbersTranslatorWebService
             Treatment treatment = new Treatment(text);
             treatment.checkNumber();
             return treatment;
+        }
+
+        public ArrayList TranslateText(Treatment treatment, string text)
+        {
+            ArrayList list = new ArrayList();
+            if (treatment.getValideNumber().Equals(true))
+            {
+                //Number number = new Cardinal();
+                //list.Add(number.GetNumber(treatment.getText()));
+                Number cardinal = new Cardinal(text);
+                Number ordinal = new Ordinal(text);
+                if (cardinal.IsNegative())
+                    list.Add("Menos");
+                list.Add(cardinal.Translate(text));
+                list.Add(ordinal.Translate(text));
+                list.Add(cardinal.GetNumber());
+            }
+            return list;
         }
     }
 }
