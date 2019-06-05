@@ -43,10 +43,10 @@ namespace NumbersTranslatorWebService
                 //list.Add(number.GetNumber(treatment.getText()));
                 Number cardinal = new Cardinal(text);
                 Number ordinal = new Ordinal(text);
-                if (cardinal.IsNegative())
-                    list.Add("Menos");
-                list.Add(cardinal.Translate(text));
-                list.Add(ordinal.Translate(text));
+                //if (cardinal.IsNegative())
+                //    list.Add("Menos");
+                list.Add(cardinal.Translate(treatment));
+                list.Add("Nada"/*ordinal.Translate(treatment)*/);
                 list.Add(cardinal.GetNumber());
             }
             return list;

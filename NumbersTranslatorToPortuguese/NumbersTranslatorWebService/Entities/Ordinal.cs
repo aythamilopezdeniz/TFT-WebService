@@ -1,4 +1,5 @@
-﻿using NumbersTranslatorWebService.Rules;
+﻿using Entities;
+using NumbersTranslatorWebService.Rules;
 using System;
 using System.Collections;
 
@@ -14,12 +15,12 @@ namespace NumbersTranslatorWebService.Entities
             Initialize(dato);
         }
 
-        public override string Translate(string number)
+        public override string Translate(Treatment treatment)
         {
             OrdinalRules ordinalRules = new OrdinalRules();
             ordinalRules.SortedUnitsNumbers();
             SortedList list = ordinalRules.GetSortedListNumbers();
-            return (string) list[Convert.ToInt32(number)];
+            return (string) list[Convert.ToInt32(treatment.getText())];
         }
     }
 }

@@ -17,3 +17,7 @@
 #title, .jumbotron p {
     color: white;
 }
+
+#TabsPanel {
+    margin-top: -5%;
+}
