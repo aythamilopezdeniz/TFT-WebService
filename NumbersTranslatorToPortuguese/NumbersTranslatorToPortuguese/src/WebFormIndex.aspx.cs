@@ -25,6 +25,7 @@ namespace NumbersTranslatorToPortuguese.src
 
                 NumberTranslatorService service = new NumberTranslatorService();
                 Treatment treatment = service.ValidateText(Text.Text);
+                ArrayList translation = service.TranslateText(treatment);
                 
                 //CreateContents(service);
                 
@@ -34,9 +35,14 @@ namespace NumbersTranslatorToPortuguese.src
                 //string number = (string) list[0]; // otra opción: string number = list[0].ToString();
                 //TextResult1.Text = number;
 
-                TextResult1.Text = (string)service.TranslateText(treatment, Text.Text)[0];
-                TextResult2.Text = (string)service.TranslateText(treatment, Text.Text)[1];
-                TextResult3.Text = treatment.getFractionalNumber().ToString();
+                //TextResult1.Text = (string)service.TranslateText(treatment, Text.Text)[0];
+                //TextResult2.Text = (string)service.TranslateText(treatment, Text.Text)[1];
+                //TextResult3.Text = (string)service.TranslateText(treatment, Text.Text)[2];
+                //TextResult4.Text = treatment.getExponentialNumber().ToString();
+
+                TextResult1.Text = (string) translation[0];
+                TextResult2.Text = (string) translation[1];
+                TextResult3.Text = (string) translation[2];
                 TextResult4.Text = treatment.getExponentialNumber().ToString();
 
                 //TextResult1.InnerHtml = (string)service.TranslateText(treatment, Text.Text)[0];
@@ -93,7 +99,8 @@ namespace NumbersTranslatorToPortuguese.src
                 tabsContent.Controls.Add(pane);
 
                 HtmlGenericControl p = new HtmlGenericControl("p");
-                p.InnerHtml = (string) service.TranslateText(treatment, Text.Text)[i];
+                //p.InnerHtml = (string) service.TranslateText(treatment, Text.Text)[i];
+                p.InnerHtml = (string) service.TranslateText(treatment)[i];
                 pane.Controls.Add(p);
             }
         }

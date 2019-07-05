@@ -21,7 +21,8 @@ namespace NumbersTranslatorWebService
         Treatment ValidateText(string text);
 
         [OperationContract]
-        ArrayList TranslateText(Treatment treatment, string text);
+        //ArrayList TranslateText(Treatment treatment, string text);
+        ArrayList TranslateText(Treatment treatment);
     }
 
 

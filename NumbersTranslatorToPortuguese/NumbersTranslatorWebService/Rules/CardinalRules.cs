@@ -5,7 +5,6 @@ namespace NumbersTranslatorWebService.Rules
 {
     public class CardinalRules
     {
-        //private ArrayList UnitsNumbers { get; }
         private SortedList SortedListUnitsNumbers { get; }
         private SortedList SortedListTensNumbers { get; }
         private SortedList SortedListHundredsNumbers { get; }
@@ -15,7 +14,6 @@ namespace NumbersTranslatorWebService.Rules
 
         public CardinalRules()
         {
-            //UnitsNumbers = new ArrayList();
             SortedListUnitsNumbers = new SortedList();
             SortedListTensNumbers = new SortedList();
             SortedListHundredsNumbers = new SortedList();
@@ -23,25 +21,6 @@ namespace NumbersTranslatorWebService.Rules
             SortedListShortScaleNumbers = new SortedList<string, string>();
             SortedListLongScaleNumbers = new SortedList<string, string>();
         }
-
-        //public void ListUnitsNumbers()
-        //{
-        //    UnitsNumbers.Add("um");
-        //    UnitsNumbers.Add("dois");
-        //    UnitsNumbers.Add("três");
-        //    UnitsNumbers.Add("quatro");
-        //    UnitsNumbers.Add("cinco");
-        //    UnitsNumbers.Add("seis");
-        //    UnitsNumbers.Add("sete");
-        //    UnitsNumbers.Add("oito");
-        //    UnitsNumbers.Add("nove");
-        //    UnitsNumbers.Add("dez");
-        //}
-
-        //public ArrayList GetUnitsNumbers()
-        //{
-        //    return UnitsNumbers;
-        //}
 
         public void SortedUnitsNumbers()
         {
@@ -97,34 +76,32 @@ namespace NumbersTranslatorWebService.Rules
 
         public void SortedShortScaleNumbers()
         {
-            SortedListShortScaleNumbers.Add("1000", "mil");
             SortedListShortScaleNumbers.Add("1000000", "milhão");
             SortedListShortScaleNumbers.Add("1000000000", "bilhâo");
         }
 
         public void SortedLongScaleNumbers()
         {
-            SortedListLongScaleNumbers.Add("1000", "mil");
             SortedListLongScaleNumbers.Add("1000000", "milhão"); // Un millón 10^6
             SortedListLongScaleNumbers.Add("1000000000000", "bilião"); // Un billón 10^12
             SortedListLongScaleNumbers.Add("1000000000000000000", "trilião"); // Un trillón 10^18
-            SortedListLongScaleNumbers.Add("1000000000000000000000000", "quatrilião"); // Un cuatrillón 10^24
+            SortedListLongScaleNumbers.Add("1000000000000000000000000", "quadrilião"); // Un cuatrillón 10^24
             SortedListLongScaleNumbers.Add("1000000000000000000000000000000", "quintilião"); // Un quintillón 10^30
             SortedListLongScaleNumbers.Add("1000000000000000000000000000000000000", "sextilião"); // Un sextillón 10^36
             SortedListLongScaleNumbers.Add("1000000000000000000000000000000000000000000", "septilião"); // Un septillón 10^42
             SortedListLongScaleNumbers.Add("1000000000000000000000000000000000000000000000000", "octilião"); // Un optillón 10^48
-            SortedListLongScaleNumbers.Add("1000000000000000000000000000000000000000000000000000000", "novilião"); // Un nonillón 10^54
-            SortedListLongScaleNumbers.Add("1000000000000000000000000000000000000000000000000000000000000", "dezilião"); // Un decillón 10^60
-            SortedListLongScaleNumbers.Add("1000000000000000000000000000000000000000000000000000000000000000000", "onzilião"); // Un undecillón 10^66
-            SortedListLongScaleNumbers.Add("1000000000000000000000000000000000000000000000000000000000000000000000000", "dozilião"); // Un duodecillón 10^72
-            SortedListLongScaleNumbers.Add("1000000000000000000000000000000000000000000000000000000000000000000000000000000", "trezilião"); // Un tredecillón 10^78
-            SortedListLongScaleNumbers.Add("1000000000000000000000000000000000000000000000000000000000000000000000000000000000000", "catorzilião"); // Un cuatordecillón 10^84
-            SortedListLongScaleNumbers.Add("1000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000", "quinzilião"); // Un quindecillón 10^90
-            SortedListLongScaleNumbers.Add("1000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000", "dezasseisilião"); // Un sexdecillón 10^96
-            SortedListLongScaleNumbers.Add("1000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000", "dezassetilião"); // Un septendecillón 10^102
-            SortedListLongScaleNumbers.Add("1000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000", "dezoitilião"); // Un optodecillón 10^108
-            SortedListLongScaleNumbers.Add("1000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000", "dezanovilião"); // Un novendecillón 10^114
-            SortedListLongScaleNumbers.Add("1000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000", "vintilião"); // Un novendecillón 10^120
+            SortedListLongScaleNumbers.Add("1000000000000000000000000000000000000000000000000000000", "nonilião"); // Un nonillón 10^54
+            SortedListLongScaleNumbers.Add("1000000000000000000000000000000000000000000000000000000000000", "decilião"); // Un decillón 10^60
+            SortedListLongScaleNumbers.Add("1000000000000000000000000000000000000000000000000000000000000000000", "undelião"); // Un undecillón 10^66
+            SortedListLongScaleNumbers.Add("1000000000000000000000000000000000000000000000000000000000000000000000000", "doudecilião"); // Un duodecillón 10^72
+            SortedListLongScaleNumbers.Add("1000000000000000000000000000000000000000000000000000000000000000000000000000000", "tredecilião"); // Un tredecillón 10^78
+            SortedListLongScaleNumbers.Add("1000000000000000000000000000000000000000000000000000000000000000000000000000000000000", "quatuordecilião"); // Un cuatordecillón 10^84
+            SortedListLongScaleNumbers.Add("1000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000", "quindecilião"); // Un quindecillón 10^90
+            SortedListLongScaleNumbers.Add("1000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000", "sedecilião"); // Un sexdecillón 10^96
+            SortedListLongScaleNumbers.Add("1000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000", "septendecilião"); // Un septendecillón 10^102
+            SortedListLongScaleNumbers.Add("1000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000", "optodecilião"); // Un optodecillón 10^108
+            SortedListLongScaleNumbers.Add("1000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000", "nonidecilião"); // Un novendecillón 10^114
+            SortedListLongScaleNumbers.Add("1000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000", "vintilião"); // Un vigintillón 10^120
         }
 
         public SortedList GetSortedListUnitsNumbers()
