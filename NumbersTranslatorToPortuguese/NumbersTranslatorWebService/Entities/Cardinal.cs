@@ -18,9 +18,7 @@ namespace NumbersTranslatorWebService.Entities
         private ArrayList sentence;
         private ArrayList digits;
         private ArrayList number;
-        private string integerPart;
-        private string decimalPart;
-
+        private string Zero { get; set; }
         private int ParamThousands { get; set; }
         private string ParamMillions { get; set; }
         private int Iter { get; set; }
@@ -35,18 +33,13 @@ namespace NumbersTranslatorWebService.Entities
             ParamThousands = 0;
             ParamMillions = "1";
             Iter = 0;
-            integerPart = "";
-            decimalPart = "";
+            Zero = "";
         }
 
         public override void Translate(Treatment treatment)
-        //public override void Translate(string text)
         {
             GenerateListsNumbers();
             DescomposeNumber(treatment);
-            //DescomposeIntegerNumber(text);
-            //return GetCardinalNumberSentence();
-            //SetSentence(GetCardinalNumberSentence());
         }
 
         private void GenerateListsNumbers()
@@ -68,46 +61,54 @@ namespace NumbersTranslatorWebService.Entities
 
         private void DescomposeNumber(Treatment treatment)
         {
+            ArrayList number = new ArrayList();
             if (treatment.getValideNumber())
             {
                 if (treatment.getIntegerNumber().Equals(true))
                     DescomposeIntegerNumber(treatment.getText());
                 else if (treatment.getDecimalNumber().Equals(true))
                 {
-                    GetIntegerAndDecimalPart(treatment);
-                    if ((integerPart.Length + decimalPart.Length) > 126) return;
-                    DescomposeIntegerNumber(integerPart);
-                    TransformDecimalNumber(decimalPart);
+                    number = GetIntegerAndDecimalPart(treatment);
+                    if ((number[0].ToString().Length + number[1].ToString().Length) > 126) return;
+                    TransformDecimalNumber(number[1].ToString());
+                    DescomposeIntegerNumber(number[0].ToString());
                 }
                 else if (treatment.getExponentialNumber().Equals(true))
                 {
                     if (treatment.getText().Length > 126) return;
+                    number = GetBaseAndExponentPart(treatment);
                 }
             }
         }
 
-        private void GetIntegerAndDecimalPart(Treatment treatment)
+        private ArrayList GetIntegerAndDecimalPart(Treatment treatment)
         {
+            ArrayList decimalNumber = new ArrayList();
             if (GetNumber().Contains("."))
             {
-                integerPart = treatment.getText().Substring(0, GetNumber().IndexOf("."));
-                decimalPart = treatment.getText().Substring(GetNumber().IndexOf(".") + 1);
+                decimalNumber.Add(treatment.getText().Substring(0, GetNumber().IndexOf(".")));
+                decimalNumber.Add(treatment.getText().Substring(GetNumber().IndexOf(".") + 1));
             }
             else if (GetNumber().Contains(","))
             {
-                integerPart = treatment.getText().Substring(0, GetNumber().IndexOf(","));
-                decimalPart = treatment.getText().Substring(GetNumber().IndexOf(",") + 1);
+                decimalNumber.Add(treatment.getText().Substring(0, GetNumber().IndexOf(",")));
+                decimalNumber.Add(treatment.getText().Substring(GetNumber().IndexOf(",") + 1));
             }
+            return decimalNumber;
+        }
+
+        private ArrayList GetBaseAndExponentPart(Treatment treatment)
+        {
+            ArrayList exponentialNumber = new ArrayList();
+            return null;
         }
 
         private void DescomposeIntegerNumber(string dato)
         {
-            //ValidateNegativeNumber(dato, "entero");
             ValidateNegativeNumber(dato);
             TransformIntegerNumber(number[0].ToString());
         }
 
-        //private void ValidateNegativeNumber(string text, string tipo)
         private void ValidateNegativeNumber(string text)
         {
             if (text.StartsWith("-"))
@@ -126,25 +127,51 @@ namespace NumbersTranslatorWebService.Entities
             else
             {
                 TakeApartNumber(number, "integer");
-                //while (number.Length > 0)
-                //{
-                //    if (number.Length > 2)
-                //    {
-                //        WriteNumber(number.Substring(number.Length - 3));
-                //        number = number.Substring(0, number.Length - 3);
-                //    }
-                //    else
-                //    {
-                //        WriteNumber(number.Substring(0, number.Length));
-                //        number = "";
-                //    }
-                //}
             }
         }
 
         private void TransformDecimalNumber(string number)
         {
+            int numberOfZeros = CheckZerosToLeft(number);
+            AddZerosToLeft(numberOfZeros);
+            number = number.Substring(numberOfZeros);
             TakeApartNumber(number, "decimal");
+            InsertSentence(Zero);
+            InsertSentence("vírgula");
+            CleanParameters();
+        }
+
+        private void CleanParameters()
+        {
+            Iter = 0;
+            ParamThousands = 0;
+            ParamMillions = "1";
+            digits.RemoveRange(0, digits.Count);
+            millonsValues = new SortedList<string, int>();
+        }
+
+        private int CheckZerosToLeft(string number)
+        {
+            int zeros = 0;
+            for (int i = 0; i < number.Length; i++)
+            {
+                if (!number[i].ToString().Equals("0"))
+                {
+                    return zeros;
+                }
+                zeros++;
+            }
+            return zeros;
+        }
+
+        private void AddZerosToLeft(int numberOfZeros)
+        {
+            string zeros = "";
+            for (int i = 0; i < numberOfZeros; i++)
+            {
+                zeros += "zero ";
+            }
+            Zero = zeros.Trim();
         }
 
         private void TakeApartNumber(string number, string type)
@@ -153,21 +180,19 @@ namespace NumbersTranslatorWebService.Entities
             {
                 if (number.Length > 2)
                 {
-                    if (type.Equals("integer")) WriteNumber(number.Substring(number.Length - 3));
-                    else WriteDecimalNumber(number.Substring(number.Length - 3));
+                    WriteNumber(number.Substring(number.Length - 3), type);
                     number = number.Substring(0, number.Length - 3);
                 }
                 else
                 {
-                    if (type.Equals("integer")) WriteNumber(number.Substring(0, number.Length));
-                    else WriteDecimalNumber(number.Substring(0, number.Length));
+                    WriteNumber(number.Substring(0, number.Length), type);
                     //WriteIntegerNumber(number.Substring(0, number.Length));
                     number = "";
                 }
             }
         }
 
-        private void WriteNumber(string number)
+        private void WriteNumber(string number, string type)
         {
             string phrase = "";
             digits.Insert(0, number);
@@ -212,56 +237,11 @@ namespace NumbersTranslatorWebService.Entities
                     phrase += units[Int32.Parse(number[i].ToString())];
                 }
             }
-            //CheckText(phrase);
             phrase = CheckTextThousands(phrase);
             CheckTextMillons(phrase);
             ResetParameters();
             InsertSentence(phrase);
         }
-
-        private void WriteDecimalNumber(string number)
-        {
-            for (int i = 0; i < number.Length; i++)
-            {
-            }
-        }
-
-        //private void CheckText(string phrase)
-        //{
-        //    // Comprobar tener alguna de las 6 cifras distintas de 0 para no añadir Escala Larga
-        //    // Comprobar que la cifra no sea 001 para no añadir el texto de la cifra 'um' antes de los miles
-        //    // Comprobar que despues de un mil si hay una cifra menor a 100 añadir 'e'
-
-        //    if (digits.Count.Equals(2))
-        //    {
-        //        if (ParamThousands > 3 && ParamThousands < 7 && !phrase.Equals(""))
-        //        {
-        //            if (Int32.Parse(digits[0].ToString()) > 1)
-        //            {
-        //                if (Int32.Parse(digits[1].ToString()) < 100 && Int32.Parse(digits[1].ToString()) > 0)
-        //                    phrase += " mil e";
-        //                else if (Int32.Parse(digits[1].ToString()) >= 100 || Int32.Parse(digits[1].ToString()) == 0)
-        //                    phrase += " mil";
-        //            }
-        //            else if (Int32.Parse(digits[0].ToString()) == 1)
-        //            {
-        //                if (Int32.Parse(digits[1].ToString()) < 100 && Int32.Parse(digits[1].ToString()) > 0)
-        //                    phrase = " mil e";
-        //                else if (Int32.Parse(digits[1].ToString()) >= 100 || Int32.Parse(digits[1].ToString()) == 0)
-        //                    phrase = "mil";
-        //            }
-        //        }
-        //        string aux = ParamMillions.Substring(0, Iter - (digits[0].ToString().Length + digits[1].ToString().Length) + 1);
-        //        CheckAppearTimesMillons(aux);
-        //        ResetParameters();
-        //    }
-        //    else if (digits.Count.Equals(1))
-        //    {
-        //        string aux = ParamMillions.Substring(0, ParamMillions.Length - digits[0].ToString().Length + 1);
-        //        CheckAppearTimesMillons(aux);
-        //    }
-        //    InsertSentence(phrase);
-        //}
 
         private string CheckTextThousands(string phrase)
         {
@@ -306,31 +286,12 @@ namespace NumbersTranslatorWebService.Entities
             }
         }
 
-        //private void CheckAppearTimesMillons(string millons)
-        //{
-        //    if (longScale.ContainsKey(millons))
-        //    {
-        //        string name = longScale[millons];
-        //        InsertMillonsValues(name);
-        //        if (!sentence.Contains(name) && millonsValues[name] > 0)
-        //            InsertSentence(CheckPlural(name));
-        //        else if (sentence.Contains(name) && millonsValues[name] > 1)
-        //        {
-        //            int pos = sentence.IndexOf(name);
-        //            sentence.Remove(name);
-        //            sentence.Insert(pos, CheckPlural(name));
-        //        }
-        //    }
-        //}
-
         private void CheckAppearTimesMillons(string millons)
         {
             if (longScale.ContainsKey(millons))
             {
                 string name = longScale[millons];
                 InsertMillonsValues(name);
-                // Vuelta 1: 1; Vuelta 2: 3000 
-                // Result: 3001 Una vez añadido no puede actualizar si es mayor a 1 la cifra en la segunda vuelta
                 if (!sentence.Contains(name) && !sentence.Contains(CheckPlural(name)))
                     InsertSentence(CheckPlural(name));
                 else if (sentence.Contains(name) && millonsValues[name] > 1)

@@ -24,7 +24,8 @@ namespace NumbersTranslatorWebService.Entities
         //public override void Translate(string number)
         {
             GeneratedListNumbers();
-            DescomposeOrdinalNumber(treatment.getText());
+            DescomposeNumber(treatment);
+            //DescomposeOrdinalNumber(treatment.getText());
             //DescomposeOrdinalNumber(number);
             //return GetOrdinalNumberSentence();
         }
@@ -40,11 +41,11 @@ namespace NumbersTranslatorWebService.Entities
             Hundreds = ordinalRules.GetSortedListHundredsNumbers();
         }
 
-        //private void DescomposeNumber(Treatment treatment)
-        //{
-        //    if (treatment.getIntegerNumber().Equals(true))
-        //        DescomposeOrdinalNumber(treatment.getText());
-        //}
+        private void DescomposeNumber(Treatment treatment)
+        {
+            if (treatment.getIntegerNumber().Equals(true))
+                DescomposeOrdinalNumber(treatment.getText());
+        }
 
         private void DescomposeOrdinalNumber(string dato)
         {
