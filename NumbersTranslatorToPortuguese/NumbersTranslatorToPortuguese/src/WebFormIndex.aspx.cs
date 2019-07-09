@@ -8,15 +8,47 @@ namespace NumbersTranslatorToPortuguese.src
 {
     public partial class WebFormIndex : System.Web.UI.Page
     {
-        private ArrayList NameTabs { get; set; }
+        private ArrayList NameTabs = new ArrayList() { "Cardinal", "Ordinal", "Fraccionario", "Multiplicativo", "Romano" };
 
         protected void Page_Load(object sender, EventArgs e)
         {
+            if(Session["Title"] == null)
+                Session["Title"] = "Conversor Cifras a Portugués";
+            Title = (string) Session["Title"];
+        }
+
+        protected void SpanishPage(object sender, EventArgs e)
+        {
+            Session["NameTabs"] = new ArrayList() { "Cardinal", "Ordinal", "Fraccionario", "Multiplicativo", "Romano" };
+            Session["Title"] = "Conversor Cifras a Portugués";
+            Title = "Conversor Cifras a Portugués";
+            TitleLabel.Text = "Conversor cifras a texto";
+            Text.Attributes.Add("placeholder", "Introduzca un número");
+            Translate.Text = "Traducir";
+        }
+
+        protected void EnglishPage(object sender, EventArgs e)
+        {
+            Session["NameTabs"] = new ArrayList() { "Cardinal", "Ordinal", "Fractional", "Multiplicative", "Roman" };
+            Session["Title"] = "Convert Numbers to Portuguese";
+            Title = "Convert Numbers to Portuguese";
+            TitleLabel.Text = "Convert Numbers to text";
+            Text.Attributes.Add("placeholder", "Insert a number");
+            Translate.Text = "Translate";
+        }
+
+        protected void PortuguesePage(object sender, EventArgs e)
+        {
+            Session["NameTabs"] = new ArrayList() { "Cardeal", "Ordinal", "Fracionário", "Multiplicativo", "Romano" };
+            Session["Title"] = "Conversor de Numeros Portugueses";
+            Title = "Conversor de Numeros Portugueses";
+            TitleLabel.Text = "Converter números em texto";
+            Text.Attributes.Add("placeholder", "Digite um número");
+            Translate.Text = "Traduzir";
         }
 
         protected void Validate_Text(object sender, EventArgs e)
         {
-            NameTabs = new ArrayList() { "Cardinal", "Ordinal", "Fraccionario", "Multiplicativo", "Romano" };
             if (!Text.Text.Equals(""))
             {
                 ShowTextBox();
@@ -26,9 +58,9 @@ namespace NumbersTranslatorToPortuguese.src
                 NumberTranslatorService service = new NumberTranslatorService();
                 Treatment treatment = service.ValidateText(Text.Text);
                 ArrayList translation = service.TranslateText(treatment);
-                
+
                 //CreateContents(service);
-                
+
                 // Prueba
                 //TextResult1.Text = treatment.getIntegerNumber().ToString();
                 //ArrayList list = service.TranslateText(treatment, Text.Text);
@@ -61,6 +93,8 @@ namespace NumbersTranslatorToPortuguese.src
             HtmlGenericControl tabs = new HtmlGenericControl("ul");
             tabs.Attributes["class"] = "nav nav-tabs";
             TabsPanel.Controls.Add(tabs);
+            if(Session["NameTabs"] != null)
+                NameTabs = (ArrayList) Session["NameTabs"];
 
             for (int i = 0; i < NameTabs.ToArray().Length; i++)
             {
