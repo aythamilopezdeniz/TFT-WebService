@@ -14,10 +14,53 @@
     margin-bottom: 20px;
 }
 
-#title, .jumbotron p {
-    color: white;
-}
+    #title, .jumbotron p {
+        color: white;
+        text-align: center;
+    }
 
 #TabsPanel {
     margin-top: -5%;
+}
+
+.box-lang {
+    position: fixed;
+    top: 20px;
+    z-index: 999999;
+    right: -60px;
+    background-color: #000000;
+    padding-left: 8px;
+    padding-right: 8px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    border-radius: 20px 0 0 20px;
+    opacity: 0.3;
+    transition: 1s ease-in-out;
+    color: #fff;
+}
+
+.box-lang:hover {
+    transform: translateX(-60px);
+    opacity: 1;
+    transition: 1s ease-in-out;
+}
+
+.icon-left-lang, .links-lang, .links-lang a {
+    display: inline;
+}
+
+.links-lang a {
+    text-decoration: none;
+    color: #fff;
+}
+
+.links-lang a:hover {
+    color: #C31D27;
+}
+
+.icon-left-lang, .links-lang a {
+    padding-top: 8px;
+    padding-bottom: 8px;
+    padding-left: 3px;
+    padding-right: 3px;
 }
