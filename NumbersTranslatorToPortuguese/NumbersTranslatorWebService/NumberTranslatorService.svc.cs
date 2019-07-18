@@ -91,10 +91,12 @@ namespace NumbersTranslatorWebService
 
         private void MultiplicativeNumber(Treatment treatment)
         {
+            list.Add("");
         }
 
         private void RomanNumber(Treatment treatment)
         {
+            list.Add("");
         }
     }
 }
