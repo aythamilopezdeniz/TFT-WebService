@@ -1,26 +1,17 @@
 ﻿body {
     margin: 0;
-    /*background-color: aliceblue;*/
 }
 
 .jumbotron {
-    /*background: #000064;
-    background: -webkit-linear-gradient(to right, #1BADD8, #00003E);
-    background: linear-gradient(to right, #1BADD8, #00003E);*/
-    /*background-image: url("https://mdbootstrap.com/img/Photos/Others/forest2.jpg5");*/
     background-image: url("../img/forest2.jpg");
     background-size: 100vw 300px;
     height: 300px;
     margin-bottom: 20px;
 }
 
-    #title, .jumbotron p {
-        color: white;
-        text-align: center;
-    }
-
-#TabsPanel {
-    margin-top: -5%;
+#title, .jumbotron p {
+    color: white;
+    text-align: center;
 }
 
 .box-lang {
@@ -63,4 +54,11 @@
     padding-bottom: 8px;
     padding-left: 3px;
     padding-right: 3px;
+}
+
+#number {
+    padding: 1%;
+    text-align: center;
+    border-radius: 0.5em;
+    background-color: goldenrod;
 }

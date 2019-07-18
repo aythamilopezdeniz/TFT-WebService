@@ -9,6 +9,10 @@
     <link type="text/css" rel="stylesheet" href="css/style.css" />
     <link type="text/css" rel="stylesheet" href="css/bootstrap-lumen.min.css" />
     <link type="text/css" rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.min.css" />
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script type="text/javascript" src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="js/responsivevoice.js"></script>
 </head>
 <body>
     <form id="form1" runat="server">
@@ -37,18 +41,10 @@
                         </span>
                     </div>
                     <br />
-                    <asp:TextBox ID="TextResult1" CssClass="form-control border-secondary py-2" runat="server" placeholder="Resultado 1" Visible="false"></asp:TextBox>
-                    <br />
-                    <asp:TextBox ID="TextResult2" CssClass="form-control border-secondary py-2" runat="server" placeholder="Resultado 2" Visible="false"></asp:TextBox>
-                    <br />
-                    <asp:TextBox ID="TextResult3" CssClass="form-control border-secondary py-2" runat="server" placeholder="Resultado 3" Visible="false"></asp:TextBox>
-                    <br />
-                    <asp:TextBox ID="TextResult4" CssClass="form-control border-secondary py-2" runat="server" placeholder="Resultado 4" Visible="false"></asp:TextBox>
+                    <asp:Panel ID="TabsPanel" CssClass="container" runat="server"></asp:Panel>
                 </div>
             </div>
         </div>
-        <br />
-        <asp:Panel ID="TabsPanel" CssClass="container" runat="server"></asp:Panel>
     </form>
 </body>
 </html>
