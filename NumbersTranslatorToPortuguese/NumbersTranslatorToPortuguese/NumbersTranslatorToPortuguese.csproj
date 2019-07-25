@@ -67,8 +67,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="src\css\bootstrap-lumen.min.css" />
     <Content Include="src\css\style.css" />
-    <Content Include="src\img\background-image.jpg" />
+    <Content Include="src\img\forest2.jpg" />
+    <Content Include="src\js\responsivevoice.js" />
     <Content Include="src\WebFormIndex.aspx" />
     <Content Include="Web.config" />
   </ItemGroup>

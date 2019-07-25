@@ -66,6 +66,15 @@
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Entities\IntegerNumber.cs" />
+    <Compile Include="Entities\DecimalNumber.cs" />
+    <Compile Include="Entities\InvalidNumber.cs" />
+    <Compile Include="Entities\Fractional.cs" />
+    <Compile Include="Entities\Multiplicative.cs" />
+    <Compile Include="Entities\Roman.cs" />
+    <Compile Include="Rules\CardinalRules.cs" />
+    <Compile Include="Entities\Number.cs" />
+    <Compile Include="Entities\Ordinal.cs" />
     <Compile Include="NumbersTranslatorWebService.asmx.cs">
       <DependentUpon>NumbersTranslatorWebService.asmx</DependentUpon>
       <SubType>Component</SubType>
@@ -76,6 +85,8 @@
     <Compile Include="NumberTranslatorIService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Entities\Treatment.cs" />
+    <Compile Include="Rules\FractionalRules.cs" />
+    <Compile Include="Rules\OrdinalRules.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
