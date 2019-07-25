@@ -33,57 +33,47 @@ namespace NumbersTranslatorWebService
         {
             Treatment treatment = new Treatment(text);
             treatment.checkNumber();
+            if (treatment.getValideNumber().Equals(false))
+                throw new InvalidNumber("0");
             return treatment;
         }
 
-        //public ArrayList TranslateText(Treatment treatment, string text)
         public ArrayList TranslateText(Treatment treatment)
         {
             list = new ArrayList();
             CardinalNumber(treatment);
+            DecimalNumber(treatment);
             OrdinalNumber(treatment);
             FractionalNumber(treatment);
             MultiplicativeNumber(treatment);
             RomanNumber(treatment);
-            //if (treatment.getValideNumber().Equals(true))
-            //{
-            //    if (treatment.getIntegerNumber().Equals(true))
-            //    {
-                    //CardinalNumber(text);
-                    //OrdinalNumber(text);
-                    //FractionalNumber(text);
-                    //MultiplicativeNumber(text);
-                    //RomanNumber(text);
-                //}
-            //}
             return list;
         }
 
-        //private void CardinalNumber(string text)
         private void CardinalNumber(Treatment treatment)
         {
-            //Number cardinal = new Cardinal(text);
-            //cardinal.Translate(text);
-            Number cardinal = new Cardinal(treatment.getText());
+            Number cardinal = new IntegerNumber(treatment.getText());
             cardinal.Translate(treatment);
             list.Add(cardinal.GetSentence());
+            //list.Add(treatment.getText());
         }
 
-        //private void OrdinalNumber(string text)
+        private void DecimalNumber(Treatment treatment)
+        {
+            Number decimalNumber = new DecimalNumber(treatment.getText());
+            decimalNumber.Translate(treatment);
+            list.Add(decimalNumber.GetSentence());
+        }
+
         private void OrdinalNumber(Treatment treatment)
         {
-            //Number ordinal = new Ordinal(text);
-            //ordinal.Translate(text);
             Number ordinal = new Ordinal(treatment.getText());
             ordinal.Translate(treatment);
             list.Add(ordinal.GetSentence());
         }
 
-        //private void FractionalNumber(string text)
         private void FractionalNumber(Treatment treatment)
         {
-            //Number fractional = new Fractional(text);
-            //fractional.Translate(text);
             Number fractional = new Fractional(treatment.getText());
             fractional.Translate(treatment);
             list.Add(fractional.GetSentence());

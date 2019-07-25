@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 namespace NumbersTranslatorWebService.Entities
 {
-    public class Cardinal : Number
+    public class DecimalNumber : Number
     {
         private SortedList units;
         private SortedList tens;
@@ -23,7 +23,7 @@ namespace NumbersTranslatorWebService.Entities
         private string ParamMillions { get; set; }
         private int Iter { get; set; }
 
-        public Cardinal(string dato)
+        public DecimalNumber(string dato)
         {
             Initialize(dato);
             sentence = new ArrayList();
@@ -62,22 +62,18 @@ namespace NumbersTranslatorWebService.Entities
         private void DescomposeNumber(Treatment treatment)
         {
             ArrayList number = new ArrayList();
-            if (treatment.getValideNumber())
+            if (treatment.getDecimalNumber().Equals(true))
             {
-                if (treatment.getIntegerNumber().Equals(true))
-                    DescomposeIntegerNumber(treatment.getText());
-                else if (treatment.getDecimalNumber().Equals(true))
-                {
-                    number = GetIntegerAndDecimalPart(treatment);
-                    if ((number[0].ToString().Length + number[1].ToString().Length) > 126) return;
-                    TransformDecimalNumber(number[1].ToString());
-                    DescomposeIntegerNumber(number[0].ToString());
-                }
-                else if (treatment.getExponentialNumber().Equals(true))
-                {
-                    if (treatment.getText().Length > 126) return;
-                    number = GetBaseAndExponentPart(treatment);
-                }
+                number = GetIntegerAndDecimalPart(treatment);
+                if ((number[0].ToString().Length + number[1].ToString().Length) > 126)
+                    throw new InvalidNumber("1");
+                TransformDecimalNumber(number[1].ToString());
+                DescomposeIntegerNumber(number[0].ToString());
+            }
+            else if (treatment.getScientificNotationNumber().Equals(true))
+            {
+                if (treatment.getText().Length > 126) throw new InvalidNumber("1");
+                number = GetBaseAndExponentPart(treatment);
             }
         }
 
@@ -114,7 +110,7 @@ namespace NumbersTranslatorWebService.Entities
             if (text.StartsWith("-"))
             {
                 if (sentence.Contains("Menos")) sentence.Remove("Menos");
-                else sentence.Add("Menos");
+                else InsertSentence("Menos");
                 number.Add(text.Substring(text.IndexOf("-") + 1));
             }
             else
@@ -123,7 +119,7 @@ namespace NumbersTranslatorWebService.Entities
 
         private void TransformIntegerNumber(string number)
         {
-            if (number.Length == 1 && number.Equals("0")) sentence.Add("Zero");
+            if (number.Length == 1 && number.Equals("0")) InsertSentence("Zero");
             else
             {
                 TakeApartNumber(number, "integer");
@@ -186,7 +182,6 @@ namespace NumbersTranslatorWebService.Entities
                 else
                 {
                     WriteNumber(number.Substring(0, number.Length), type);
-                    //WriteIntegerNumber(number.Substring(0, number.Length));
                     number = "";
                 }
             }

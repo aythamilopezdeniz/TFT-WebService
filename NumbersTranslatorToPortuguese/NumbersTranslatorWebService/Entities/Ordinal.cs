@@ -21,13 +21,9 @@ namespace NumbersTranslatorWebService.Entities
         }
 
         public override void Translate(Treatment treatment)
-        //public override void Translate(string number)
         {
             GeneratedListNumbers();
             DescomposeNumber(treatment);
-            //DescomposeOrdinalNumber(treatment.getText());
-            //DescomposeOrdinalNumber(number);
-            //return GetOrdinalNumberSentence();
         }
 
         private void GeneratedListNumbers()

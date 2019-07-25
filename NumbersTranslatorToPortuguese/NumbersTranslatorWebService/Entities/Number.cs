@@ -18,7 +18,6 @@ namespace NumbersTranslatorWebService.Entities
         }
 
         public abstract void Translate(Treatment treatment);
-        //public abstract void Translate(string text);
 
         public abstract string GetSentence();
     }

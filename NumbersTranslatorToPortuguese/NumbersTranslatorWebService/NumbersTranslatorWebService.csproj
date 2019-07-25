@@ -66,7 +66,9 @@
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Entities\Cardinal.cs" />
+    <Compile Include="Entities\IntegerNumber.cs" />
+    <Compile Include="Entities\DecimalNumber.cs" />
+    <Compile Include="Entities\InvalidNumber.cs" />
     <Compile Include="Entities\Fractional.cs" />
     <Compile Include="Entities\Multiplicative.cs" />
     <Compile Include="Entities\Roman.cs" />
