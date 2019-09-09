@@ -19,6 +19,7 @@ namespace Entities
         private ArrayList number;
         private string integerPartNumber;
         private string decimalPartNumber;
+        private string minus;
 
         public Treatment(string text)
         {
@@ -35,6 +36,7 @@ namespace Entities
             number = new ArrayList();
             integerPartNumber = "";
             decimalPartNumber = "";
+            minus = "";
         }
 
         public void checkNumber()
@@ -45,8 +47,6 @@ namespace Entities
                 number = GetBaseAndExponentPart();
                 GetIntegerAndDecimalPart();
                 ConvertIntegerOrDecimalNumber();
-                //if (DecimalPartIsZero())
-                //    text = integerPartNumber;
             }
             this.integerNumber = checkIntegerNumber(this.text);
             this.decimalNumber = checkDecimalNumber(this.text);
@@ -55,20 +55,6 @@ namespace Entities
             if (this.integerNumber.Equals(true) || this.decimalNumber.Equals(true) ||
                 this.fractionalNumber.Equals(true) || this.scientificNotationNumber.Equals(true))
                 this.valideNumber = true;
-
-            //this.integerNumber = checkIntegerNumber(this.text);
-            //this.decimalNumber = checkDecimalNumber(this.text);
-            //this.fractionalNumber = checkFractionalNumber(this.text);
-            //this.scientificNotationNumber = checkScientificNotationNumber(this.text);
-            //if (this.integerNumber.Equals(true) || this.decimalNumber.Equals(true) ||
-            //    this.fractionalNumber.Equals(true) || this.scientificNotationNumber.Equals(true))
-            //    this.valideNumber = true;
-            //if (scientificNotationNumber.Equals(true))
-            //{
-            //    number = GetBaseAndExponentPart();
-            //    GetIntegerAndDecimalPart();
-            //    ConvertIntegerOrDecimalNumber();
-            //}
         }
 
         private bool checkIntegerNumber(string text)
@@ -155,7 +141,6 @@ namespace Entities
         private void ConvertIntegerOrDecimalNumber()
         {
             string zeros = "";
-            string minus = "";
             if (integerPartNumber.Contains("-"))
             {
                 minus = "-";
@@ -165,7 +150,7 @@ namespace Entities
             if (exp == 0)
             {
                 if (DecimalPartIsZero())
-                    text = integerPartNumber;
+                    text = minus + integerPartNumber;
                 else
                     text = minus + number[0].ToString();
             }
@@ -188,10 +173,12 @@ namespace Entities
                     }
                     else if (exp < decimalPartNumber.Length)
                     {
-                        integerPartNumber = integerPartNumber + decimalPartNumber.Substring(0, (decimalPartNumber.Length - exp) + 1);
-                        decimalPartNumber = decimalPartNumber.Substring((decimalPartNumber.Length - exp) + 1);
+                        //integerPartNumber = integerPartNumber + decimalPartNumber.Substring(0, (decimalPartNumber.Length - exp) + 1);
+                        //decimalPartNumber = decimalPartNumber.Substring((decimalPartNumber.Length - exp) + 1);
+                        integerPartNumber = integerPartNumber + decimalPartNumber.Substring(0, exp - 1);
+                        decimalPartNumber = decimalPartNumber.Substring(exp);
                         CheckIntegerNumber();
-                        text = minus + integerPartNumber + "," + decimalPartNumber;
+                        CheckDecimalPart();
                     }
                     else
                     {
@@ -209,20 +196,21 @@ namespace Entities
                 {
                     if (!(exp - integerPartNumber.Length).Equals(0))
                         zeros = new string('0', (exp - integerPartNumber.Length));
-                    decimalPartNumber = zeros + integerPartNumber + decimalPartNumber;
+                    decimalPartNumber = (zeros + integerPartNumber + decimalPartNumber).TrimEnd('0');
                     integerPartNumber = "0";
                 }
                 else if (exp < integerPartNumber.Length)
                 {
-                    decimalPartNumber = integerPartNumber.Substring((integerPartNumber.Length - exp)) + decimalPartNumber;
+                    /*Revisar*/
+                    decimalPartNumber = integerPartNumber.Substring((integerPartNumber.Length - exp)) + decimalPartNumber.TrimEnd('0');
                     integerPartNumber = integerPartNumber.Substring(0, (integerPartNumber.Length - exp));
                 }
                 else
                 {
-                    decimalPartNumber = integerPartNumber + decimalPartNumber;
+                    decimalPartNumber = (integerPartNumber + decimalPartNumber).TrimEnd('0');
                     integerPartNumber = "0";
                 }
-                text = minus + integerPartNumber + "," + decimalPartNumber;
+                CheckDecimalPart();
             }
         }
 
@@ -239,6 +227,14 @@ namespace Entities
         {
             integerPartNumber = integerPartNumber.TrimStart('0');
             if (integerPartNumber.Length.Equals(0)) integerPartNumber = "0";
+        }
+
+        private void CheckDecimalPart()
+        {
+            if (DecimalPartIsZero())
+                text = minus + integerPartNumber;
+            else
+                text = minus + integerPartNumber + "," + decimalPartNumber;
         }
     }
 }
