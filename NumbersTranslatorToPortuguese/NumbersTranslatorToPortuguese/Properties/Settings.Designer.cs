@@ -22,15 +22,5 @@ namespace NumbersTranslatorToPortuguese.Properties {
                 return defaultInstance;
             }
         }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.WebServiceUrl)]
-        [global::System.Configuration.DefaultSettingValueAttribute("http://localhost:52417/NumbersTranslatorWebService.asmx")]
-        public string NumbersTranslatorToPortuguese_localhost_NumbersTranslatorWebService {
-            get {
-                return ((string)(this["NumbersTranslatorToPortuguese_localhost_NumbersTranslatorWebService"]));
-            }
-        }
     }
 }

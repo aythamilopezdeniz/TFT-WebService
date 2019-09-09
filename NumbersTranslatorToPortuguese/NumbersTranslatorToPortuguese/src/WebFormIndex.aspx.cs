@@ -1,9 +1,8 @@
-﻿using Entities;
-using NumbersTranslatorWebService;
-using NumbersTranslatorWebService.Entities;
-using System;
+﻿using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Web.UI.HtmlControls;
+using NumbersTranslatorWebService.Entities;
 
 namespace NumbersTranslatorToPortuguese.src
 {
@@ -12,6 +11,7 @@ namespace NumbersTranslatorToPortuguese.src
         private ArrayList NameTabs;
         private ArrayList Numbers;
         private ArrayList Mistakes;
+        private ArrayList romanNumbers;
 
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -87,32 +87,48 @@ namespace NumbersTranslatorToPortuguese.src
         {
             if (!Text.Text.Equals(""))
             {
-                NumberTranslatorService service = new NumberTranslatorService();
-                try
-                {
-                    Treatment treatment = service.ValidateText(Text.Text);
-                    try
-                    {
-                        ArrayList translation = service.TranslateText(treatment);
+                NumberTranslatorWebService.NumbersTranslatorWebServiceClient service = new 
+                    NumberTranslatorWebService.NumbersTranslatorWebServiceClient();
+                //try
+                //{
+                //    Treatment treatment = service.ValidateText(Text.Text);
+                //    try
+                //    {
+                //        ArrayList translation = service.TranslateText(treatment);
 
-                        CreateTabs(translation);
-                        CreateContents(translation);
-                    }
-                    catch (InvalidNumber ex)
-                    {
-                        ErrorTab();
-                        ErrorContent((string) Mistakes[Int32.Parse(ex.Message)]);
-                    }
-                }
-                catch (InvalidNumber ex)
+                //        CreateTabs(translation);
+                //        CreateContents(translation);
+                //    }
+                //    catch (InvalidNumber ex)
+                //    {
+                //        ErrorTab();
+                //        ErrorContent((string)Mistakes[Int32.Parse(ex.Message)]);
+                //    }
+                //}
+                //catch (InvalidNumber ex)
+                //{
+                //    ErrorTab();
+                //    ErrorContent((string)Mistakes[Int32.Parse(ex.Message)]);
+                //}
+                ArrayList translation = service.TranslateText(Text.Text);
+
+                if (translation[0].Equals("Error")) Problem((string) translation[1]);
+                else
                 {
-                        ErrorTab();
-                        ErrorContent((string) Mistakes[Int32.Parse(ex.Message)]);
+                    CreateTabs(translation);
+                    CreateContents(translation);
                 }
             }
         }
 
+        private void Problem(string ex)
+        {
+            ErrorTab();
+            ErrorContent((string)Mistakes[Int32.Parse(ex)]);
+        }
+
         private void CreateTabs(ArrayList translation)
+        //private void CreateTabs(Object[] translation)
         {
             HtmlGenericControl tab = GetHtmlGenericControlUl();
             TabsPanel.Controls.Add(tab);
@@ -156,9 +172,11 @@ namespace NumbersTranslatorToPortuguese.src
         }
 
         private void CreateContents(ArrayList translation)
+        //private void CreateContents(Object[] translation)
         {
             HtmlGenericControl content = GetHtmlGenericControlContent();
             TabsPanel.Controls.Add(content);
+            HtmlGenericControl p;
             int iter = 0;
             for (int i = 0; i < 6; i++)
             {
@@ -169,10 +187,20 @@ namespace NumbersTranslatorToPortuguese.src
                     content.Controls.Add(pane);
                     HtmlGenericControl number = GetHtmlGenericControlNumber((string) Numbers[i]);
                     pane.Controls.Add(number);
-                    HtmlGenericControl p = GetHtmlGenericControlP((string) translation[i]);
-                    pane.Controls.Add(p);
-                    HtmlButton voice = GetHtmlButton((string) translation[i]);
-                    pane.Controls.Add(voice);
+                    if (i.Equals(5))
+                    {
+                        romanNumbers = LevelsRomanNumbers((string) translation[i]);
+                        ArrayList romanLines = GetNumLines(romanNumbers);
+                        p = GetHtmlGenericControlRomanNumber(romanNumbers, romanLines);
+                        pane.Controls.Add(p);
+                    }
+                    else
+                    {
+                        p = GetHtmlGenericControlP((string) translation[i]);
+                        pane.Controls.Add(p);
+                        HtmlButton voice = GetHtmlButton((string) translation[i]);
+                        pane.Controls.Add(voice);
+                    }
                     iter++;
                 }
             }
@@ -205,8 +233,74 @@ namespace NumbersTranslatorToPortuguese.src
         private HtmlGenericControl GetHtmlGenericControlP(string text)
         {
             HtmlGenericControl p = new HtmlGenericControl("p");
+            p.Attributes.Add("id", "text-justify");
             p.InnerHtml = text;
             return p;
+        }
+
+        private ArrayList LevelsRomanNumbers(string text)
+        {
+            ArrayList list = new ArrayList();
+            while (text.Length > 0)
+            {
+                if (text.Contains(","))
+                {
+                    list.Add(text.Substring(0, text.IndexOf(",")));
+                    text = text.Substring(text.IndexOf(",") + 1);
+                }
+                else
+                {
+                    list.Add(text);
+                    text = "";
+                }
+            }
+            return list;
+        }
+
+        private ArrayList GetNumLines(ArrayList text)
+        {
+            string number = "";
+            int numberLines = 0;
+            ArrayList lines = new ArrayList();
+            ArrayList modify = new ArrayList();
+            foreach (string roman in text)
+            {
+                number = roman;
+                while (number.Contains("raya"))
+                {
+                    if (number.Contains("raya"))
+                    {
+                        numberLines++;
+                        number = number.Substring(number.IndexOf("raya") + 4);
+                    }
+                }
+                modify.Add(number);
+                lines.Add(numberLines);
+                numberLines = 0;
+            }
+            romanNumbers = modify;
+            return lines;
+        }
+
+        private HtmlGenericControl GetHtmlGenericControlRomanNumber(ArrayList romanNumbers, ArrayList numberLines)
+        {
+            HtmlGenericControl p = new HtmlGenericControl("p");
+            p.Attributes.Add("id", "text-justify");
+            for (int i = 0; i < romanNumbers.Count; i++)
+            {
+                p.Controls.Add(GetHtmlSpan(romanNumbers[i].ToString(), Int32.Parse(numberLines[i].ToString())));
+            }
+            return p;
+        }
+
+        private HtmlGenericControl GetHtmlSpan(string text, int lines)
+        {
+            HtmlGenericControl span = new HtmlGenericControl("span");
+            if (lines.Equals(1)) span.Attributes["id"] = "decoration_one_line";
+            else if (lines.Equals(2)) span.Attributes["id"] = "decoration_two_line";
+            else if (lines.Equals(3)) span.Attributes["id"] = "decoration_three_line";
+            span.InnerHtml = text;
+            return span;
         }
 
         private HtmlButton GetHtmlButton(string text)
