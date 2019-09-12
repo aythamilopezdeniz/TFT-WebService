@@ -1,24 +1,24 @@
-﻿using System;
-using Entities;
+﻿using Entities;
+using System.Collections.Generic;
 
 namespace NumbersTranslatorWebService.Entities
 {
     public abstract class Number
     {
-        private string number;
+        private string type;
 
         internal void Initialize(string text)
         {
-            number = text;
+            type = text;
         }
 
-        public string GetNumber()
+        public string GetTypeNumber()
         {
-            return number;
+            return type;
         }
 
         public abstract void Translate(Treatment treatment);
 
-        public abstract string GetSentence();
+        public abstract List<string> GetResults();
     }
 }

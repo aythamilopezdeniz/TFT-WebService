@@ -1,14 +1,16 @@
 ﻿using Entities;
-using NumbersTranslatorWebService.RulesDB;
-using System;
 using System.Collections;
 using System.Collections.Generic;
+using NumbersTranslatorWebService.RulesDB;
+using System;
 using System.Text;
 
 namespace NumbersTranslatorWebService.Entities
 {
-    public class DecimalNumber : Number
+    public class Multiplicative : Number
     {
+        private ArrayList sentence;
+        private ArrayList alternativeSentence;
         private SortedList<string, string> units;
         private SortedList<string, string> tens;
         private SortedList<string, string> hundreds;
@@ -16,39 +18,42 @@ namespace NumbersTranslatorWebService.Entities
         private SortedList<string, string> longScale;
         private SortedList<string, string> alternativeSpecials;
         private SortedList<string, string> alternativeLongScale;
-        private SortedList<int, string> decimalNumbers;
-        private SortedList<string, int> millonsValues;
-        private ArrayList sentence;
-        private ArrayList alternativeSentence;
-        private ArrayList alternativeSentenceDecimal;
-        private ArrayList digits;
-        private StringBuilder Zero { get; set; }
-        private int ParamThousands { get; set; }
-        private StringBuilder ParamMillions { get; set; }
+        private SortedList<string, string> multiplicative;
+        private SortedList<string, string> alternativeMultiplicative;
         private int Iter { get; set; }
+        private bool Vezes { get; set; }
+        private bool applyMultiplicativeTerm;
+        private ArrayList digits;
+        private int ParamThousands;
+        private StringBuilder ParamMillions;
+        private SortedList<string, int> millonsValues;
 
-        public DecimalNumber(string dato)
+        public Multiplicative(string dato)
         {
             Initialize(dato);
             sentence = new ArrayList();
             alternativeSentence = new ArrayList();
-            alternativeSentenceDecimal = new ArrayList();
+            Iter = 0;
+            Vezes = true;
+            applyMultiplicativeTerm = false;
             digits = new ArrayList();
-            millonsValues = new SortedList<string, int>();
             ParamThousands = 0;
             ParamMillions = new StringBuilder("1");
-            Iter = 0;
-            Zero = new StringBuilder("");
+            millonsValues = new SortedList<string, int>();
         }
 
         public override void Translate(Treatment treatment)
         {
-            GenerateListsNumbers();
+            GeneratedListNumbers();
             DescomposeNumber(treatment);
         }
 
-        private void GenerateListsNumbers()
+        private void GeneratedListNumbers()
         {
+            MultiplicativeRules multiplicativeRules = new MultiplicativeRules();
+            multiplicativeRules.Initialize();
+            multiplicative = multiplicativeRules.GetSortedListSpecialNumbers();
+            alternativeMultiplicative = multiplicativeRules.GetSortedListAlternativeSpecialNumbers();
             CardinalRules cardinalRules = new CardinalRules();
             cardinalRules.Initialize();
             units = cardinalRules.GetSortedListUnitsNumbers();
@@ -58,97 +63,46 @@ namespace NumbersTranslatorWebService.Entities
             longScale = cardinalRules.GetSortedListMillonsNumbers();
             alternativeSpecials = cardinalRules.GetSortedListAlternativeSpecialNumbers();
             alternativeLongScale = cardinalRules.GetSortedListAlternativeMillonsNumbers();
-            DecimalRules decimalRules = new DecimalRules();
-            decimalRules.Initialize();
-            decimalNumbers = decimalRules.GetSortedListDecimalPosition();
         }
 
         private void DescomposeNumber(Treatment treatment)
         {
-            StringBuilder decimalNumber = new StringBuilder();
-            if (treatment.GetDecimalNumber().Equals(true) && GetTypeNumber().Equals("Decimal"))
-            {
-                decimalNumber = GetIntegerAndDecimalPart(treatment.GetText());
-                if (decimalNumber.Length > 126)
-                    throw new InvalidNumber("1");
-                TransformDecimalNumber(decimalNumber);
-            }
+            if (treatment.getIntegerNumber().Equals(true) &&
+                !IsMinusContains(treatment.getText()))
+                TakeApartNumber(new StringBuilder(treatment.getText()));
         }
 
-        private StringBuilder GetIntegerAndDecimalPart(string number)
+        private bool IsMinusContains(string text)
         {
-            StringBuilder decimalNumber = new StringBuilder();
-            if (number.Contains("."))
-            {
-                return new StringBuilder(number.ToString().Substring(number.ToString().IndexOf(".") + 1));
-            }
-            else if (number.Contains(","))
-            {
-                return new StringBuilder(number.ToString().Substring(number.ToString().IndexOf(",") + 1));
-            }
-            return decimalNumber;
+            if (text.StartsWith("-")) return true;
+            return false;
         }
-
-        private void TransformDecimalNumber(StringBuilder number)
-        {
-            if (number.ToString().TrimEnd('0').Equals("")) return;
-            number = new StringBuilder(number.ToString().TrimEnd('0'));
-            CheckSingularOrPluralNameDecimal(number);
-            number = new StringBuilder(number.ToString().TrimStart('0'));
-            TakeApartNumber(number);
-            //InsertSentence("inteiros e");
-            //InsertSentence("e/vírgula");
-            //InsertAlternativeCardinalSentence("e/vírgula");
-            //InsertAlternativeDecimalSentence("e/vírgula");
-            //CleanParameters();
-        }
-
-        private void CheckSingularOrPluralNameDecimal(StringBuilder number)
-        {
-            /*Resolver lastNumber 101 devuelve nombre en singular y debe devolverlo en plural*/
-            string lastNumber = number.ToString().Substring(number.Length - 1);
-            StringBuilder nameDecimal = new StringBuilder(decimalNumbers[number.Length]);
-            if (Int32.Parse(lastNumber) > 1)
-            {
-                if (nameDecimal.ToString().Contains(" "))
-                {
-                    int pos = nameDecimal.ToString().IndexOf(" ");
-                    nameDecimal.Insert(pos, "s");
-                }
-                else
-                    nameDecimal.Append("s");
-            }
-            InsertSentence(nameDecimal.ToString());
-            InsertAlternativeSentence(nameDecimal.ToString());
-        }
-
-        //private void CleanParameters()
-        //{
-        //    Iter = 0;
-        //    ParamThousands = 0;
-        //    ParamMillions = new StringBuilder("1");
-        //    digits.RemoveRange(0, digits.Count);
-        //    millonsValues = new SortedList<string, int>();
-        //}
 
         private void TakeApartNumber(StringBuilder number)
         {
-            while (number.Length > 0)
+            if (number.Length >= 1 && !number.Equals("0"))
             {
-                if (number.Length > 2)
+                while (number.Length > 0)
                 {
-                    WriteNumber(number.ToString().Substring(number.Length - 3));
-                    number = new StringBuilder(number.ToString().Substring(0, number.Length - 3));
-                }
-                else
-                {
-                    WriteNumber(number.ToString().Substring(0, number.Length));
-                    number = new StringBuilder("");
+                    if (number.Length > 2)
+                    {
+                        StringBuilder src = new StringBuilder(number.ToString().Substring(number.Length - 3));
+                        number = new StringBuilder(number.ToString().Substring(0, number.Length - 3));
+                        if (number.Length.Equals(0)) applyMultiplicativeTerm = true;
+                        WriteNumber(src);
+                    }
+                    else
+                    {
+                        StringBuilder src = new StringBuilder(number.ToString().Substring(0, number.Length));
+                        number = new StringBuilder("");
+                        if (number.Length.Equals(0)) applyMultiplicativeTerm = true;
+                        WriteNumber(src);
+                    }
                 }
             }
         }
 
-        private void WriteNumber(string number)
+        private void WriteNumber(StringBuilder number)
         {
             StringBuilder phrase = new StringBuilder("");
             StringBuilder alternative = new StringBuilder("");
@@ -158,64 +112,93 @@ namespace NumbersTranslatorWebService.Entities
                 Iter++;
                 ParamThousands++;
                 if (ParamMillions.Length < Iter) ParamMillions.Append("0");
-                if (!phrase.Equals(new StringBuilder("")) && 
-                    !number[i].ToString().Equals("0")) phrase.Append(" e ");
-                if (!alternative.Equals(new StringBuilder("")) && 
-                    !number[i].ToString().Equals("0")) alternative.Append(" e ");
+                if (!phrase.Equals(new StringBuilder("")) &&
+                    !number[i].ToString().Equals(new StringBuilder("0"))) phrase.Append(" e ");
+                if (!alternative.Equals(new StringBuilder("")) &&
+                    !number[i].ToString().Equals(new StringBuilder("0"))) alternative.Append(" e ");
                 if ((number.Length - 1 - i) > 1)
                 {
-                    if (number[i].ToString().Equals("1") &&
-                        (!number[i + 1].ToString().Equals("0") || !number[i + 2].ToString().Equals("0")))
+                    if (applyMultiplicativeTerm.Equals(true) && Iter.Equals(1) &&
+                        multiplicative.ContainsKey(number.ToString()))
                     {
-                        phrase.Append("cento");
-                        alternative.Append("cento");
+                        Vezes = false;
+                        phrase.Append(multiplicative[number.ToString()]);
+                        i = i + 2;
                     }
                     else
                     {
-                        if (hundreds.ContainsKey(number[i].ToString() + "00"))
+                        if (number[i].ToString().Equals("1") &&
+                            (!number[i + 1].ToString().Equals("0") || !number[i + 2].ToString().Equals("0")))
                         {
-                            phrase.Append(hundreds[number[i].ToString() + "00"]);
+                            phrase.Append("cento");
+                            alternative.Append("cento");
+                        }
+                        else
+                        {
+                            if (hundreds.ContainsKey(number[i].ToString() + "00"))
+                                phrase.Append(hundreds[number[i].ToString() + "00"]);
                             alternative.Append(hundreds[number[i].ToString() + "00"]);
                         }
                     }
                 }
                 else if ((number.Length - 1 - i) == 1)
                 {
-                    if (number[i].ToString().Equals("1"))
+                    if (applyMultiplicativeTerm.Equals(true) && Iter.Equals(1) &&
+                        multiplicative.ContainsKey(number.ToString()))
                     {
-                        if (number[i + 1].ToString().Equals("0"))
-                        {
-                            phrase.Append(tens[number[i].ToString() + number[i + 1].ToString()]);
-                            alternative.Append(tens[number[i].ToString() + number[i + 1].ToString()]);
-                        }
-                        else
-                        {
-                            if (number[i + 1].ToString().Equals("4"))
-                                alternative.Append(alternativeSpecials[number[i].ToString() + number[i + 1].ToString()]);
-                            else
-                                alternative.Append(specials[number[i].ToString() + number[i + 1].ToString()]);
-                            phrase.Append(specials[number[i].ToString() + number[i + 1].ToString()]);
-                        }
+                        Vezes = false;
+                        phrase.Append(multiplicative[number.ToString()]);
                         i++;
-                        Iter++;
-                        ParamThousands++;
-                        if (ParamMillions.Length < Iter) ParamMillions.Append("0");
                     }
                     else
                     {
-                        if (tens.ContainsKey(number[i].ToString() + "0"))
+                        if (number[i].ToString().Equals("1"))
                         {
-                            phrase.Append(tens[number[i].ToString() + "0"]);
-                            alternative.Append(tens[number[i].ToString() + "0"]);
+                            if (number[i + 1].ToString().Equals("0"))
+                            {
+                                phrase.Append(tens[number[i].ToString() + number[i + 1].ToString()]);
+                                alternative.Append(tens[number[i].ToString() + number[i + 1].ToString()]);
+                            }
+                            else
+                            {
+                                if (number[i + 1].ToString().Equals("4"))
+                                    alternative.Append(alternativeSpecials[number[i].ToString() + number[i + 1].ToString()]);
+                                else
+                                    alternative.Append(specials[number[i].ToString() + number[i + 1].ToString()]);
+                                phrase.Append(specials[number[i].ToString() + number[i + 1].ToString()]);
+                            }
+                            i++;
+                            Iter++;
+                            ParamThousands++;
+                            if (ParamMillions.Length < Iter) ParamMillions.Append("0");
+                        }
+                        else
+                        {
+                            if (tens.ContainsKey(number[i].ToString() + "0"))
+                            {
+                                phrase.Append(tens[number[i].ToString() + "0"]);
+                                alternative.Append(tens[number[i].ToString() + "0"]);
+                            }
                         }
                     }
                 }
                 else
                 {
-                    if (units.ContainsKey(number[i].ToString()))
+                    if (applyMultiplicativeTerm.Equals(true) && Iter.Equals(1) &&
+                        multiplicative.ContainsKey(number.ToString()))
                     {
-                        phrase.Append(units[number[i].ToString()]);
-                        alternative.Append(units[number[i].ToString()]);
+                        Vezes = false;
+                        phrase.Append(multiplicative[number.ToString()]);
+                        if(alternativeMultiplicative.ContainsKey(number.ToString()))
+                            alternative.Append(alternativeMultiplicative[number.ToString()]);
+                    }
+                    else
+                    {
+                        if (units.ContainsKey(number[i].ToString()))
+                        {
+                            phrase.Append(units[number[i].ToString()]);
+                            alternative.Append(units[number[i].ToString()]);
+                        }
                     }
                 }
             }
@@ -254,8 +237,8 @@ namespace NumbersTranslatorWebService.Entities
 
         private void CheckTextMillons(StringBuilder phrase)
         {
-            String aux = "";
-            if (!phrase.Equals(""))
+            string aux = "";
+            if (!phrase.Equals(new StringBuilder("")))
             {
                 if (digits.Count.Equals(2))
                 {
@@ -277,9 +260,10 @@ namespace NumbersTranslatorWebService.Entities
                 StringBuilder name = new StringBuilder(longScale[millons]);
                 StringBuilder alternativeName = new StringBuilder(alternativeLongScale[millons]);
                 InsertMillonsValues(name.ToString());
-                if (!sentence.Contains(name) && !sentence.Contains(CheckPlural(name.ToString())))
+                InsertMillonsValues(alternativeName.ToString());
+                if (!sentence.Contains(name.ToString()) && !sentence.Contains(CheckPlural(name.ToString())))
                     InsertSentence(CheckPlural(name.ToString()));
-                else if (sentence.Contains(name.ToString()) && millonsValues[name.ToString()] > 1)
+                else if (sentence.Contains(name) && millonsValues[name.ToString()] > 1)
                 {
                     int pos = sentence.IndexOf(name.ToString());
                     sentence.Remove(name.ToString());
@@ -308,10 +292,10 @@ namespace NumbersTranslatorWebService.Entities
                 millonsValues.Add(millons, Int32.Parse(digits[0].ToString()));
         }
 
-        private String CheckPlural(string millons)
+        private string CheckPlural(string millons)
         {
             StringBuilder value = new StringBuilder(millons);
-            if (!millons.Equals(""))
+            if (!millons.Equals(new StringBuilder("")))
             {
                 if (digits.Count.Equals(2))
                 {
@@ -342,55 +326,25 @@ namespace NumbersTranslatorWebService.Entities
 
         private void InsertSentence(string phrase)
         {
-            if (sentence.Contains("Menos")) sentence.Insert(1, phrase);
-            else sentence.Insert(0, phrase);
+            sentence.Insert(0, phrase);
         }
 
         private void InsertAlternativeSentence(string phrase)
         {
-            if (alternativeSentence.Contains("Menos")) alternativeSentence.Insert(1, phrase);
-            else alternativeSentence.Insert(0, phrase);
+            alternativeSentence.Insert(0, phrase);
         }
 
-        public override List<string> GetResults()
-        {
-            List<string> results = new List<string>();
-            string firtsResult = GetSentence(sentence);
-            string secondResult = GetSentence(alternativeSentence);
-            if (firtsResult.Equals("")) return new List<string>();
-            if (IsSentencesEquals(firtsResult, secondResult))
-                results.Add(firtsResult);
-            else
-            {
-                results.Add(firtsResult);
-                results.Add(secondResult);
-            }
-            //StringBuilder phrase = new StringBuilder("");
-            //foreach (string item in sentence)
-            //{
-            //    if (!item.Equals(""))
-            //        phrase.Append(item + " ");
-            //}
-            //if (phrase.Equals(new StringBuilder(""))) return new List<string>() { };
-            //return new List<string>() { phrase.ToString().Trim() };
-            return results;
-        }
-
-        private string GetSentence(ArrayList list)
+        public override string GetSentence()
         {
             StringBuilder phrase = new StringBuilder("");
-            foreach (string item in list)
+            foreach (var item in sentence)
             {
                 if (!item.Equals(new StringBuilder("")))
-                    phrase.Append(new StringBuilder(item + " "));
+                    phrase.Append(item + " ");
             }
             if (phrase.Equals(new StringBuilder(""))) return "";
+            if (Vezes.Equals(true)) phrase.Append(" vezes");
             return (char.ToUpper(phrase[0]) + phrase.ToString().Substring(1)).Trim();
-        }
-
-        private bool IsSentencesEquals(string firstResult, string secondResult)
-        {
-            return firstResult.Equals(secondResult);
         }
     }
 }
