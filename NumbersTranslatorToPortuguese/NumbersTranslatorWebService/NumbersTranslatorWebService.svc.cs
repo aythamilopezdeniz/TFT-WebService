@@ -1,5 +1,4 @@
-﻿using System;
-using Entities;
+﻿using Entities;
 using NumbersTranslatorWebService.Entities;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -12,46 +11,12 @@ namespace NumbersTranslatorWebService
     // NOTE: para iniciar el Cliente de prueba WCF para probar este servicio, seleccione Service1.svc o Service1.svc.cs en el Explorador de soluciones e inicie la depuración.
     public class NumbersTranslatorWebService : INumbersTranslatorWebService
     {
-        private List<string> list;
+        private List<List<string>> list;
         private ArrayList taskList;
-        private ArrayList arrayList;
 
-        //public string GetData(int value)
-        //{
-        //    return string.Format("You entered: {0}", value);
-        //}
-
-        //public CompositeType GetDataUsingDataContract(CompositeType composite)
-        //{
-        //    if (composite == null)
-        //    {
-        //        throw new ArgumentNullException("composite");
-        //    }
-        //    if (composite.BoolValue)
-        //    {
-        //        composite.StringValue += "Suffix";
-        //    }
-        //    return composite;
-        //}
-
-        //public ArrayList TranslateText(Treatment treatment)
-        //{
-        //    list = new ArrayList();
-        //    CardinalNumber(treatment);
-        //    DecimalNumber(treatment);
-        //    OrdinalNumber(treatment);
-        //    FractionalNumber(treatment);
-        //    MultiplicativeNumber(treatment);
-        //    RomanNumber(treatment);
-        //    return list;
-        //}
-
-        //public List<string> TranslateText(string text)
-        public ArrayList TranslateText(string text)
+        public List<List<string>> TranslateText(string text)
         {
-            list = new List<string>();
-            arrayList = new ArrayList();
-            //Task<string> task = Task.Run(() => "hello"); Ejemplo
+            list = new List<List<string>>();
             try
             {
                 Treatment treatment = ValidateText(text);
@@ -60,49 +25,20 @@ namespace NumbersTranslatorWebService
             }
             catch (InvalidNumber ex)
             {
-                arrayList = new ArrayList() { "Error", ex.Message };
-                //throw new InvalidNumber(ex.Message);
+                list = new List<List<string>>() { new List<string> { "Error", ex.Message } };
             }
-            //GenerateTask(treatment);
-            //Task<string> task = null;
-            //task = Task.Run(() => CardinalNumber(treatment));
-            //list.Add(task.Result);
-            //task = Task.Run(() => DecimalNumber(treatment));
-            //list.Add(task.Result);
-            //task = Task.Run(() => OrdinalNumber(treatment));
-            //list.Add(task.Result);
-            //task = Task.Run(() => MultiplicativeNumber(treatment));
-            //list.Add(task.Result);
-            //task = Task.Run(() => RomanNumber(treatment));
-            //list.Add(task.Result);
-            //CardinalNumber(treatment);
-            //    DecimalNumber(treatment);
-            //    OrdinalNumber(treatment);
-            //    FractionalNumber(treatment);
-            //    MultiplicativeNumber(treatment);
-            //    RomanNumber(treatment);
-            //list.Add(treatment.getValideNumber().ToString());
-            //return list;
-            return arrayList;
+            return list;
+            //return new WebService().Convertion(text);
         }
 
         private Treatment ValidateText(string text)
         {
             Treatment treatment = new Treatment(text);
             treatment.checkNumber();
-            if (treatment.getValideNumber().Equals(false))
+            if (treatment.GetValideNumber().Equals(false))
                 throw new InvalidNumber("0");
             return treatment;
         }
-
-        //private void GenerateTask(Treatment treatment)
-        //{
-            //taskList.Add(new Task(() => CardinalNumber(treatment)));
-            //taskList.Add(new Task(() => DecimalNumber(treatment)));
-            //taskList.Add(new Task(() => OrdinalNumber(treatment)));
-            //taskList.Add(new Task(() => MultiplicativeNumber(treatment)));
-            //taskList.Add(new Task(() => RomanNumber(treatment)));
-        //}
 
         private void StartTask(Treatment treatment)
         {
@@ -110,77 +46,136 @@ namespace NumbersTranslatorWebService
             {
                 Task.Run(() => CardinalNumber(treatment)),
                 Task.Run(() => DecimalNumber(treatment)),
-                Task.Run(() => OrdinalNumber(treatment)),
-                Task.Run(() => FractionalNumber(treatment)),
-                //Task.Run(() => ""),
-                Task.Run(() => MultiplicativeNumber(treatment)),
-                Task.Run(() => RomanNumber(treatment))
+                Task.Run(() => OrdinalNumber(treatment))/*,*/
+                //Task.Run(() => FractionalNumber(treatment)),
+                //Task.Run(() => MultiplicativeNumber(treatment)),
+                //Task.Run(() => RomanNumber(treatment))
             };
-            //foreach (Task<string> task in taskList)
-            //{
-            //    task.Start();
-            //}
         }
 
         private void SaveResults()
         {
-            foreach (Task<string> task in taskList)
-                arrayList.Add(task.Result);
-                //list.Add(task.Result);
+            foreach (Task<List<string>> task in taskList)
+                list.Add(task.Result);
         }
 
-        //private void CardinalNumber(Treatment treatment)
-        //{
-        //    Number cardinal = new IntegerNumber("Cardinal");
-        //    cardinal.Translate(treatment);
-        //    list.Add(cardinal.GetSentence());
-        //}
-
-        private string CardinalNumber(Treatment treatment)
+        private List<string> CardinalNumber(Treatment treatment)
         {
             Number cardinal = new IntegerNumber("Cardinal");
             cardinal.Translate(treatment);
-            return cardinal.GetSentence();
+            List<string> list = cardinal.GetResults();
+            if (list.Count.Equals(2))
+            {
+                list[0] = "<b>(DPLP)</b> " + list[0];
+                list[1] = "<b>(MAT)</b> " + list[1];
+            }
+            else if (list.Count.Equals(1))
+                list[0] = "<b>(DPLP)</b> " + list[0];
+            return list;
         }
 
-        //private void DecimalNumber(Treatment treatment)
-        //{
-        //    Number decimalNumber = new DecimalNumber("Decimal");
-        //    decimalNumber.Translate(treatment);
-        //    list.Add(decimalNumber.GetSentence());
-        //}
-
-        private string DecimalNumber(Treatment treatment)
+        private List<string> DecimalNumber(Treatment treatment)
         {
+            Number integerNumber = new IntegerNumber("Decimal");
             Number decimalNumber = new DecimalNumber("Decimal");
+            integerNumber.Translate(treatment);
             decimalNumber.Translate(treatment);
-            return decimalNumber.GetSentence();
+            return CheckDecimalNumber(integerNumber, decimalNumber);
         }
 
-        //private void OrdinalNumber(Treatment treatment)
-        //{
-        //    Number ordinal = new Ordinal("Ordinal");
-        //    ordinal.Translate(treatment);
-        //    list.Add(ordinal.GetSentence());
-        //}
+        private List<string> CheckDecimalNumber(Number integerNumber, Number decimalNumber)
+        {
+            List<string> list = new List<string>();
+            if (integerNumber.GetResults().Count > 0 && decimalNumber.GetResults().Count > 0)
+            {
+                if (integerNumber.GetResults().Count.Equals(2) && decimalNumber.GetResults().Count.Equals(2))
+                {
+                    if (integerNumber.GetResults()[0].Contains("Zero") &&
+                        integerNumber.GetResults()[1].Contains("Zero"))
+                    {
+                        list.Add("<b>(DPLP)</b> " + decimalNumber.GetResults()[0]);
+                        list.Add("<b>(MAT)</b> " + decimalNumber.GetResults()[1]);
+                    }
+                    else
+                    {
+                        list.Add("<b>(DPLP)</b> " + integerNumber.GetResults()[0] + " <b>inteiros e</b> " +
+                            decimalNumber.GetResults()[0]);
+                        list.Add("<b>(MAT)</b> " + integerNumber.GetResults()[1] + " <b>inteiros e</b> " +
+                            decimalNumber.GetResults()[1]);
+                        list.Add("<b>(MAT)</b> " + integerNumber.GetResults()[0] + " <b>vírgula</b> " +
+                            decimalNumber.GetResults()[0]);
+                        list.Add("<b>(MAT)</b> " + integerNumber.GetResults()[1] + " <b>vírgula</b> " +
+                            decimalNumber.GetResults()[1]);
+                    }
+                }
+                else if (integerNumber.GetResults().Count.Equals(2) && decimalNumber.GetResults().Count.Equals(1))
+                {
+                    if (integerNumber.GetResults()[0].Contains("Zero") &&
+                        integerNumber.GetResults()[1].Contains("Zero"))
+                        list.Add("<b>(DPLP)</b> " + decimalNumber.GetResults()[0]);
+                    else
+                    {
+                        list.Add("<b>(DPLP)</b> " + integerNumber.GetResults()[0] + " <b>inteiros e</b> " +
+                            decimalNumber.GetResults()[0]);
+                        list.Add("<b>(MAT)</b> " + integerNumber.GetResults()[1] + " <b>inteiros e</b> " +
+                            decimalNumber.GetResults()[0]);
+                        list.Add("<b>(MAT)</b> " + integerNumber.GetResults()[0] + " <b>vírgula</b> " +
+                            decimalNumber.GetResults()[0]);
+                        list.Add("<b>(MAT)</b> " + integerNumber.GetResults()[1] + " <b>vírgula</b> " +
+                            decimalNumber.GetResults()[0]);
+                    }
+                }
+                else if (integerNumber.GetResults().Count.Equals(1) && decimalNumber.GetResults().Count.Equals(2))
+                {
+                    if (integerNumber.GetResults()[0].Contains("Zero"))
+                    {
+                        list.Add("<b>(DPLP)</b> " + decimalNumber.GetResults()[0]);
+                        list.Add("<b>(DPLP)</b> " + decimalNumber.GetResults()[1]);
+                    }
+                    else
+                    {
+                        list.Add("<b>(DPLP)</b> " + integerNumber.GetResults()[0] + " <b>inteiros e</b> " +
+                            decimalNumber.GetResults()[0]);
+                        list.Add("<b>(MAT)</b> " + integerNumber.GetResults()[0] + " <b>inteiros e</b> " +
+                            decimalNumber.GetResults()[1]);
+                        list.Add("<b>(MAT)</b> " + integerNumber.GetResults()[0] + " <b>vírgula</b> " +
+                            decimalNumber.GetResults()[0]);
+                        list.Add("<b>(MAT)</b> " + integerNumber.GetResults()[0] + " <b>vírgula</b> " +
+                            decimalNumber.GetResults()[1]);
+                    }
+                }
+                else if (integerNumber.GetResults().Count.Equals(1) && decimalNumber.GetResults().Count.Equals(1))
+                {
+                    if (integerNumber.GetResults()[0].Contains("Zero"))
+                        list.Add("<b>(DPLP)</b> " + decimalNumber.GetResults()[0]);
+                    else
+                    {
+                        list.Add("<b>(DPLP)</b> " + integerNumber.GetResults()[0] + " <b>inteiros e</b> " +
+                            decimalNumber.GetResults()[0]);
+                        list.Add("<b>(MAT)</b> " + integerNumber.GetResults()[0] + " <b>vírgula</b> " +
+                            decimalNumber.GetResults()[0]);
+                    }
+                }
+            }
+            return list;
+        }
 
-        private string OrdinalNumber(Treatment treatment)
+        private List<string> OrdinalNumber(Treatment treatment)
         {
             Number ordinal = new Ordinal("Ordinal");
             ordinal.Translate(treatment);
-            return ordinal.GetSentence();
+            List<string> list = ordinal.GetResults();
+            if (list.Count.Equals(2))
+            {
+                list[0] = "<b>(DPLP)</b> " + list[0];
+                list[1] = "<b>(MAT)</b> " + list[1];
+            }
+            else if (list.Count.Equals(1))
+                list[0] = "<b>(DPLP)</b> " + list[0];
+            return list;
         }
 
-        //private void FractionalNumber(Treatment treatment)
-        //{
-        //    Number integerNumber = new IntegerNumber("Fractional");
-        //    Number fractional = new Fractional("Fractional");
-        //    integerNumber.Translate(treatment);
-        //    fractional.Translate(treatment);
-        //    CheckNegativeNumber(integerNumber, fractional);
-        //}
-
-        private string FractionalNumber(Treatment treatment)
+        private List<string> FractionalNumber(Treatment treatment)
         {
             Number integerNumber = new IntegerNumber("Fractional");
             Number fractional = new Fractional("Fractional");
@@ -189,51 +184,37 @@ namespace NumbersTranslatorWebService
             return CheckNegativeNumber(integerNumber, fractional);
         }
 
-        private string CheckNegativeNumber(Number integerNumber, Number fractional)
+        private List<string> CheckNegativeNumber(Number integerNumber, Number fractional)
         {
             StringBuilder text = new StringBuilder();
-            if (!integerNumber.GetSentence().Equals("") && !fractional.GetSentence().Equals(""))
+            if (!integerNumber.GetResults().Equals("") && !fractional.GetResults().Equals(""))
             {
-                if (integerNumber.GetSentence().Contains("-") && fractional.GetSentence().Contains("-"))
+                if (integerNumber.GetResults().Contains("-") && fractional.GetResults().Contains("-"))
                 {
-                    integerNumber.GetSentence().Replace("Menos ", "");
-                    fractional.GetSentence().Replace("Menos ", "");
-                    //list.Add(integerNumber.GetSentence() + " " + fractional.GetSentence());
-                    return text.Append(integerNumber.GetSentence() + " " + fractional.GetSentence()).ToString();
+                    //integerNumber.GetResults().Replace("Menos ", "");
+                    //fractional.GetResults().Replace("Menos ", "");
+                    //return text.Append(integerNumber.GetResults() + " " + fractional.GetResults()).ToString();
                 }
-                else
-                    return text.Append(integerNumber.GetSentence() + " " + fractional.GetSentence()).ToString();
+                //else
+                //return text.Append(integerNumber.GetResults() + " " + fractional.GetResults()).ToString();
             }
-            else
-                return text.Append("").ToString();
+            //else
+            //return text.Append("").ToString();
+            return new List<string>();
         }
 
-        //private void MultiplicativeNumber(Treatment treatment)
-        //{
-        //    Number multiplicative = new Multiplicative("Multiplicative");
-        //    multiplicative.Translate(treatment);
-        //    list.Add(multiplicative.GetSentence());
-        //}
-
-        private string MultiplicativeNumber(Treatment treatment)
+        private List<string> MultiplicativeNumber(Treatment treatment)
         {
             Number multiplicative = new Multiplicative("Multiplicative");
             multiplicative.Translate(treatment);
-            return multiplicative.GetSentence();
+            return multiplicative.GetResults();
         }
 
-        //private void RomanNumber(Treatment treatment)
-        //{
-        //    Number roman = new Roman("Roman");
-        //    roman.Translate(treatment);
-        //    list.Add(roman.GetSentence());
-        //}
-
-        private string RomanNumber(Treatment treatment)
+        private List<string> RomanNumber(Treatment treatment)
         {
             Number roman = new Roman("Roman");
             roman.Translate(treatment);
-            return roman.GetSentence();
+            return roman.GetResults();
         }
     }
 }
