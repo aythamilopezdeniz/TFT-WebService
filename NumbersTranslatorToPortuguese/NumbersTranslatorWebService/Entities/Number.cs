@@ -1,4 +1,5 @@
 ﻿using Entities;
+using System.Collections.Generic;
 
 namespace NumbersTranslatorWebService.Entities
 {
@@ -18,6 +19,6 @@ namespace NumbersTranslatorWebService.Entities
 
         public abstract void Translate(Treatment treatment);
 
-        public abstract string GetSentence();
+        public abstract List<string> GetResults();
     }
 }

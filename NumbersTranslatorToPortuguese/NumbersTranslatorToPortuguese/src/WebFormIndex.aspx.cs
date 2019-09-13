@@ -89,34 +89,13 @@ namespace NumbersTranslatorToPortuguese.src
             {
                 NumberTranslatorWebService.NumbersTranslatorWebServiceClient service = new 
                     NumberTranslatorWebService.NumbersTranslatorWebServiceClient();
-                //try
-                //{
-                //    Treatment treatment = service.ValidateText(Text.Text);
-                //    try
-                //    {
-                //        ArrayList translation = service.TranslateText(treatment);
+                List<IList<string>> translation = new List<IList<string>>(service.TranslateText(Text.Text));
 
-                //        CreateTabs(translation);
-                //        CreateContents(translation);
-                //    }
-                //    catch (InvalidNumber ex)
-                //    {
-                //        ErrorTab();
-                //        ErrorContent((string)Mistakes[Int32.Parse(ex.Message)]);
-                //    }
-                //}
-                //catch (InvalidNumber ex)
-                //{
-                //    ErrorTab();
-                //    ErrorContent((string)Mistakes[Int32.Parse(ex.Message)]);
-                //}
-                ArrayList translation = service.TranslateText(Text.Text);
-
-                if (translation[0].Equals("Error")) Problem((string) translation[1]);
+                if (translation[0][0].Equals("Error")) Problem((string) translation[0][1]);
                 else
                 {
-                    CreateTabs(translation);
-                    CreateContents(translation);
+                    //CreateTabs(translation);
+                    //CreateContents(translation);
                 }
             }
         }
@@ -127,7 +106,7 @@ namespace NumbersTranslatorToPortuguese.src
             ErrorContent((string)Mistakes[Int32.Parse(ex)]);
         }
 
-        private void CreateTabs(ArrayList translation)
+        private void CreateTabs(List<IList<string>> translation)
         //private void CreateTabs(Object[] translation)
         {
             HtmlGenericControl tab = GetHtmlGenericControlUl();
@@ -171,7 +150,7 @@ namespace NumbersTranslatorToPortuguese.src
             return a;
         }
 
-        private void CreateContents(ArrayList translation)
+        private void CreateContents(List<IList<string>> translation)
         //private void CreateContents(Object[] translation)
         {
             HtmlGenericControl content = GetHtmlGenericControlContent();
@@ -189,16 +168,16 @@ namespace NumbersTranslatorToPortuguese.src
                     pane.Controls.Add(number);
                     if (i.Equals(5))
                     {
-                        romanNumbers = LevelsRomanNumbers((string) translation[i]);
+                        romanNumbers = LevelsRomanNumbers((string) translation[i][0]);
                         ArrayList romanLines = GetNumLines(romanNumbers);
                         p = GetHtmlGenericControlRomanNumber(romanNumbers, romanLines);
                         pane.Controls.Add(p);
                     }
                     else
                     {
-                        p = GetHtmlGenericControlP((string) translation[i]);
+                        p = GetHtmlGenericControlP((string) translation[i][0]);
                         pane.Controls.Add(p);
-                        HtmlButton voice = GetHtmlButton((string) translation[i]);
+                        HtmlButton voice = GetHtmlButton((string) translation[i][0]);
                         pane.Controls.Add(voice);
                     }
                     iter++;
