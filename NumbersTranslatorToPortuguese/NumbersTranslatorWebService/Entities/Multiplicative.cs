@@ -67,9 +67,12 @@ namespace NumbersTranslatorWebService.Entities
 
         private void DescomposeNumber(Treatment treatment)
         {
-            if (treatment.getIntegerNumber().Equals(true) &&
-                !IsMinusContains(treatment.getText()))
-                TakeApartNumber(new StringBuilder(treatment.getText()));
+            if (treatment.GetIntegerNumber().Equals(true) &&
+                !IsMinusContains(treatment.GetText()))
+            {
+                if (treatment.GetText().Length > 126) throw new InvalidNumber("1");
+                    TakeApartNumber(new StringBuilder(treatment.GetText()));
+            }
         }
 
         private bool IsMinusContains(string text)
@@ -113,9 +116,9 @@ namespace NumbersTranslatorWebService.Entities
                 ParamThousands++;
                 if (ParamMillions.Length < Iter) ParamMillions.Append("0");
                 if (!phrase.Equals(new StringBuilder("")) &&
-                    !number[i].ToString().Equals(new StringBuilder("0"))) phrase.Append(" e ");
+                    !number[i].ToString().Equals("0")) phrase.Append(" e ");
                 if (!alternative.Equals(new StringBuilder("")) &&
-                    !number[i].ToString().Equals(new StringBuilder("0"))) alternative.Append(" e ");
+                    !number[i].ToString().Equals("0")) alternative.Append(" e ");
                 if ((number.Length - 1 - i) > 1)
                 {
                     if (applyMultiplicativeTerm.Equals(true) && Iter.Equals(1) &&
@@ -136,8 +139,10 @@ namespace NumbersTranslatorWebService.Entities
                         else
                         {
                             if (hundreds.ContainsKey(number[i].ToString() + "00"))
+                            {
                                 phrase.Append(hundreds[number[i].ToString() + "00"]);
-                            alternative.Append(hundreds[number[i].ToString() + "00"]);
+                                alternative.Append(hundreds[number[i].ToString() + "00"]);
+                            }
                         }
                     }
                 }
@@ -238,7 +243,7 @@ namespace NumbersTranslatorWebService.Entities
         private void CheckTextMillons(StringBuilder phrase)
         {
             string aux = "";
-            if (!phrase.Equals(new StringBuilder("")))
+            if (!phrase.Equals(new StringBuilder("")) && ParamMillions.Length > 6)
             {
                 if (digits.Count.Equals(2))
                 {
@@ -333,18 +338,39 @@ namespace NumbersTranslatorWebService.Entities
         {
             alternativeSentence.Insert(0, phrase);
         }
+        public override List<string> GetResults()
+        {
+            List<string> results = new List<string>();
+            string firtsResult = GetSentence(sentence);
+            string secondResult = GetSentence(alternativeSentence);
+            if (firtsResult.Equals("")) return new List<string>();
+            if (secondResult.Equals("")) return new List<string>() { firtsResult };
+            if (IsSentencesEquals(firtsResult, secondResult))
+                results.Add(firtsResult);
+            else
+            {
+                results.Add(firtsResult);
+                results.Add(secondResult);
+            }
+            return results;
+        }
 
-        public override string GetSentence()
+        public string GetSentence(ArrayList list)
         {
             StringBuilder phrase = new StringBuilder("");
-            foreach (var item in sentence)
+            foreach (var item in list)
             {
-                if (!item.Equals(new StringBuilder("")))
+                if (!item.Equals(""))
                     phrase.Append(item + " ");
             }
             if (phrase.Equals(new StringBuilder(""))) return "";
-            if (Vezes.Equals(true)) phrase.Append(" vezes");
+            if (Vezes.Equals(true)) phrase.Append("vezes");
             return (char.ToUpper(phrase[0]) + phrase.ToString().Substring(1)).Trim();
+        }
+
+        private bool IsSentencesEquals(string firstResult, string secondResult)
+        {
+            return firstResult.Equals(secondResult);
         }
     }
 }
