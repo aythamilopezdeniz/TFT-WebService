@@ -62,3 +62,25 @@
     border-radius: 0.5em;
     background-color: goldenrod;
 }
+
+#text-justify {
+    text-align: justify;
+}
+
+#decoration_one_line {
+    text-decoration: overline;
+}
+
+#decoration_two_line {
+    background-image:url(../img/lineas2.gif);
+    background-repeat:repeat-x;
+    margin-top: -2px;
+    padding-top: 2px;
+}
+
+#decoration_three_line {
+    background-image: url(../img/lineas3.gif);
+    background-repeat: repeat-x;
+    margin-top: -4px;
+    padding-top: 4px;
+}

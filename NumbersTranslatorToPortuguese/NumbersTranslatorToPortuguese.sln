@@ -4,8 +4,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 15.0.28307.572
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NumbersTranslatorToPortuguese", "NumbersTranslatorToPortuguese\NumbersTranslatorToPortuguese.csproj", "{64AA63DD-DD19-46CA-A98A-6B8058C53F60}"
+	ProjectSection(ProjectDependencies) = postProject
+		{2B70516F-53B9-4F2B-9A61-996A83730E4D} = {2B70516F-53B9-4F2B-9A61-996A83730E4D}
+	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NumbersTranslatorWebService", "NumbersTranslatorWebService\NumbersTranslatorWebService.csproj", "{4F464F26-7C1A-4416-9DAC-2B7998B5D369}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NumbersTranslatorWebService", "NumbersTranslatorWebService\NumbersTranslatorWebService.csproj", "{2B70516F-53B9-4F2B-9A61-996A83730E4D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,10 +20,10 @@ Global
 		{64AA63DD-DD19-46CA-A98A-6B8058C53F60}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{64AA63DD-DD19-46CA-A98A-6B8058C53F60}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{64AA63DD-DD19-46CA-A98A-6B8058C53F60}.Release|Any CPU.Build.0 = Release|Any CPU
-		{4F464F26-7C1A-4416-9DAC-2B7998B5D369}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{4F464F26-7C1A-4416-9DAC-2B7998B5D369}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{4F464F26-7C1A-4416-9DAC-2B7998B5D369}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{4F464F26-7C1A-4416-9DAC-2B7998B5D369}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2B70516F-53B9-4F2B-9A61-996A83730E4D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2B70516F-53B9-4F2B-9A61-996A83730E4D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2B70516F-53B9-4F2B-9A61-996A83730E4D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2B70516F-53B9-4F2B-9A61-996A83730E4D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
