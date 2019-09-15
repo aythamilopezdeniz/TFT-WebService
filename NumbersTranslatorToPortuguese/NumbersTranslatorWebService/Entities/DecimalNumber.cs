@@ -96,19 +96,14 @@ namespace NumbersTranslatorWebService.Entities
             CheckSingularOrPluralNameDecimal(number);
             number = new StringBuilder(number.ToString().TrimStart('0'));
             TakeApartNumber(number);
-            //InsertSentence("inteiros e");
-            //InsertSentence("e/vírgula");
-            //InsertAlternativeCardinalSentence("e/vírgula");
-            //InsertAlternativeDecimalSentence("e/vírgula");
-            //CleanParameters();
         }
 
         private void CheckSingularOrPluralNameDecimal(StringBuilder number)
         {
-            /*Resolver lastNumber 101 devuelve nombre en singular y debe devolverlo en plural*/
-            string lastNumber = number.ToString().Substring(number.Length - 1);
             StringBuilder nameDecimal = new StringBuilder(decimalNumbers[number.Length]);
-            if (Int32.Parse(lastNumber) > 1)
+            number = new StringBuilder(number.ToString().TrimStart('0'));
+            string lastNumber = number.ToString().Substring(number.Length - 1);
+            if ((Int32.Parse(lastNumber) > 1 && number.Length == 1) || (number.Length > 1))
             {
                 if (nameDecimal.ToString().Contains(" "))
                 {
@@ -121,15 +116,6 @@ namespace NumbersTranslatorWebService.Entities
             InsertSentence(nameDecimal.ToString());
             InsertAlternativeSentence(nameDecimal.ToString());
         }
-
-        //private void CleanParameters()
-        //{
-        //    Iter = 0;
-        //    ParamThousands = 0;
-        //    ParamMillions = new StringBuilder("1");
-        //    digits.RemoveRange(0, digits.Count);
-        //    millonsValues = new SortedList<string, int>();
-        //}
 
         private void TakeApartNumber(StringBuilder number)
         {
@@ -255,7 +241,7 @@ namespace NumbersTranslatorWebService.Entities
         private void CheckTextMillons(StringBuilder phrase)
         {
             String aux = "";
-            if (!phrase.Equals(""))
+            if (!phrase.Equals("") && ParamMillions.Length > 6)
             {
                 if (digits.Count.Equals(2))
                 {
@@ -358,6 +344,7 @@ namespace NumbersTranslatorWebService.Entities
             string firtsResult = GetSentence(sentence);
             string secondResult = GetSentence(alternativeSentence);
             if (firtsResult.Equals("")) return new List<string>();
+            if (secondResult.Equals("")) return new List<string>() { firtsResult };
             if (IsSentencesEquals(firtsResult, secondResult))
                 results.Add(firtsResult);
             else
@@ -365,14 +352,6 @@ namespace NumbersTranslatorWebService.Entities
                 results.Add(firtsResult);
                 results.Add(secondResult);
             }
-            //StringBuilder phrase = new StringBuilder("");
-            //foreach (string item in sentence)
-            //{
-            //    if (!item.Equals(""))
-            //        phrase.Append(item + " ");
-            //}
-            //if (phrase.Equals(new StringBuilder(""))) return new List<string>() { };
-            //return new List<string>() { phrase.ToString().Trim() };
             return results;
         }
 

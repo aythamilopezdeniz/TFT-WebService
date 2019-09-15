@@ -124,7 +124,11 @@ namespace NumbersTranslatorWebService.Entities
 
         private void TransformIntegerNumber(StringBuilder number)
         {
-            if (number.Length == 1 && number.Equals(new StringBuilder("0"))) InsertSentence("Zero");
+            if (number.Length == 1 && number.Equals(new StringBuilder("0")))
+            {
+                InsertSentence("Zero");
+                InsertAlternativeSentence("Zero");
+            }
             else
             {
                 TakeApartNumber(number);
@@ -217,9 +221,6 @@ namespace NumbersTranslatorWebService.Entities
                     }
                 }
             }
-            //phrase = CheckTextThousands(alternative);
-            //CheckTextMillons(alternative);
-            //ResetParameters();
             phrase = CheckTextThousands(phrase);
             alternative = CheckTextThousands(alternative);
             CheckTextMillons(phrase);
@@ -256,7 +257,7 @@ namespace NumbersTranslatorWebService.Entities
         private void CheckTextMillons(StringBuilder phrase)
         {
             string aux = "";
-            if (!phrase.Equals(new StringBuilder("")))
+            if (!phrase.Equals(new StringBuilder("")) && ParamMillions.Length > 6)
             {
                 if (digits.Count.Equals(2))
                 {
@@ -275,16 +276,6 @@ namespace NumbersTranslatorWebService.Entities
         {
             if (longScale.ContainsKey(millons))
             {
-                //StringBuilder name = new StringBuilder(longScale[millons]);
-                //InsertMillonsValues(name.ToString());
-                //if (!sentence.Contains(name.ToString()) && !sentence.Contains(CheckPlural(name)))
-                //    InsertSentence(CheckPlural(name));
-                //else if (sentence.Contains(name.ToString()) && millonsValues[name.ToString()] > 1)
-                //{
-                //    int pos = sentence.IndexOf(name.ToString());
-                //    sentence.Remove(name.ToString());
-                //    sentence.Insert(pos, CheckPlural(name));
-                //}
                 StringBuilder name = new StringBuilder(longScale[millons]);
                 StringBuilder alternativeName = new StringBuilder(alternativeLongScale[millons]);
                 InsertMillonsValues(name.ToString());
@@ -370,6 +361,7 @@ namespace NumbersTranslatorWebService.Entities
             string firtsResult = GetSentence(sentence);
             string secondResult = GetSentence(alternativeSentence);
             if (firtsResult.Equals("")) return new List<string>();
+            if (secondResult.Equals("")) return new List<string>() { firtsResult };
             if (IsSentencesEquals(firtsResult, secondResult))
                 results.Add(firtsResult);
             else
@@ -377,14 +369,6 @@ namespace NumbersTranslatorWebService.Entities
                 results.Add(firtsResult);
                 results.Add(secondResult);
             }
-            //StringBuilder phrase = new StringBuilder("");
-            //foreach (string item in sentence)
-            //{
-            //    if (!item.Equals(new StringBuilder("")))
-            //        phrase.Append(new StringBuilder(item + " "));
-            //}
-            //if (phrase.Equals(new StringBuilder(""))) return new List<string>() { };
-            //return new List<string>() { (char.ToUpper(phrase[0]) + phrase.ToString().Substring(1)).Trim() };
             return results;
         }
 
@@ -393,7 +377,7 @@ namespace NumbersTranslatorWebService.Entities
             StringBuilder phrase = new StringBuilder("");
             foreach (string item in list)
             {
-                if (!item.Equals(new StringBuilder("")))
+                if (!item.Equals(""))
                     phrase.Append(new StringBuilder(item + " "));
             }
             if (phrase.Equals(new StringBuilder(""))) return "";
