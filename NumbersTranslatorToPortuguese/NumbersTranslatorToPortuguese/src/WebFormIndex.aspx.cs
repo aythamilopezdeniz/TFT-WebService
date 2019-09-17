@@ -2,7 +2,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Web.UI.HtmlControls;
-using NumbersTranslatorWebService.Entities;
 
 namespace NumbersTranslatorToPortuguese.src
 {
@@ -12,6 +11,7 @@ namespace NumbersTranslatorToPortuguese.src
         private ArrayList Numbers;
         private ArrayList Mistakes;
         private ArrayList romanNumbers;
+        private string Options;
 
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -21,6 +21,7 @@ namespace NumbersTranslatorToPortuguese.src
             NameTabs = (ArrayList) Session["NameTabs"];
             Numbers = (ArrayList) Session["Numbers"];
             Mistakes = (ArrayList) Session["Mistakes"];
+            Options = (string) Session["Options"];
         }
 
         protected void SpanishPage(object sender, EventArgs e)
@@ -41,6 +42,7 @@ namespace NumbersTranslatorToPortuguese.src
             "Los números romanos expresan los valores numéricos de nuestro sistema de cifras con un repertorio de signos distintos." };
             Session["Mistakes"] = new ArrayList() { "El formato escrito no es compatible.",
                 "El número es demasiado largo." };
+            Session["Options"] = "Otras alternativas";
         }
 
         protected void EnglishPage(object sender, EventArgs e)
@@ -61,6 +63,7 @@ namespace NumbersTranslatorToPortuguese.src
             "The Roman numerals describe the numerical values of our decimal system with different signs set." };
             Session["Mistakes"] = new ArrayList() { "The written format is not compatible.",
                 "The number is too large." };
+            Session["Options"] = "Others alternatives";
         }
 
         protected void PortuguesePage(object sender, EventArgs e)
@@ -81,6 +84,7 @@ namespace NumbersTranslatorToPortuguese.src
             "Os números romanos expressam os valores numéricos do nosso sistema de figuras com um repertório de diferentes signos." };
             Session["Mistakes"] = new ArrayList() { "O formato escrito não é compatível.",
                 "O número é muito longo." };
+            Session["Options"] = "Outras alternativas";
         }
 
         protected void Validate_Text(object sender, EventArgs e)
@@ -89,30 +93,10 @@ namespace NumbersTranslatorToPortuguese.src
             {
                 NumberTranslatorWebService.NumbersTranslatorWebServiceClient service = new 
                     NumberTranslatorWebService.NumbersTranslatorWebServiceClient();
-                //try
-                //{
-                //    Treatment treatment = service.ValidateText(Text.Text);
-                //    try
-                //    {
-                //        ArrayList translation = service.TranslateText(treatment);
+                List<IList<string>> translation = new List<IList<string>>(service.TranslateText(Text.Text));
 
-                //        CreateTabs(translation);
-                //        CreateContents(translation);
-                //    }
-                //    catch (InvalidNumber ex)
-                //    {
-                //        ErrorTab();
-                //        ErrorContent((string)Mistakes[Int32.Parse(ex.Message)]);
-                //    }
-                //}
-                //catch (InvalidNumber ex)
-                //{
-                //    ErrorTab();
-                //    ErrorContent((string)Mistakes[Int32.Parse(ex.Message)]);
-                //}
-                ArrayList translation = service.TranslateText(Text.Text);
-
-                if (translation[0].Equals("Error")) Problem((string) translation[1]);
+                if ((translation[0].Count > 0) && translation[0][0].ToString().Equals("Error"))
+                    Problem(translation[0][1].ToString());
                 else
                 {
                     CreateTabs(translation);
@@ -127,22 +111,24 @@ namespace NumbersTranslatorToPortuguese.src
             ErrorContent((string)Mistakes[Int32.Parse(ex)]);
         }
 
-        private void CreateTabs(ArrayList translation)
-        //private void CreateTabs(Object[] translation)
+        private void CreateTabs(List<IList<string>> translation)
         {
             HtmlGenericControl tab = GetHtmlGenericControlUl();
             TabsPanel.Controls.Add(tab);
             int iter = 0;
-            for (int i = 0; i < 6; i++)
+            for (int i = 0; i < translation.Count; i++)
             {
                 HtmlGenericControl li = GetHtmlGenericControlLi();
                 tab.Controls.Add(li);
-                if (!translation[i].Equals(""))
+                for (int j = 0; j < translation[i].Count; j++)
                 {
-                    HtmlAnchor a = GetHtmlAnchorA(NameTabs[i].ToString());
-                    if (iter.Equals(0)) a.Attributes["class"] += " active";
-                    li.Controls.Add(a);
-                    iter++;
+                    if (!translation[i][j].Equals("") && j.Equals(0))
+                    {
+                        HtmlAnchor a = GetHtmlAnchorA(NameTabs[Int32.Parse(translation[i][j].ToString())].ToString());
+                        if (iter.Equals(0)) a.Attributes["class"] += " active";
+                        li.Controls.Add(a);
+                        iter++;
+                    }
                 }
             }
         }
@@ -171,39 +157,94 @@ namespace NumbersTranslatorToPortuguese.src
             return a;
         }
 
-        private void CreateContents(ArrayList translation)
-        //private void CreateContents(Object[] translation)
+        private void CreateContents(List<IList<string>> translation)
         {
             HtmlGenericControl content = GetHtmlGenericControlContent();
             TabsPanel.Controls.Add(content);
             HtmlGenericControl p;
+            HtmlGenericControl pane = null;
             int iter = 0;
-            for (int i = 0; i < 6; i++)
+            for (int i = 0; i < translation.Count; i++)
             {
-                if (!translation[i].Equals(""))
+                bool accordion = false;
+                HtmlGenericControl accordionContainer = null;
+                HtmlGenericControl accordionPanelDefault = null;
+                for (int j = 0; j < translation[i].Count; j++)
                 {
-                    HtmlGenericControl pane = GetHtmlGenericControlPane(NameTabs[i].ToString());
-                    if (iter.Equals(0)) pane.Attributes["class"] += " show active";
-                    content.Controls.Add(pane);
-                    HtmlGenericControl number = GetHtmlGenericControlNumber((string) Numbers[i]);
-                    pane.Controls.Add(number);
-                    if (i.Equals(5))
+                    if (translation[i].Count > 2 && accordion.Equals(false))
                     {
-                        romanNumbers = LevelsRomanNumbers((string) translation[i]);
-                        ArrayList romanLines = GetNumLines(romanNumbers);
-                        p = GetHtmlGenericControlRomanNumber(romanNumbers, romanLines);
+                        accordionContainer = GetHtmlGenericAccordion("container");
+                        HtmlGenericControl accordionGroup = GetHtmlGenericAccordion("panel-group");
+                        accordionContainer.Controls.Add(accordionGroup);
+                        accordionPanelDefault = GetHtmlGenericAccordion("panel panel-default");
+                        accordionGroup.Controls.Add(accordionPanelDefault);
+                        HtmlGenericControl accordionPanelHeading = GetHtmlGenericAccordion("panel-heading");
+                        accordionPanelDefault.Controls.Add(accordionPanelHeading);
+                        HtmlAnchor title = GetHtmlGenericAccordionTitle(Options);
+                        accordionPanelHeading.Controls.Add(title);
+                        accordion = true;
+                    }
+                    if (j.Equals(0))
+                    {
+                        pane = GetHtmlGenericControlPane(NameTabs[Int32.Parse(translation[i][j].ToString())].ToString());
+                        if (iter.Equals(0)) pane.Attributes["class"] += " show active";
+                        content.Controls.Add(pane);
+                        HtmlGenericControl number = GetHtmlGenericControlNumber((string)Numbers[i]);
+                        pane.Controls.Add(number);
+                        iter++;
+                    }
+                    else if (j.Equals(1))
+                    {
+                        p = GetHtmlGenericControlP("<b>(DPLP)</b> " + (string)translation[i][j]);
                         pane.Controls.Add(p);
+                        HtmlButton voice = GetHtmlButton((string)translation[i][j]);
+                        pane.Controls.Add(voice);
                     }
                     else
                     {
-                        p = GetHtmlGenericControlP((string) translation[i]);
-                        pane.Controls.Add(p);
-                        HtmlButton voice = GetHtmlButton((string) translation[i]);
-                        pane.Controls.Add(voice);
+                        HtmlGenericControl accordionElements = GetHtmlGenericAccordionPanelElements();
+                        HtmlGenericControl accordionElement = GetHtmlGenericAccordionElement("<b>(MAT)</b> " + (string)translation[i][j]);
+                        accordionElements.Controls.Add(accordionElement);
+                        accordionPanelDefault.Controls.Add(accordionElements);
                     }
-                    iter++;
                 }
+                if (accordionContainer != null)
+                    pane.Controls.Add(accordionContainer);
             }
+        }
+
+        private HtmlGenericControl GetHtmlGenericAccordion(string text)
+        {
+            HtmlGenericControl accordion = new HtmlGenericControl("div");
+            accordion.Attributes.Add("class", text);
+            return accordion;
+        }
+
+        private HtmlAnchor GetHtmlGenericAccordionTitle(string text)
+        {
+            HtmlAnchor title = new HtmlAnchor();
+            title.Attributes.Add("id", "alternativeTitle");
+            title.Attributes.Add("data-toggle", "collapse");
+            title.HRef = "#collapse1";
+            title.InnerHtml = "<b>+ " + text + "</b>";
+            return title;
+        }
+
+        private HtmlGenericControl GetHtmlGenericAccordionPanelElements()
+        {
+            HtmlGenericControl accordion = new HtmlGenericControl("div");
+            accordion.Attributes.Add("id", "collapse1");
+            accordion.Attributes.Add("class", "panel-collapse collapse");
+            return accordion;
+        }
+
+        private HtmlGenericControl GetHtmlGenericAccordionElement(string text)
+        {
+            HtmlGenericControl accordionElement = new HtmlGenericControl("div");
+            accordionElement.Attributes.Add("id", "text-justify");
+            accordionElement.Attributes.Add("class", "panel-body");
+            accordionElement.InnerHtml = text;
+            return accordionElement;
         }
 
         private HtmlGenericControl GetHtmlGenericControlContent()

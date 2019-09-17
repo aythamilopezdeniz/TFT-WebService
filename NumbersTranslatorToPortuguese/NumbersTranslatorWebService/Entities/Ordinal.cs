@@ -57,9 +57,12 @@ namespace NumbersTranslatorWebService.Entities
 
         private void DescomposeNumber(Treatment treatment)
         {
-            if (treatment.getIntegerNumber().Equals(true) &&
-                !IsMinusContains(treatment.getText()))
-                TransforNumber(new StringBuilder(treatment.getText()));
+            if (treatment.GetIntegerNumber().Equals(true) &&
+                !IsMinusContains(treatment.GetText()))
+            {
+                if (treatment.GetText().Length > 126) throw new InvalidNumber("1");
+                    TransforNumber(new StringBuilder(treatment.GetText()));
+            }
         }
 
         private bool IsMinusContains(string text)
@@ -106,7 +109,10 @@ namespace NumbersTranslatorWebService.Entities
                     if (alternativeHundreds.ContainsKey(number[i].ToString() + "00"))
                         alternative.Append(alternativeHundreds[number[i].ToString() + "00"]);
                     else
-                        alternative.Append(Hundreds[number[i].ToString() + "00"]);
+                    {
+                        if (Hundreds.ContainsKey(number[i].ToString() + "00"))
+                            alternative.Append(Hundreds[number[i].ToString() + "00"]);
+                    }
                     if (Hundreds.ContainsKey(number[i].ToString() + "00"))
                         phrase.Append(Hundreds[number[i].ToString() + "00"]);
                 }
@@ -120,7 +126,10 @@ namespace NumbersTranslatorWebService.Entities
                         if (alternativeSpecials.ContainsKey(number[i].ToString() + number[i + 1].ToString()))
                             alternative.Append(alternativeSpecials[number[i].ToString() + number[i + 1].ToString()]);
                         else
-                            alternative.Append(Tens[number[i].ToString() + "0"]);
+                        {
+                            if (Tens.ContainsKey(number[i].ToString() + "0"))
+                                alternative.Append(Tens[number[i].ToString() + "0"]);
+                        }
                     }
                     if (Tens.ContainsKey(number[i].ToString() + "0"))
                     {
@@ -140,8 +149,10 @@ namespace NumbersTranslatorWebService.Entities
                     if (Units.ContainsKey(number[i].ToString()))
                     {
                         phrase.Append(Units[number[i].ToString()]);
-                        if(!comparation.Equals(new StringBuilder("11")) && !comparation.Equals(new StringBuilder("12")))
+                        if (!comparation.Equals(new StringBuilder("11")) && !comparation.Equals(new StringBuilder("12")))
                             alternative.Append(Units[number[i].ToString()]);
+                        else
+                            alternative = new StringBuilder(alternative.ToString().Trim());
                     }
                 }
             }
@@ -172,7 +183,7 @@ namespace NumbersTranslatorWebService.Entities
         private void CheckTextMillons(StringBuilder phrase)
         {
             string aux = "";
-            if (!phrase.Equals(new StringBuilder("")))
+            if (!phrase.Equals(new StringBuilder("")) && ParamMillions.Length > 6)
             {
                 if (digits.Count.Equals(2))
                 {
@@ -229,16 +240,38 @@ namespace NumbersTranslatorWebService.Entities
             alternativeSentence.Insert(0, alternative);
         }
 
-        public override string GetSentence()
+        public override List<string> GetResults()
+        {
+            List<string> results = new List<string>();
+            string firtsResult = GetSentence(sentence);
+            string secondResult = GetSentence(alternativeSentence);
+            if (firtsResult.Equals("")) return new List<string>();
+            if (secondResult.Equals("")) return new List<string>() { firtsResult };
+            if (IsSentencesEquals(firtsResult, secondResult))
+                results.Add(firtsResult);
+            else
+            {
+                results.Add(firtsResult);
+                results.Add(secondResult);
+            }
+            return results;
+        }
+
+        private string GetSentence(ArrayList list)
         {
             StringBuilder phrase = new StringBuilder("");
-            foreach (var item in sentence)
+            foreach (string item in list)
             {
                 if (!item.Equals(""))
                     phrase.Append(new StringBuilder(item + " "));
             }
-            if (phrase.Equals("")) return "";
+            if (phrase.Equals(new StringBuilder(""))) return "";
             return (char.ToUpper(phrase[0]) + phrase.ToString().Substring(1)).Trim();
+        }
+
+        private bool IsSentencesEquals(string firstResult, string secondResult)
+        {
+            return firstResult.Equals(secondResult);
         }
     }
 }
