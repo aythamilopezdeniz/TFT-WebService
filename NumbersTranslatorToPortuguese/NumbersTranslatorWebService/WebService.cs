@@ -48,6 +48,8 @@ namespace NumbersTranslatorWebService
                 Task.Run(() => MultiplicativeNumber(treatment))/*,*/
                 //Task.Run(() => RomanNumber(treatment))
             };
+            Task[] tasks = (Task[]) taskList.ToArray(typeof(Task));
+            Task.WaitAll(tasks);
         }
 
         private void SaveResults()
@@ -70,11 +72,13 @@ namespace NumbersTranslatorWebService
             List<string> list = cardinal.GetResults();
             if (list.Count.Equals(2))
             {
-                list[0] = "<b>(DPLP)</b> " + list[0];
-                list[1] = "<b>(MAT)</b> " + list[1];
+                list[0] = /*"<b>(DPLP)</b> " +*/ list[0];
+                list[1] = /*"<b>(MAT)</b> " +*/ list[1];
             }
             else if (list.Count.Equals(1))
-                list[0] = "<b>(DPLP)</b> " + list[0];
+                list[0] = /*"<b>(DPLP)</b> " +*/ list[0];
+            if (list.Count > 0)
+                list.Insert(0, "0");
             return list;
         }
 
@@ -104,23 +108,23 @@ namespace NumbersTranslatorWebService
                     if (integerNumber.GetResults()[0].Equals("Zero") &&
                         integerNumber.GetResults()[1].Equals("Zero"))
                     {
-                        list.Add("<b>(DPLP)</b> " + decimalNumber.GetResults()[0]);
-                        list.Add("<b>(MAT)</b> " + decimalNumber.GetResults()[1]);
+                        list.Add(/*"<b>(DPLP)</b> " + */decimalNumber.GetResults()[0]);
+                        list.Add(/*"<b>(MAT)</b> " + */decimalNumber.GetResults()[1]);
                     }
                     else if (integerNumber.GetResults()[0].Equals("Menos Zero"))
                     {
-                        list.Add("<b>(DPLP)</b> Menos " + decimalNumber.GetResults()[0]);
-                        list.Add("<b>(MAT)</b> Menos " + decimalNumber.GetResults()[1]);
+                        list.Add(/*"<b>(DPLP)</b> Menos " + */"Menos " + decimalNumber.GetResults()[0]);
+                        list.Add(/*"<b>(MAT)</b> Menos " + */"Menos " + decimalNumber.GetResults()[1]);
                     }
                     else
                     {
-                        list.Add("<b>(DPLP)</b> " + integerNumber.GetResults()[0] + " <b>inteiros e</b> " +
+                        list.Add(/*"<b>(DPLP)</b> " + */integerNumber.GetResults()[0] + " <b>inteiros e</b> " +
                             decimalNumber.GetResults()[0]);
-                        list.Add("<b>(MAT)</b> " + integerNumber.GetResults()[1] + " <b>inteiros e</b> " +
+                        list.Add(/*"<b>(MAT)</b> " + */integerNumber.GetResults()[1] + " <b>inteiros e</b> " +
                             decimalNumber.GetResults()[1]);
-                        list.Add("<b>(MAT)</b> " + integerNumber.GetResults()[0] + " <b>vírgula</b> " +
+                        list.Add(/*"<b>(MAT)</b> " + */integerNumber.GetResults()[0] + " <b>vírgula</b> " +
                             decimalNumber.GetResults()[0]);
-                        list.Add("<b>(MAT)</b> " + integerNumber.GetResults()[1] + " <b>vírgula</b> " +
+                        list.Add(/*"<b>(MAT)</b> " + */integerNumber.GetResults()[1] + " <b>vírgula</b> " +
                             decimalNumber.GetResults()[1]);
                     }
                 }
@@ -128,18 +132,18 @@ namespace NumbersTranslatorWebService
                 {
                     if (integerNumber.GetResults()[0].Equals("Zero") &&
                         integerNumber.GetResults()[1].Equals("Zero"))
-                        list.Add("<b>(DPLP)</b> " + decimalNumber.GetResults()[0]);
+                        list.Add(/*"<b>(DPLP)</b> " + */decimalNumber.GetResults()[0]);
                     else if (integerNumber.GetResults()[0].Equals("Menos Zero"))
-                        list.Add("<b>(DPLP)</b> Menos " + decimalNumber.GetResults()[0]);
+                        list.Add(/*"<b>(DPLP)</b> Menos " + */"Menos " + decimalNumber.GetResults()[0]);
                     else
                     {
-                        list.Add("<b>(DPLP)</b> " + integerNumber.GetResults()[0] + " <b>inteiros e</b> " +
+                        list.Add(/*"<b>(DPLP)</b> " + */integerNumber.GetResults()[0] + " <b>inteiros e</b> " +
                             decimalNumber.GetResults()[0]);
-                        list.Add("<b>(MAT)</b> " + integerNumber.GetResults()[1] + " <b>inteiros e</b> " +
+                        list.Add(/*"<b>(MAT)</b> " + */integerNumber.GetResults()[1] + " <b>inteiros e</b> " +
                             decimalNumber.GetResults()[0]);
-                        list.Add("<b>(MAT)</b> " + integerNumber.GetResults()[0] + " <b>vírgula</b> " +
+                        list.Add(/*"<b>(MAT)</b> " + */integerNumber.GetResults()[0] + " <b>vírgula</b> " +
                             decimalNumber.GetResults()[0]);
-                        list.Add("<b>(MAT)</b> " + integerNumber.GetResults()[1] + " <b>vírgula</b> " +
+                        list.Add(/*"<b>(MAT)</b> " + */integerNumber.GetResults()[1] + " <b>vírgula</b> " +
                             decimalNumber.GetResults()[0]);
                     }
                 }
@@ -147,41 +151,43 @@ namespace NumbersTranslatorWebService
                 {
                     if (integerNumber.GetResults()[0].Equals("Zero"))
                     {
-                        list.Add("<b>(DPLP)</b> " + decimalNumber.GetResults()[0]);
-                        list.Add("<b>(MAT)</b> " + decimalNumber.GetResults()[1]);
+                        list.Add(/*"<b>(DPLP)</b> " + */decimalNumber.GetResults()[0]);
+                        list.Add(/*"<b>(MAT)</b> " + */decimalNumber.GetResults()[1]);
                     }
                     else if (integerNumber.GetResults()[0].Equals("Menos Zero"))
                     {
-                        list.Add("<b>(DPLP)</b> Menos " + decimalNumber.GetResults()[0]);
-                        list.Add("<b>(MAT)</b> Menos " + decimalNumber.GetResults()[1]);
+                        list.Add(/*"<b>(DPLP)</b> Menos " + */"Menos " + decimalNumber.GetResults()[0]);
+                        list.Add(/*"<b>(MAT)</b> Menos " + */"Menos " + decimalNumber.GetResults()[1]);
                     }
                     else
                     {
-                        list.Add("<b>(DPLP)</b> " + integerNumber.GetResults()[0] + " <b>inteiros e</b> " +
+                        list.Add(/*"<b>(DPLP)</b> " + */integerNumber.GetResults()[0] + " <b>inteiros e</b> " +
                             decimalNumber.GetResults()[0]);
-                        list.Add("<b>(MAT)</b> " + integerNumber.GetResults()[0] + " <b>inteiros e</b> " +
+                        list.Add(/*"<b>(MAT)</b> " + */integerNumber.GetResults()[0] + " <b>inteiros e</b> " +
                             decimalNumber.GetResults()[1]);
-                        list.Add("<b>(MAT)</b> " + integerNumber.GetResults()[0] + " <b>vírgula</b> " +
+                        list.Add(/*"<b>(MAT)</b> " + */integerNumber.GetResults()[0] + " <b>vírgula</b> " +
                             decimalNumber.GetResults()[0]);
-                        list.Add("<b>(MAT)</b> " + integerNumber.GetResults()[0] + " <b>vírgula</b> " +
+                        list.Add(/*"<b>(MAT)</b> " + */integerNumber.GetResults()[0] + " <b>vírgula</b> " +
                             decimalNumber.GetResults()[1]);
                     }
                 }
                 else if (integerNumber.GetResults().Count.Equals(1) && decimalNumber.GetResults().Count.Equals(1))
                 {
                     if (integerNumber.GetResults()[0].Equals("Zero"))
-                        list.Add("<b>(DPLP)</b> " + decimalNumber.GetResults()[0]);
+                        list.Add(/*"<b>(DPLP)</b> " + */decimalNumber.GetResults()[0]);
                     else if (integerNumber.GetResults()[0].Equals("Menos Zero"))
-                        list.Add("<b>(DPLP)</b> Menos " + decimalNumber.GetResults()[0]);
+                        list.Add(/*"<b>(DPLP)</b> Menos " + */"Menos " + decimalNumber.GetResults()[0]);
                     else
                     {
-                        list.Add("<b>(DPLP)</b> " + integerNumber.GetResults()[0] + " <b>inteiros e</b> " +
+                        list.Add(/*"<b>(DPLP)</b> " + */integerNumber.GetResults()[0] + " <b>inteiros e</b> " +
                             decimalNumber.GetResults()[0]);
-                        list.Add("<b>(MAT)</b> " + integerNumber.GetResults()[0] + " <b>vírgula</b> " +
+                        list.Add(/*"<b>(MAT)</b> " + */integerNumber.GetResults()[0] + " <b>vírgula</b> " +
                             decimalNumber.GetResults()[0]);
                     }
                 }
             }
+            if (list.Count > 0)
+                list.Insert(0, "1");
             return list;
         }
 
@@ -199,11 +205,13 @@ namespace NumbersTranslatorWebService
             List<string> list = ordinal.GetResults();
             if (list.Count.Equals(2))
             {
-                list[0] = "<b>(DPLP)</b> " + list[0];
-                list[1] = "<b>(MAT)</b> " + list[1];
+                list[0] = /*"<b>(DPLP)</b> " +*/ list[0];
+                list[1] = /*"<b>(MAT)</b> " +*/ list[1];
             }
             else if (list.Count.Equals(1))
-                list[0] = "<b>(DPLP)</b> " + list[0];
+                list[0] = /*"<b>(DPLP)</b> " +*/ list[0];
+            if (list.Count > 0)
+                list.Insert(0, "2");
             return list;
         }
 
@@ -253,7 +261,17 @@ namespace NumbersTranslatorWebService
             {
                 return new List<string> { "Error", ex.Message };
             }
-            return multiplicative.GetResults();
+            List<string> list = multiplicative.GetResults();
+            if (list.Count.Equals(2))
+            {
+                list[0] = /*"<b>(DPLP)</b> " +*/ list[0];
+                list[1] = /*"<b>(MAT)</b> " +*/ list[1];
+            }
+            else if (list.Count.Equals(1))
+                list[0] = /*"<b>(DPLP)</b> " +*/ list[0];
+            if (list.Count > 0)
+                list.Insert(0, "4");
+            return list;
         }
 
         private List<string> RomanNumber(Treatment treatment)
@@ -267,7 +285,10 @@ namespace NumbersTranslatorWebService
             {
                 return new List<string> { "Error", ex.Message };
             }
-            return roman.GetResults();
+            List<string> list = roman.GetResults();
+            if (list.Count > 0)
+                list.Insert(0, "5");
+            return list;
         }
     }
 }
