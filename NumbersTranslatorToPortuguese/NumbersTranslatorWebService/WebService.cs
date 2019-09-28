@@ -44,7 +44,7 @@ namespace NumbersTranslatorWebService
                 Task.Run(() => CardinalNumber(treatment)),
                 Task.Run(() => DecimalNumber(treatment)),
                 Task.Run(() => OrdinalNumber(treatment)),
-                //Task.Run(() => FractionalNumber(treatment)),
+                Task.Run(() => FractionalNumber(treatment)),
                 Task.Run(() => MultiplicativeNumber(treatment))/*,*/
                 //Task.Run(() => RomanNumber(treatment))
             };
@@ -72,11 +72,11 @@ namespace NumbersTranslatorWebService
             List<string> list = cardinal.GetResults();
             if (list.Count.Equals(2))
             {
-                list[0] = /*"<b>(DPLP)</b> " +*/ list[0];
-                list[1] = /*"<b>(MAT)</b> " +*/ list[1];
+                list[0] = list[0];
+                list[1] = list[1];
             }
             else if (list.Count.Equals(1))
-                list[0] = /*"<b>(DPLP)</b> " +*/ list[0];
+                list[0] = list[0];
             if (list.Count > 0)
                 list.Insert(0, "0");
             return list;
@@ -108,23 +108,23 @@ namespace NumbersTranslatorWebService
                     if (integerNumber.GetResults()[0].Equals("Zero") &&
                         integerNumber.GetResults()[1].Equals("Zero"))
                     {
-                        list.Add(/*"<b>(DPLP)</b> " + */decimalNumber.GetResults()[0]);
-                        list.Add(/*"<b>(MAT)</b> " + */decimalNumber.GetResults()[1]);
+                        list.Add(decimalNumber.GetResults()[0]);
+                        list.Add(decimalNumber.GetResults()[1]);
                     }
                     else if (integerNumber.GetResults()[0].Equals("Menos Zero"))
                     {
-                        list.Add(/*"<b>(DPLP)</b> Menos " + */"Menos " + decimalNumber.GetResults()[0]);
-                        list.Add(/*"<b>(MAT)</b> Menos " + */"Menos " + decimalNumber.GetResults()[1]);
+                        list.Add("Menos " + decimalNumber.GetResults()[0]);
+                        list.Add("Menos " + decimalNumber.GetResults()[1]);
                     }
                     else
                     {
-                        list.Add(/*"<b>(DPLP)</b> " + */integerNumber.GetResults()[0] + " <b>inteiros e</b> " +
+                        list.Add(integerNumber.GetResults()[0] + " <b>inteiros e</b> " +
                             decimalNumber.GetResults()[0]);
-                        list.Add(/*"<b>(MAT)</b> " + */integerNumber.GetResults()[1] + " <b>inteiros e</b> " +
+                        list.Add(integerNumber.GetResults()[1] + " <b>inteiros e</b> " +
                             decimalNumber.GetResults()[1]);
-                        list.Add(/*"<b>(MAT)</b> " + */integerNumber.GetResults()[0] + " <b>vírgula</b> " +
+                        list.Add(integerNumber.GetResults()[0] + " <b>vírgula</b> " +
                             decimalNumber.GetResults()[0]);
-                        list.Add(/*"<b>(MAT)</b> " + */integerNumber.GetResults()[1] + " <b>vírgula</b> " +
+                        list.Add(integerNumber.GetResults()[1] + " <b>vírgula</b> " +
                             decimalNumber.GetResults()[1]);
                     }
                 }
@@ -132,18 +132,18 @@ namespace NumbersTranslatorWebService
                 {
                     if (integerNumber.GetResults()[0].Equals("Zero") &&
                         integerNumber.GetResults()[1].Equals("Zero"))
-                        list.Add(/*"<b>(DPLP)</b> " + */decimalNumber.GetResults()[0]);
+                        list.Add(decimalNumber.GetResults()[0]);
                     else if (integerNumber.GetResults()[0].Equals("Menos Zero"))
-                        list.Add(/*"<b>(DPLP)</b> Menos " + */"Menos " + decimalNumber.GetResults()[0]);
+                        list.Add("Menos " + decimalNumber.GetResults()[0]);
                     else
                     {
-                        list.Add(/*"<b>(DPLP)</b> " + */integerNumber.GetResults()[0] + " <b>inteiros e</b> " +
+                        list.Add(integerNumber.GetResults()[0] + " <b>inteiros e</b> " +
                             decimalNumber.GetResults()[0]);
-                        list.Add(/*"<b>(MAT)</b> " + */integerNumber.GetResults()[1] + " <b>inteiros e</b> " +
+                        list.Add(integerNumber.GetResults()[1] + " <b>inteiros e</b> " +
                             decimalNumber.GetResults()[0]);
-                        list.Add(/*"<b>(MAT)</b> " + */integerNumber.GetResults()[0] + " <b>vírgula</b> " +
+                        list.Add(integerNumber.GetResults()[0] + " <b>vírgula</b> " +
                             decimalNumber.GetResults()[0]);
-                        list.Add(/*"<b>(MAT)</b> " + */integerNumber.GetResults()[1] + " <b>vírgula</b> " +
+                        list.Add(integerNumber.GetResults()[1] + " <b>vírgula</b> " +
                             decimalNumber.GetResults()[0]);
                     }
                 }
@@ -151,37 +151,37 @@ namespace NumbersTranslatorWebService
                 {
                     if (integerNumber.GetResults()[0].Equals("Zero"))
                     {
-                        list.Add(/*"<b>(DPLP)</b> " + */decimalNumber.GetResults()[0]);
-                        list.Add(/*"<b>(MAT)</b> " + */decimalNumber.GetResults()[1]);
+                        list.Add(decimalNumber.GetResults()[0]);
+                        list.Add(decimalNumber.GetResults()[1]);
                     }
                     else if (integerNumber.GetResults()[0].Equals("Menos Zero"))
                     {
-                        list.Add(/*"<b>(DPLP)</b> Menos " + */"Menos " + decimalNumber.GetResults()[0]);
-                        list.Add(/*"<b>(MAT)</b> Menos " + */"Menos " + decimalNumber.GetResults()[1]);
+                        list.Add("Menos " + decimalNumber.GetResults()[0]);
+                        list.Add("Menos " + decimalNumber.GetResults()[1]);
                     }
                     else
                     {
-                        list.Add(/*"<b>(DPLP)</b> " + */integerNumber.GetResults()[0] + " <b>inteiros e</b> " +
+                        list.Add(integerNumber.GetResults()[0] + " <b>inteiros e</b> " +
                             decimalNumber.GetResults()[0]);
-                        list.Add(/*"<b>(MAT)</b> " + */integerNumber.GetResults()[0] + " <b>inteiros e</b> " +
+                        list.Add(integerNumber.GetResults()[0] + " <b>inteiros e</b> " +
                             decimalNumber.GetResults()[1]);
-                        list.Add(/*"<b>(MAT)</b> " + */integerNumber.GetResults()[0] + " <b>vírgula</b> " +
+                        list.Add(integerNumber.GetResults()[0] + " <b>vírgula</b> " +
                             decimalNumber.GetResults()[0]);
-                        list.Add(/*"<b>(MAT)</b> " + */integerNumber.GetResults()[0] + " <b>vírgula</b> " +
+                        list.Add(integerNumber.GetResults()[0] + " <b>vírgula</b> " +
                             decimalNumber.GetResults()[1]);
                     }
                 }
                 else if (integerNumber.GetResults().Count.Equals(1) && decimalNumber.GetResults().Count.Equals(1))
                 {
                     if (integerNumber.GetResults()[0].Equals("Zero"))
-                        list.Add(/*"<b>(DPLP)</b> " + */decimalNumber.GetResults()[0]);
+                        list.Add(decimalNumber.GetResults()[0]);
                     else if (integerNumber.GetResults()[0].Equals("Menos Zero"))
-                        list.Add(/*"<b>(DPLP)</b> Menos " + */"Menos " + decimalNumber.GetResults()[0]);
+                        list.Add("Menos " + decimalNumber.GetResults()[0]);
                     else
                     {
-                        list.Add(/*"<b>(DPLP)</b> " + */integerNumber.GetResults()[0] + " <b>inteiros e</b> " +
+                        list.Add(integerNumber.GetResults()[0] + " <b>inteiros e</b> " +
                             decimalNumber.GetResults()[0]);
-                        list.Add(/*"<b>(MAT)</b> " + */integerNumber.GetResults()[0] + " <b>vírgula</b> " +
+                        list.Add(integerNumber.GetResults()[0] + " <b>vírgula</b> " +
                             decimalNumber.GetResults()[0]);
                     }
                 }
@@ -205,11 +205,11 @@ namespace NumbersTranslatorWebService
             List<string> list = ordinal.GetResults();
             if (list.Count.Equals(2))
             {
-                list[0] = /*"<b>(DPLP)</b> " +*/ list[0];
-                list[1] = /*"<b>(MAT)</b> " +*/ list[1];
+                list[0] = list[0];
+                list[1] = list[1];
             }
             else if (list.Count.Equals(1))
-                list[0] = /*"<b>(DPLP)</b> " +*/ list[0];
+                list[0] = list[0];
             if (list.Count > 0)
                 list.Insert(0, "2");
             return list;
@@ -222,32 +222,340 @@ namespace NumbersTranslatorWebService
             try
             {
                 integerNumber.Translate(treatment);
+                fractional.Translate(treatment);
             }
             catch (InvalidNumber ex)
             {
                 return new List<string> { "Error", ex.Message };
             }
-            fractional.Translate(treatment);
             return CheckNegativeNumber(integerNumber, fractional);
         }
 
         private List<string> CheckNegativeNumber(Number integerNumber, Number fractional)
         {
-            StringBuilder text = new StringBuilder();
-            if (!integerNumber.GetResults().Equals("") && !fractional.GetResults().Equals(""))
+            List<string> list = new List<string>();
+            StringBuilder textNumerator = new StringBuilder();
+            StringBuilder textDenominator = new StringBuilder();
+            if (integerNumber.GetResults().Count > 0 && fractional.GetResults().Count > 0)
             {
-                if (integerNumber.GetResults().Contains("-") && fractional.GetResults().Contains("-"))
+                if (integerNumber.GetResults().Count.Equals(2) && fractional.GetResults().Count.Equals(4))
                 {
-                    //integerNumber.GetResults().Replace("Menos ", "");
-                    //fractional.GetResults().Replace("Menos ", "");
-                    //return text.Append(integerNumber.GetResults() + " " + fractional.GetResults()).ToString();
+                    if (integerNumber.GetResults()[0].Contains("Menos") && fractional.GetResults()[0].Contains("Menos"))
+                    {
+                        textNumerator = new StringBuilder(integerNumber.GetResults()[0].Replace("Menos ", ""));
+                        textDenominator = new StringBuilder(fractional.GetResults()[0].Replace("Menos ", ""));
+                        list.Add(CheckPluralResult("", textNumerator, textDenominator));
+                        textNumerator = new StringBuilder(integerNumber.GetResults()[1].Replace("Menos ", ""));
+                        textDenominator = new StringBuilder(fractional.GetResults()[1].Replace("Menos ", ""));
+                        list.Add(CheckPluralResult("", textNumerator, textDenominator));
+                        textNumerator = new StringBuilder(integerNumber.GetResults()[0].Replace("Menos ", ""));
+                        textNumerator = new StringBuilder(char.ToUpper(textNumerator.ToString()[0]) + textNumerator.ToString().Substring(1));
+                        textDenominator = new StringBuilder(fractional.GetResults()[2].Replace("Menos ", ""));
+                        list.Add(textNumerator + " " + textDenominator);
+                        textNumerator = new StringBuilder(integerNumber.GetResults()[1].Replace("Menos ", ""));
+                        textNumerator = new StringBuilder(char.ToUpper(textNumerator.ToString()[0]) + textNumerator.ToString().Substring(1));
+                        textDenominator = new StringBuilder(fractional.GetResults()[3].Replace("Menos ", ""));
+                        list.Add(textNumerator + " " + textDenominator);
+                    }
+                    else if (integerNumber.GetResults()[0].Contains("Menos") && !fractional.GetResults()[0].Contains("Menos"))
+                    {
+                        textNumerator = new StringBuilder(integerNumber.GetResults()[0].Replace("Menos ", ""));
+                        list.Add(CheckPluralResult("Menos ", textNumerator, new StringBuilder(fractional.GetResults()[0])));
+                        textNumerator = new StringBuilder(integerNumber.GetResults()[1].Replace("Menos ", ""));
+                        list.Add(CheckPluralResult("Menos ", textNumerator, new StringBuilder(fractional.GetResults()[1])));
+                        list.Add(integerNumber.GetResults()[0] + " " + fractional.GetResults()[2]);
+                        list.Add(integerNumber.GetResults()[1] + " " + fractional.GetResults()[3]);
+                    }
+                    else if (!integerNumber.GetResults()[0].Contains("Menos") && fractional.GetResults()[0].Contains("Menos"))
+                    {
+                        textNumerator = new StringBuilder(char.ToLower(integerNumber.GetResults()[0].ToString()[0]) + integerNumber.GetResults()[0].Substring(1));
+                        textDenominator = new StringBuilder(fractional.GetResults()[0].Replace("Menos ", ""));
+                        list.Add(CheckPluralResult("Menos ", textNumerator, textDenominator));
+                        textNumerator = new StringBuilder(char.ToLower(integerNumber.GetResults()[1].ToString()[0]) + integerNumber.GetResults()[1].Substring(1));
+                        textDenominator = new StringBuilder(fractional.GetResults()[1].Replace("Menos ", ""));
+                        list.Add(CheckPluralResult("Menos ", textNumerator, textDenominator));
+                        textNumerator = new StringBuilder(char.ToLower(integerNumber.GetResults()[0].ToString()[0]) + integerNumber.GetResults()[0].Substring(1));
+                        textDenominator = new StringBuilder(fractional.GetResults()[2].Replace("Menos ", ""));
+                        list.Add("Menos " + textNumerator + " " + textDenominator);
+                        textNumerator = new StringBuilder(char.ToLower(integerNumber.GetResults()[1].ToString()[0]) + integerNumber.GetResults()[1].Substring(1));
+                        textDenominator = new StringBuilder(fractional.GetResults()[3].Replace("Menos ", ""));
+                        list.Add("Menos " + textNumerator + " " + textDenominator);
+                    }
+                    else
+                    {
+                        list.Add(CheckPluralResult("", new StringBuilder(integerNumber.GetResults()[0]), new StringBuilder(fractional.GetResults()[0])));
+                        list.Add(CheckPluralResult("", new StringBuilder(integerNumber.GetResults()[1]), new StringBuilder(fractional.GetResults()[1])));
+                        list.Add(integerNumber.GetResults()[0] + " " + fractional.GetResults()[2]);
+                        list.Add(integerNumber.GetResults()[1] + " " + fractional.GetResults()[3]);
+                    }
                 }
-                //else
-                //return text.Append(integerNumber.GetResults() + " " + fractional.GetResults()).ToString();
+                else if (integerNumber.GetResults().Count.Equals(2) && fractional.GetResults().Count.Equals(3))
+                {
+                    if (integerNumber.GetResults()[0].Contains("Menos") && fractional.GetResults()[0].Contains("Menos"))
+                    {
+                        textNumerator.Append(integerNumber.GetResults()[0].Replace("Menos ", ""));
+                        textDenominator.Append(fractional.GetResults()[0].Replace("Menos ", ""));
+                        list.Add(CheckPluralResult("", textNumerator, textDenominator));
+                        textNumerator = new StringBuilder(integerNumber.GetResults()[1].Replace("Menos ", ""));
+                        textDenominator = new StringBuilder(fractional.GetResults()[1].Replace("Menos ", ""));
+                        list.Add(CheckPluralResult("", textNumerator, textDenominator));
+                        textNumerator = new StringBuilder(integerNumber.GetResults()[0].Replace("Menos ", ""));
+                        textDenominator = new StringBuilder(fractional.GetResults()[2].Replace("Menos ", ""));
+                        textNumerator = new StringBuilder(char.ToUpper(textNumerator.ToString()[0]) + textNumerator.ToString().Substring(1));
+                        list.Add(textNumerator + " " + textDenominator);
+                        textNumerator = new StringBuilder(integerNumber.GetResults()[1].Replace("Menos ", ""));
+                        textNumerator = new StringBuilder(char.ToUpper(textNumerator.ToString()[0]) + textNumerator.ToString().Substring(1));
+                        list.Add(textNumerator + " "+ textDenominator);
+                    }
+                    else if (integerNumber.GetResults()[0].Contains("Menos") && !fractional.GetResults()[0].Contains("Menos"))
+                    {
+                        textNumerator.Append(integerNumber.GetResults()[0].Replace("Menos ", ""));
+                        list.Add(CheckPluralResult("Menos ", textNumerator, new StringBuilder(fractional.GetResults()[0])));
+                        textNumerator = new StringBuilder(integerNumber.GetResults()[1].Replace("Menos ", ""));
+                        list.Add(CheckPluralResult("Menos ", textNumerator, new StringBuilder(fractional.GetResults()[1])));
+                        list.Add(integerNumber.GetResults()[0] + " " + fractional.GetResults()[2]);
+                        list.Add(integerNumber.GetResults()[1] + " " + fractional.GetResults()[2]);
+                    }
+                    else if (!integerNumber.GetResults()[0].Contains("Menos") && fractional.GetResults()[0].Contains("Menos"))
+                    {
+                        textNumerator = new StringBuilder(char.ToLower(integerNumber.GetResults()[0].ToString()[0]) + integerNumber.GetResults()[0].Substring(1));
+                        textDenominator.Append(fractional.GetResults()[0].Replace("Menos ", ""));
+                        list.Add(CheckPluralResult("Menos ", textNumerator, textDenominator));
+                        textNumerator = new StringBuilder(char.ToLower(integerNumber.GetResults()[1].ToString()[0]) + integerNumber.GetResults()[1].Substring(1));
+                        textDenominator = new StringBuilder(fractional.GetResults()[1].Replace("Menos ", ""));
+                        list.Add(CheckPluralResult("Menos ", textNumerator, textDenominator));
+                        textDenominator = new StringBuilder(fractional.GetResults()[2].Replace("Menos ", ""));
+                        textNumerator = new StringBuilder(char.ToLower(integerNumber.GetResults()[0].ToString()[0]) + integerNumber.GetResults()[0].Substring(1));
+                        list.Add("Menos " + textNumerator + " " + textDenominator);
+                        textNumerator = new StringBuilder(char.ToLower(integerNumber.GetResults()[1].ToString()[0]) + integerNumber.GetResults()[1].Substring(1));
+                        list.Add("Menos " + textNumerator + " " + textDenominator);
+                    }
+                    else
+                    {
+                        list.Add(CheckPluralResult("", new StringBuilder(integerNumber.GetResults()[0]), new StringBuilder(fractional.GetResults()[0])));
+                        list.Add(CheckPluralResult("", new StringBuilder(integerNumber.GetResults()[1]), new StringBuilder(fractional.GetResults()[1])));
+                        list.Add(integerNumber.GetResults()[0] + " " + fractional.GetResults()[2]);
+                        list.Add(integerNumber.GetResults()[1] + " " + fractional.GetResults()[2]);
+                    }
+                }
+                else if (integerNumber.GetResults().Count.Equals(2) && fractional.GetResults().Count.Equals(2))
+                {
+                    if (integerNumber.GetResults()[0].Contains("Menos") && fractional.GetResults()[0].Contains("Menos"))
+                    {
+                        textNumerator.Append(integerNumber.GetResults()[0].Replace("Menos ", ""));
+                        textNumerator = new StringBuilder(char.ToUpper(textNumerator.ToString()[0]) + textNumerator.ToString().Substring(1));
+                        textDenominator.Append(fractional.GetResults()[0].Replace("Menos ", ""));
+                        list.Add(CheckPluralResult("", textNumerator, textDenominator));
+                        textNumerator = new StringBuilder(integerNumber.GetResults()[1].Replace("Menos ", ""));
+                        textNumerator = new StringBuilder(char.ToUpper(textNumerator.ToString()[0]) + textNumerator.ToString().Substring(1));
+                        textDenominator = new StringBuilder(fractional.GetResults()[1].Replace("Menos ", ""));
+                        list.Add(textNumerator + " " + textDenominator);
+                    }
+                    else if (integerNumber.GetResults()[0].Contains("Menos") && !fractional.GetResults()[0].Contains("Menos"))
+                    {
+                        textNumerator.Append(integerNumber.GetResults()[0].Replace("Menos ", ""));
+                        list.Add(CheckPluralResult("Menos ", textNumerator, new StringBuilder(fractional.GetResults()[0])));
+                        list.Add(integerNumber.GetResults()[1] + " " + fractional.GetResults()[1]);
+                    }
+                    else if (!integerNumber.GetResults()[0].Contains("Menos") && fractional.GetResults()[0].Contains("Menos"))
+                    {
+                        textNumerator = new StringBuilder(char.ToLower(integerNumber.GetResults()[0].ToString()[0]) + integerNumber.GetResults()[0].Substring(1));
+                        textDenominator.Append(fractional.GetResults()[0].Replace("Menos ", ""));
+                        list.Add(CheckPluralResult("Menos ", textNumerator, textDenominator));
+                        textNumerator = new StringBuilder(char.ToLower(integerNumber.GetResults()[1].ToString()[0]) + integerNumber.GetResults()[1].Substring(1));
+                        textDenominator = new StringBuilder(fractional.GetResults()[1].Replace("Menos ", ""));
+                        list.Add("Menos " + textNumerator + " " + textDenominator);
+                    }
+                    else
+                    {
+                        textNumerator = new StringBuilder(char.ToLower(integerNumber.GetResults()[0].ToString()[0]) + integerNumber.GetResults()[0].Substring(1));
+                        list.Add(CheckPluralResult("", textNumerator, new StringBuilder(fractional.GetResults()[0])));
+                        list.Add(integerNumber.GetResults()[1] + " " + fractional.GetResults()[1]);
+                    }
+                }
+                //else if (integerNumber.GetResults().Count.Equals(2) && fractional.GetResults().Count.Equals(1))
+                //{
+                //    if (integerNumber.GetResults()[0].Contains("Menos") && fractional.GetResults()[0].Contains("Menos"))
+                //    {
+                //        textNumerator = new StringBuilder(integerNumber.GetResults()[0].Replace("Menos ", ""));
+                //        textDenominator = new StringBuilder(fractional.GetResults()[0].Replace("Menos ", ""));
+                //        list.Add(CheckPluralResult("", textNumerator, textDenominator));
+                //        textNumerator = new StringBuilder(integerNumber.GetResults()[1].Replace("Menos ", ""));
+                //        list.Add(CheckPluralResult("", textNumerator, textDenominator));
+                //    }
+                //    else if (integerNumber.GetResults()[0].Contains("Menos") && !fractional.GetResults()[0].Contains("Menos"))
+                //    {
+                //        list.Add(CheckPluralResult("", new StringBuilder(integerNumber.GetResults()[0]), new StringBuilder(fractional.GetResults()[0])));
+                //        list.Add(CheckPluralResult("", new StringBuilder(integerNumber.GetResults()[1]), new StringBuilder(fractional.GetResults()[0])));
+                //    }
+                //    else if (!integerNumber.GetResults()[0].Contains("Menos") && fractional.GetResults()[0].Contains("Menos"))
+                //    {
+                //        textNumerator = new StringBuilder(char.ToLower(integerNumber.GetResults()[0].ToString()[0]) + integerNumber.GetResults()[0].Substring(1));
+                //        textDenominator = new StringBuilder(fractional.GetResults()[0].Replace("Menos ", ""));
+                //        list.Add(CheckPluralResult("Menos ", textNumerator, textDenominator));
+                //        textNumerator = new StringBuilder(char.ToLower(integerNumber.GetResults()[1].ToString()[0]) + integerNumber.GetResults()[1].Substring(1));
+                //        list.Add(CheckPluralResult("Menos ", textNumerator, textDenominator));
+                //    }
+                //    else
+                //    {
+                //        textNumerator = new StringBuilder(char.ToLower(integerNumber.GetResults()[0].ToString()[0]) + integerNumber.GetResults()[0].Substring(1));
+                //        list.Add(CheckPluralResult("", textNumerator, new StringBuilder(fractional.GetResults()[0])));
+                //        textNumerator = new StringBuilder(char.ToLower(integerNumber.GetResults()[1].ToString()[0]) + integerNumber.GetResults()[1].Substring(1));
+                //        list.Add(CheckPluralResult("", textNumerator, new StringBuilder(fractional.GetResults()[0])));
+                //    }
+                //}
+                else if (integerNumber.GetResults().Count.Equals(1) && fractional.GetResults().Count.Equals(4))
+                {
+                    if (integerNumber.GetResults()[0].Contains("Menos") && fractional.GetResults()[0].Contains("Menos"))
+                    {
+                        textNumerator.Append(integerNumber.GetResults()[0].Replace("Menos ", ""));
+                        textDenominator.Append(fractional.GetResults()[0].Replace("Menos ", ""));
+                        list.Add(CheckPluralResult("", textNumerator, textDenominator));
+                        textDenominator = new StringBuilder(fractional.GetResults()[1].Replace("Menos ", ""));
+                        list.Add(CheckPluralResult("", textNumerator, textDenominator));
+                        textNumerator = new StringBuilder(integerNumber.GetResults()[0].Replace("Menos ", ""));
+                        textNumerator = new StringBuilder(char.ToUpper(textNumerator.ToString()[0]) + textNumerator.ToString().Substring(1));
+                        textDenominator = new StringBuilder(fractional.GetResults()[2].Replace("Menos ", ""));
+                        list.Add(textNumerator + " " + textDenominator);
+                        textDenominator = new StringBuilder(fractional.GetResults()[3].Replace("Menos ", ""));
+                        list.Add(textNumerator + " " + textDenominator);
+                    }
+                    else if (integerNumber.GetResults()[0].Contains("Menos") && !fractional.GetResults()[0].Contains("Menos"))
+                    {
+                        textNumerator.Append(integerNumber.GetResults()[0].Replace("Menos ", ""));
+                        list.Add(CheckPluralResult("Menos ", textNumerator, new StringBuilder(fractional.GetResults()[0])));
+                        list.Add(CheckPluralResult("Menos ", textNumerator, new StringBuilder(fractional.GetResults()[1])));
+                        list.Add(integerNumber.GetResults()[0] + " " + fractional.GetResults()[2]);
+                        list.Add(integerNumber.GetResults()[0] + " " + fractional.GetResults()[3]);
+                    }
+                    else if (!integerNumber.GetResults()[0].Contains("Menos") && fractional.GetResults()[0].Contains("Menos"))
+                    {
+                        textNumerator = new StringBuilder(char.ToUpper(integerNumber.GetResults()[0].ToString()[0]) + integerNumber.GetResults()[0].Substring(1));
+                        textDenominator.Append(fractional.GetResults()[0].Replace("Menos ", ""));
+                        list.Add(CheckPluralResult("Menos ", textNumerator, textDenominator));
+                        textDenominator = new StringBuilder(fractional.GetResults()[1].Replace("Menos ", ""));
+                        list.Add(CheckPluralResult("Menos ", textNumerator, textDenominator));
+                        textDenominator = new StringBuilder(fractional.GetResults()[2].Replace("Menos ", ""));
+                        list.Add("Menos " + textNumerator + " " + textDenominator);
+                        textDenominator = new StringBuilder(fractional.GetResults()[3].Replace("Menos ", ""));
+                        list.Add("Menos " + textNumerator + " " + textDenominator);
+                    }
+                    else
+                    {
+                        list.Add(CheckPluralResult("", new StringBuilder(integerNumber.GetResults()[0]), new StringBuilder(fractional.GetResults()[0])));
+                        list.Add(CheckPluralResult("", new StringBuilder(integerNumber.GetResults()[0]), new StringBuilder(fractional.GetResults()[1])));
+                        list.Add(integerNumber.GetResults()[0] + " " + fractional.GetResults()[2]);
+                        list.Add(integerNumber.GetResults()[0] + " " + fractional.GetResults()[3]);
+                    }
+                }
+                else if (integerNumber.GetResults().Count.Equals(1) && fractional.GetResults().Count.Equals(3))
+                {
+                    if (integerNumber.GetResults()[0].Contains("Menos") && fractional.GetResults()[0].Contains("Menos"))
+                    {
+                        textNumerator.Append(integerNumber.GetResults()[0].Replace("Menos ", ""));
+                        textDenominator.Append(fractional.GetResults()[0].Replace("Menos ", ""));
+                        list.Add(CheckPluralResult("", textNumerator, textDenominator));
+                        textDenominator = new StringBuilder(fractional.GetResults()[1].Replace("Menos ", ""));
+                        list.Add(CheckPluralResult("", textNumerator, textDenominator));
+                        textNumerator = new StringBuilder(char.ToUpper(textNumerator.ToString()[0]) + textNumerator.ToString().Substring(1));
+                        textDenominator = new StringBuilder(fractional.GetResults()[2].Replace("Menos ", ""));
+                        list.Add(textNumerator + " " + textDenominator);
+                    }
+                    else if (integerNumber.GetResults()[0].Contains("Menos") && !fractional.GetResults()[0].Contains("Menos"))
+                    {
+                        textNumerator.Append(integerNumber.GetResults()[0].Replace("Menos ", ""));
+                        list.Add(CheckPluralResult("Menos ", textNumerator, new StringBuilder(fractional.GetResults()[0])));
+                        list.Add(CheckPluralResult("Menos ", textNumerator, new StringBuilder(fractional.GetResults()[1])));
+                        list.Add(integerNumber.GetResults()[0] + " " + fractional.GetResults()[2]);
+                    }
+                    else if (!integerNumber.GetResults()[0].Contains("Menos") && fractional.GetResults()[0].Contains("Menos"))
+                    {
+                        textNumerator = new StringBuilder(char.ToLower(integerNumber.GetResults()[0].ToString()[0]) + integerNumber.GetResults()[0].Substring(1));
+                        textDenominator.Append(fractional.GetResults()[0].Replace("Menos ", ""));
+                        list.Add(CheckPluralResult("Menos ", textNumerator, textDenominator));
+                        textDenominator = new StringBuilder(fractional.GetResults()[1].Replace("Menos ", ""));
+                        list.Add(CheckPluralResult("Menos ", textNumerator, textDenominator));
+                        textDenominator = new StringBuilder(fractional.GetResults()[2].Replace("Menos ", ""));
+                        list.Add("Menos " + textNumerator + " " + textDenominator);
+                    }
+                    else
+                    {
+                        list.Add(CheckPluralResult("", new StringBuilder(integerNumber.GetResults()[0]), new StringBuilder(fractional.GetResults()[0])));
+                        list.Add(CheckPluralResult("", new StringBuilder(integerNumber.GetResults()[0]), new StringBuilder(fractional.GetResults()[1])));
+                        list.Add(integerNumber.GetResults()[0] + " " + fractional.GetResults()[2]);
+                    }
+                }
+                else if (integerNumber.GetResults().Count.Equals(1) && fractional.GetResults().Count.Equals(2))
+                {
+                    if (integerNumber.GetResults()[0].Contains("Menos") && fractional.GetResults()[0].Contains("Menos"))
+                    {
+                        textNumerator.Append(integerNumber.GetResults()[0].Replace("Menos ", ""));
+                        textDenominator.Append(fractional.GetResults()[0].Replace("Menos ", ""));
+                        list.Add(CheckPluralResult("", textNumerator, textDenominator));
+                        textNumerator = new StringBuilder(char.ToUpper(textNumerator.ToString()[0]) + textNumerator.ToString().Substring(1));
+                        textDenominator = new StringBuilder(fractional.GetResults()[1].Replace("Menos ", ""));
+                        list.Add(textNumerator + " " + textDenominator);
+                    }
+                    else if (integerNumber.GetResults()[0].Contains("Menos") && !fractional.GetResults()[0].Contains("Menos"))
+                    {
+                        textNumerator.Append(integerNumber.GetResults()[0].Replace("Menos ", ""));
+                        list.Add(CheckPluralResult("Menos ", textNumerator, new StringBuilder(fractional.GetResults()[0])));
+                        list.Add(integerNumber.GetResults()[0] + " " + fractional.GetResults()[1]);
+                    }
+                    else if (!integerNumber.GetResults()[0].Contains("Menos") && fractional.GetResults()[0].Contains("Menos"))
+                    {
+                        textNumerator = new StringBuilder(char.ToLower(integerNumber.GetResults()[0].ToString()[0]) + integerNumber.GetResults()[0].Substring(1));
+                        textDenominator.Append(fractional.GetResults()[0].Replace("Menos ", ""));
+                        list.Add(CheckPluralResult("Menos ", textNumerator, textDenominator));
+                        textDenominator = new StringBuilder(fractional.GetResults()[1].Replace("Menos ", ""));
+                        list.Add("Menos " + textNumerator + " " + textDenominator);
+                    }
+                    else
+                    {
+                        textNumerator = new StringBuilder(char.ToLower(integerNumber.GetResults()[0].ToString()[0]) + integerNumber.GetResults()[0].Substring(1));
+                        list.Add(CheckPluralResult("", textNumerator, new StringBuilder(fractional.GetResults()[0])));
+                        list.Add(integerNumber.GetResults()[0] + " " + fractional.GetResults()[1]);
+                    }
+                }
+                //else if (integerNumber.GetResults().Count.Equals(1) && fractional.GetResults().Count.Equals(1))
+                //{
+                //    if (integerNumber.GetResults()[0].Contains("Menos") && fractional.GetResults()[0].Contains("Menos"))
+                //    {
+                //        textNumerator = new StringBuilder(integerNumber.GetResults()[0].Replace("Menos ", ""));
+                //        textDenominator = new StringBuilder(fractional.GetResults()[0].Replace("Menos ", ""));
+                //        list.Add(CheckPluralResult("", textNumerator, textDenominator));
+                //    }
+                //    else if (integerNumber.GetResults()[0].Contains("Menos") && !fractional.GetResults()[0].Contains("Menos"))
+                //    {
+                //        textNumerator = new StringBuilder(integerNumber.GetResults()[0].Replace("Menos ", ""));
+                //        list.Add(CheckPluralResult("Menos ", textNumerator, new StringBuilder(fractional.GetResults()[0])));
+                //    }
+                //    else if (!integerNumber.GetResults()[0].Contains("Menos") && fractional.GetResults()[0].Contains("Menos"))
+                //    {
+                //        textNumerator = new StringBuilder(char.ToLower(integerNumber.GetResults()[0].ToString()[0]) + integerNumber.GetResults()[0].ToString().Substring(1));
+                //        textDenominator = new StringBuilder(fractional.GetResults()[0].Replace("Menos ", ""));
+                //        list.Add(CheckPluralResult("Menos ", textNumerator, textDenominator));
+                //    }
+                //    else
+                //    {
+                //        textNumerator = new StringBuilder(char.ToLower(integerNumber.GetResults()[0].ToString()[0]) + integerNumber.GetResults()[0].ToString().Substring(1));
+                //        list.Add(CheckPluralResult("", textNumerator, new StringBuilder(fractional.GetResults()[0])));
+                //    }
+                //}
             }
-            //else
-            //return text.Append("").ToString();
-            return new List<string>();
+            if (list.Count > 0)
+                list.Insert(0, "3");
+            return list;
+        }
+
+        private string CheckPluralResult(string minus, StringBuilder numerator, StringBuilder denominator)
+        {
+            StringBuilder aux = numerator;
+            if (minus.Equals("")) numerator = new StringBuilder(char.ToUpper(numerator[0]) + numerator.ToString().Substring(1));
+            if (!aux.Equals(new StringBuilder("um")))
+                return minus + numerator + " " + denominator + "s";
+            else
+                return minus + numerator + " " + denominator;
         }
 
         private List<string> MultiplicativeNumber(Treatment treatment)
@@ -264,11 +572,11 @@ namespace NumbersTranslatorWebService
             List<string> list = multiplicative.GetResults();
             if (list.Count.Equals(2))
             {
-                list[0] = /*"<b>(DPLP)</b> " +*/ list[0];
-                list[1] = /*"<b>(MAT)</b> " +*/ list[1];
+                list[0] = list[0];
+                list[1] = list[1];
             }
             else if (list.Count.Equals(1))
-                list[0] = /*"<b>(DPLP)</b> " +*/ list[0];
+                list[0] = list[0];
             if (list.Count > 0)
                 list.Insert(0, "4");
             return list;

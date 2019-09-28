@@ -1,9 +1,9 @@
-﻿using Entities;
-using NumbersTranslatorWebService.RulesDB;
-using System;
+﻿using System;
+using Entities;
+using System.Text;
 using System.Collections;
 using System.Collections.Generic;
-using System.Text;
+using NumbersTranslatorWebService.RulesDB;
 
 namespace NumbersTranslatorWebService.Entities
 {
@@ -161,8 +161,8 @@ namespace NumbersTranslatorWebService.Entities
             CheckTextMillons(phrase);
             CheckTextMillons(alternative);
             ResetParameters();
-            InsertSentence(phrase.ToString());
-            InsertAlternativeSentence(alternative.ToString());
+            InsertSentence(sentence, phrase.ToString());
+            InsertSentence(alternativeSentence, alternative.ToString());
         }
 
         private StringBuilder CheckTextThousands(StringBuilder phrase)
@@ -205,9 +205,9 @@ namespace NumbersTranslatorWebService.Entities
                 StringBuilder name = new StringBuilder(BigNumbers[millons]);
                 InsertMillonsValues(name.ToString());
                 if (!sentence.Contains(name.ToString()))
-                    InsertSentence(name.ToString());
+                    InsertSentence(sentence, name.ToString());
                 if (!alternativeSentence.Contains(name.ToString()))
-                    InsertAlternativeSentence(name.ToString());
+                    InsertSentence(alternativeSentence, name.ToString());
             }
         }
 
@@ -230,14 +230,9 @@ namespace NumbersTranslatorWebService.Entities
             }
         }
 
-        private void InsertSentence(string phrase)
+        private void InsertSentence(ArrayList list, string phrase)
         {
-            sentence.Insert(0, phrase);
-        }
-
-        private void InsertAlternativeSentence(string alternative)
-        {
-            alternativeSentence.Insert(0, alternative);
+            list.Insert(0, phrase);
         }
 
         public override List<string> GetResults()

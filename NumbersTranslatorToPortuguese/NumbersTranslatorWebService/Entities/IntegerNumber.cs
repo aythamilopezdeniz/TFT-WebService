@@ -1,9 +1,9 @@
-﻿using Entities;
-using NumbersTranslatorWebService.RulesDB;
-using System;
+﻿using System;
+using Entities;
+using System.Text;
 using System.Collections;
 using System.Collections.Generic;
-using System.Text;
+using NumbersTranslatorWebService.RulesDB;
 
 namespace NumbersTranslatorWebService.Entities
 {
@@ -113,8 +113,8 @@ namespace NumbersTranslatorWebService.Entities
                 }
                 else
                 {
-                    InsertSentence("Menos");
-                    InsertAlternativeSentence("Menos");
+                    InsertSentence(sentence, "Menos");
+                    InsertSentence(alternativeSentence, "Menos");
                 }
                 numberEdited.Append(text.Substring(text.IndexOf("-") + 1));
             }
@@ -126,8 +126,8 @@ namespace NumbersTranslatorWebService.Entities
         {
             if (number.Length == 1 && number.Equals(new StringBuilder("0")))
             {
-                InsertSentence("Zero");
-                InsertAlternativeSentence("Zero");
+                InsertSentence(sentence, "Zero");
+                InsertSentence(alternativeSentence, "Zero");
             }
             else
             {
@@ -225,8 +225,8 @@ namespace NumbersTranslatorWebService.Entities
             alternative = CheckTextThousands(alternative);
             CheckTextMillons(phrase);
             ResetParameters();
-            InsertSentence(phrase.ToString());
-            InsertAlternativeSentence(alternative.ToString());
+            InsertSentence(sentence, phrase.ToString());
+            InsertSentence(alternativeSentence, alternative.ToString());
         }
 
         private StringBuilder CheckTextThousands(StringBuilder phrase)
@@ -281,7 +281,7 @@ namespace NumbersTranslatorWebService.Entities
                 InsertMillonsValues(name.ToString());
                 InsertMillonsValues(alternativeName.ToString());
                 if (!sentence.Contains(name.ToString()) && !sentence.Contains(CheckPlural(name.ToString())))
-                    InsertSentence(CheckPlural(name.ToString()));
+                    InsertSentence(sentence, CheckPlural(name.ToString()));
                 else if (sentence.Contains(name.ToString()) && millonsValues[name.ToString()] > 1)
                 {
                     int pos = sentence.IndexOf(name.ToString());
@@ -290,7 +290,7 @@ namespace NumbersTranslatorWebService.Entities
                 }
                 if (!alternativeSentence.Contains(alternativeName.ToString()) && 
                     !alternativeSentence.Contains(CheckPlural(alternativeName.ToString())))
-                    InsertAlternativeSentence(CheckPlural(alternativeName.ToString()));
+                    InsertSentence(alternativeSentence, CheckPlural(alternativeName.ToString()));
                 else if (alternativeSentence.Contains(alternativeName.ToString()) && 
                     millonsValues[alternativeName.ToString()] > 1)
                 {
@@ -343,16 +343,10 @@ namespace NumbersTranslatorWebService.Entities
             }
         }
 
-        private void InsertSentence(string phrase)
+        private void InsertSentence(ArrayList list, string phrase)
         {
-            if (sentence.Contains("Menos")) sentence.Insert(1, phrase);
-            else sentence.Insert(0, phrase);
-        }
-
-        private void InsertAlternativeSentence(string phrase)
-        {
-            if (alternativeSentence.Contains("Menos")) alternativeSentence.Insert(1, phrase);
-            else alternativeSentence.Insert(0, phrase);
+            if (list.Contains("Menos")) list.Insert(1, phrase);
+            else list.Insert(0, phrase);
         }
 
         public override List<string> GetResults()

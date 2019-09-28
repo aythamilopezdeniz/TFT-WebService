@@ -1,9 +1,4 @@
-﻿using Entities;
-using NumbersTranslatorWebService.Entities;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using System.Collections;
-using System.Text;
+﻿using System.Collections.Generic;
 
 namespace NumbersTranslatorWebService
 {
