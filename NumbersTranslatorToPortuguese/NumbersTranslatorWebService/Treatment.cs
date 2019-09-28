@@ -41,18 +41,24 @@ namespace Entities
 
         public void checkNumber()
         {
-            this.scientificNotationNumber = checkScientificNotationNumber(Text);
+            scientificNotationNumber = checkScientificNotationNumber(Text);
             if (scientificNotationNumber.Equals(true))
             {
                 exponentialNumber = GetBaseAndExponentPart();
                 GetIntegerAndDecimalPart(exponentialNumber);
                 ConvertIntegerOrDecimalNumber();
             }
-            this.decimalNumber = checkDecimalNumber(Text);
+            decimalNumber = checkDecimalNumber(Text);
             if (decimalNumber.Equals(true))
             {
                 GetIntegerAndDecimalPart(new ArrayList() { Text });
                 CheckDecimalPart();
+            }
+            fractionalNumber = checkFractionalNumber(Text);
+            if (fractionalNumber.Equals(true))
+            {
+                ArrayList denominator = GetFractionsPart(Text);
+                CheckFractions(denominator);
             }
             integerNumber = checkIntegerNumber(Text);
             decimalNumber = checkDecimalNumber(Text);
@@ -238,6 +244,27 @@ namespace Entities
                 Text = minus + integerPartNumber;
             else
                 Text = minus + integerPartNumber + "," + decimalPartNumber;
+        }
+
+        private ArrayList GetFractionsPart(string text)
+        {
+            ArrayList fraction = new ArrayList();
+            fraction.Add(text.Substring(0, text.IndexOf("/")));
+            fraction.Add(text.Substring(text.IndexOf("/") + 1));
+            return fraction;
+        }
+
+        private void CheckFractions(ArrayList fraction)
+        {
+            if (fraction[1].ToString().Equals("1"))
+                Text = fraction[0].ToString();
+            else if (fraction[1].ToString().Equals("-1"))
+            {
+                if (fraction[0].ToString().Contains("-"))
+                    Text = fraction[0].ToString().Substring(fraction[0].ToString().IndexOf("-") + 1);
+                else
+                    Text = "-" + fraction[0].ToString();
+            }
         }
     }
 }

@@ -68,12 +68,12 @@
     <Compile Include="Entities\DecimalNumber.cs" />
     <Compile Include="Entities\Fractional.cs" />
     <Compile Include="Entities\IntegerNumber.cs" />
-    <Compile Include="Entities\InvalidNumber.cs" />
+    <Compile Include="InvalidNumber.cs" />
     <Compile Include="Entities\Multiplicative.cs" />
     <Compile Include="Entities\Number.cs" />
     <Compile Include="Entities\Ordinal.cs" />
     <Compile Include="Entities\Roman.cs" />
-    <Compile Include="Entities\Treatment.cs" />
+    <Compile Include="Treatment.cs" />
     <Compile Include="NumbersTranslatorWebService.svc.cs">
       <DependentUpon>NumbersTranslatorWebService.svc</DependentUpon>
     </Compile>

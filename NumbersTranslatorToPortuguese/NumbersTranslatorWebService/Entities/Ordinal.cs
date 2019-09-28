@@ -1,9 +1,9 @@
-﻿using Entities;
-using NumbersTranslatorWebService.RulesDB;
-using System;
+﻿using System;
+using Entities;
+using System.Text;
 using System.Collections;
 using System.Collections.Generic;
-using System.Text;
+using NumbersTranslatorWebService.RulesDB;
 
 namespace NumbersTranslatorWebService.Entities
 {
@@ -109,7 +109,10 @@ namespace NumbersTranslatorWebService.Entities
                     if (alternativeHundreds.ContainsKey(number[i].ToString() + "00"))
                         alternative.Append(alternativeHundreds[number[i].ToString() + "00"]);
                     else
-                        alternative.Append(Hundreds[number[i].ToString() + "00"]);
+                    {
+                        if (Hundreds.ContainsKey(number[i].ToString() + "00"))
+                            alternative.Append(Hundreds[number[i].ToString() + "00"]);
+                    }
                     if (Hundreds.ContainsKey(number[i].ToString() + "00"))
                         phrase.Append(Hundreds[number[i].ToString() + "00"]);
                 }
@@ -123,7 +126,10 @@ namespace NumbersTranslatorWebService.Entities
                         if (alternativeSpecials.ContainsKey(number[i].ToString() + number[i + 1].ToString()))
                             alternative.Append(alternativeSpecials[number[i].ToString() + number[i + 1].ToString()]);
                         else
-                            alternative.Append(Tens[number[i].ToString() + "0"]);
+                        {
+                            if (Tens.ContainsKey(number[i].ToString() + "0"))
+                                alternative.Append(Tens[number[i].ToString() + "0"]);
+                        }
                     }
                     if (Tens.ContainsKey(number[i].ToString() + "0"))
                     {
@@ -143,8 +149,10 @@ namespace NumbersTranslatorWebService.Entities
                     if (Units.ContainsKey(number[i].ToString()))
                     {
                         phrase.Append(Units[number[i].ToString()]);
-                        if(!comparation.Equals(new StringBuilder("11")) && !comparation.Equals(new StringBuilder("12")))
+                        if (!comparation.Equals(new StringBuilder("11")) && !comparation.Equals(new StringBuilder("12")))
                             alternative.Append(Units[number[i].ToString()]);
+                        else
+                            alternative = new StringBuilder(alternative.ToString().Trim());
                     }
                 }
             }
@@ -153,8 +161,8 @@ namespace NumbersTranslatorWebService.Entities
             CheckTextMillons(phrase);
             CheckTextMillons(alternative);
             ResetParameters();
-            InsertSentence(phrase.ToString());
-            InsertAlternativeSentence(alternative.ToString());
+            InsertSentence(sentence, phrase.ToString());
+            InsertSentence(alternativeSentence, alternative.ToString());
         }
 
         private StringBuilder CheckTextThousands(StringBuilder phrase)
@@ -175,7 +183,7 @@ namespace NumbersTranslatorWebService.Entities
         private void CheckTextMillons(StringBuilder phrase)
         {
             string aux = "";
-            if (!phrase.Equals(new StringBuilder("")))
+            if (!phrase.Equals(new StringBuilder("")) && ParamMillions.Length > 6)
             {
                 if (digits.Count.Equals(2))
                 {
@@ -197,9 +205,9 @@ namespace NumbersTranslatorWebService.Entities
                 StringBuilder name = new StringBuilder(BigNumbers[millons]);
                 InsertMillonsValues(name.ToString());
                 if (!sentence.Contains(name.ToString()))
-                    InsertSentence(name.ToString());
+                    InsertSentence(sentence, name.ToString());
                 if (!alternativeSentence.Contains(name.ToString()))
-                    InsertAlternativeSentence(name.ToString());
+                    InsertSentence(alternativeSentence, name.ToString());
             }
         }
 
@@ -222,14 +230,9 @@ namespace NumbersTranslatorWebService.Entities
             }
         }
 
-        private void InsertSentence(string phrase)
+        private void InsertSentence(ArrayList list, string phrase)
         {
-            sentence.Insert(0, phrase);
-        }
-
-        private void InsertAlternativeSentence(string alternative)
-        {
-            alternativeSentence.Insert(0, alternative);
+            list.Insert(0, phrase);
         }
 
         public override List<string> GetResults()
@@ -238,6 +241,7 @@ namespace NumbersTranslatorWebService.Entities
             string firtsResult = GetSentence(sentence);
             string secondResult = GetSentence(alternativeSentence);
             if (firtsResult.Equals("")) return new List<string>();
+            if (secondResult.Equals("")) return new List<string>() { firtsResult };
             if (IsSentencesEquals(firtsResult, secondResult))
                 results.Add(firtsResult);
             else
@@ -253,7 +257,7 @@ namespace NumbersTranslatorWebService.Entities
             StringBuilder phrase = new StringBuilder("");
             foreach (string item in list)
             {
-                if (!item.Equals(new StringBuilder("")))
+                if (!item.Equals(""))
                     phrase.Append(new StringBuilder(item + " "));
             }
             if (phrase.Equals(new StringBuilder(""))) return "";
