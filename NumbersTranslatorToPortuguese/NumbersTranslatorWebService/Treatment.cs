@@ -6,34 +6,34 @@ namespace Entities
 {
     public class Treatment
     {
-        private string text { get; set; }
-        private bool valideNumber { get; set; }
-        private bool integerNumber { get; set; }
-        private bool decimalNumber { get; set; }
-        private bool fractionalNumber { get; set; }
-        private bool scientificNotationNumber { get; set; }
-        private string integerRegularExpression { get; set; }
-        private string decimalRegularExpression { get; set; }
-        private string fractionalRegularExpression { get; set; }
-        private string scientificNotationRegularExpression { get; set; }
-        private ArrayList number;
+        private string Text;
+        private bool valideNumber;
+        private bool integerNumber;
+        private bool decimalNumber;
+        private bool fractionalNumber;
+        private bool scientificNotationNumber;
+        private string integerRegularExpression;
+        private string decimalRegularExpression;
+        private string fractionalRegularExpression;
+        private string scientificNotationRegularExpression;
+        private ArrayList exponentialNumber;
         private string integerPartNumber;
         private string decimalPartNumber;
         private string minus;
 
         public Treatment(string text)
         {
-            this.text = text;
-            this.valideNumber = false;
-            this.integerNumber = false;
-            this.decimalNumber = false;
-            this.fractionalNumber = false;
-            this.scientificNotationNumber = false;
-            this.integerRegularExpression = "^(\\+|-)?\\d+$";
-            this.decimalRegularExpression = "^(\\+|-)?\\d+[\\.|,]{1}\\d+$";
-            this.fractionalRegularExpression = "^(\\+|-)?\\d+\\/{1}[\\+|-]?\\d+$";
-            this.scientificNotationRegularExpression = "^(\\+|-)?\\d+((\\.|,)\\d+)?[Ee]{1}(\\+|-)?\\d+$";
-            number = new ArrayList();
+            Text = text;
+            valideNumber = false;
+            integerNumber = false;
+            decimalNumber = false;
+            fractionalNumber = false;
+            scientificNotationNumber = false;
+            integerRegularExpression = "^(\\+|-)?\\d+$";
+            decimalRegularExpression = "^(\\+|-)?\\d+[\\.|,]{1}\\d+$";
+            fractionalRegularExpression = "^(\\+|-)?\\d+\\/{1}[\\+|-]?\\d+$";
+            scientificNotationRegularExpression = "^(\\+|-)?\\d+((\\.|,)\\d+)?[Ee]{1}(\\+|-)?\\d+$";
+            exponentialNumber = new ArrayList();
             integerPartNumber = "";
             decimalPartNumber = "";
             minus = "";
@@ -41,97 +41,109 @@ namespace Entities
 
         public void checkNumber()
         {
-            this.scientificNotationNumber = checkScientificNotationNumber(this.text);
+            scientificNotationNumber = checkScientificNotationNumber(Text);
             if (scientificNotationNumber.Equals(true))
             {
-                number = GetBaseAndExponentPart();
-                GetIntegerAndDecimalPart();
+                exponentialNumber = GetBaseAndExponentPart();
+                GetIntegerAndDecimalPart(exponentialNumber);
                 ConvertIntegerOrDecimalNumber();
             }
-            this.integerNumber = checkIntegerNumber(this.text);
-            this.decimalNumber = checkDecimalNumber(this.text);
-            this.fractionalNumber = checkFractionalNumber(this.text);
-            this.scientificNotationNumber = checkScientificNotationNumber(this.text);
-            if (this.integerNumber.Equals(true) || this.decimalNumber.Equals(true) ||
-                this.fractionalNumber.Equals(true) || this.scientificNotationNumber.Equals(true))
-                this.valideNumber = true;
+            decimalNumber = checkDecimalNumber(Text);
+            if (decimalNumber.Equals(true))
+            {
+                GetIntegerAndDecimalPart(new ArrayList() { Text });
+                CheckDecimalPart();
+            }
+            fractionalNumber = checkFractionalNumber(Text);
+            if (fractionalNumber.Equals(true))
+            {
+                ArrayList denominator = GetFractionsPart(Text);
+                CheckFractions(denominator);
+            }
+            integerNumber = checkIntegerNumber(Text);
+            decimalNumber = checkDecimalNumber(Text);
+            fractionalNumber = checkFractionalNumber(Text);
+            scientificNotationNumber = checkScientificNotationNumber(Text);
+            if (integerNumber.Equals(true) || decimalNumber.Equals(true) ||
+                fractionalNumber.Equals(true) || scientificNotationNumber.Equals(true))
+                valideNumber = true;
         }
 
         private bool checkIntegerNumber(string text)
         {
-            return Regex.Match(text, this.integerRegularExpression).Success;
+            return Regex.Match(text, integerRegularExpression).Success;
         }
 
         private bool checkDecimalNumber(string text)
         {
-            return Regex.Match(text, this.decimalRegularExpression).Success;
+            return Regex.Match(text, decimalRegularExpression).Success;
         }
 
         private bool checkFractionalNumber(string text)
         {
-            return Regex.Match(text, this.fractionalRegularExpression).Success;
+            return Regex.Match(text, fractionalRegularExpression).Success;
         }
 
         private bool checkScientificNotationNumber(string text)
         {
-            return Regex.Match(text, this.scientificNotationRegularExpression).Success;
+            return Regex.Match(text, scientificNotationRegularExpression).Success;
         }
 
-        public string getText()
+        public string GetText()
         {
-            return this.text;
+            return Text;
         }
 
-        public bool getValideNumber()
+        public bool GetValideNumber()
         {
-            return this.valideNumber;
+            return valideNumber;
         }
 
-        public bool getIntegerNumber()
+        public bool GetIntegerNumber()
         {
-            return this.integerNumber;
+            return integerNumber;
         }
 
-        public bool getDecimalNumber()
+        public bool GetDecimalNumber()
         {
-            return this.decimalNumber;
+            return decimalNumber;
         }
 
-        public bool getFractionalNumber()
+        public bool GetFractionalNumber()
         {
-            return this.fractionalNumber;
+            return fractionalNumber;
         }
 
-        public bool getScientificNotationNumber()
+        public bool GetScientificNotationNumber()
         {
-            return this.scientificNotationNumber;
+            return scientificNotationNumber;
         }
 
         private ArrayList GetBaseAndExponentPart()
         {
             ArrayList exponentialNumber = new ArrayList();
-            if (text.Contains("E"))
+            if (Text.Contains("E"))
             {
-                exponentialNumber.Add(text.Substring(0, text.IndexOf("E")));
-                exponentialNumber.Add(text.Substring(text.IndexOf("E") + 1));
+                exponentialNumber.Add(Text.Substring(0, Text.IndexOf("E")));
+                exponentialNumber.Add(Text.Substring(Text.IndexOf("E") + 1));
             }
-            else if (text.Contains(","))
+            else if (Text.Contains(","))
             {
-                exponentialNumber.Add(text.Substring(0, text.IndexOf("e")));
-                exponentialNumber.Add(text.Substring(text.IndexOf("e") + 1));
+                exponentialNumber.Add(Text.Substring(0, Text.IndexOf("e")));
+                exponentialNumber.Add(Text.Substring(Text.IndexOf("e") + 1));
             }
             return exponentialNumber;
         }
 
-        private void GetIntegerAndDecimalPart()
+        private void GetIntegerAndDecimalPart(ArrayList number)
         {
-            if (!text.Contains(",") && !text.Contains(".")) integerPartNumber = number[0].ToString();
-            if (text.Contains(","))
+            if (!Text.Contains(",") && !Text.Contains(".")) integerPartNumber = number[0].ToString();
+            if (Text.Contains(","))
             {
                 integerPartNumber = number[0].ToString().Substring(0, number[0].ToString().IndexOf(","));
                 decimalPartNumber = number[0].ToString().Substring(number[0].ToString().IndexOf(",") + 1);
             }
-            else if (text.Contains("."))
+            else if (Text.Contains("."))
             {
                 integerPartNumber = number[0].ToString().Substring(0, number[0].ToString().IndexOf("."));
                 decimalPartNumber = number[0].ToString().Substring(number[0].ToString().IndexOf(".") + 1);
@@ -146,20 +158,20 @@ namespace Entities
                 minus = "-";
                 integerPartNumber = integerPartNumber.Substring(integerPartNumber.IndexOf("-") + 1);
             }
-            int exp = Int32.Parse(number[1].ToString());
+            int exp = Int32.Parse(exponentialNumber[1].ToString());
             if (exp == 0)
             {
                 if (DecimalPartIsZero())
-                    text = minus + integerPartNumber;
+                    Text = minus + integerPartNumber;
                 else
-                    text = minus + number[0].ToString();
+                    Text = minus + exponentialNumber[0].ToString();
             }
             if (exp > 0)
             {
                 if (decimalPartNumber.Length.Equals(0))
                 {
                     zeros = new string('0', exp);
-                    text = minus + integerPartNumber + zeros;
+                    Text = minus + integerPartNumber + zeros;
                 }
                 else if (decimalPartNumber.Length > 0)
                 {
@@ -169,12 +181,10 @@ namespace Entities
                             zeros = new string('0', (exp - decimalPartNumber.Length));
                         integerPartNumber = integerPartNumber + decimalPartNumber + zeros;
                         decimalPartNumber = "";
-                        text = minus + integerPartNumber.TrimStart('0');
+                        Text = minus + integerPartNumber.TrimStart('0');
                     }
                     else if (exp < decimalPartNumber.Length)
                     {
-                        //integerPartNumber = integerPartNumber + decimalPartNumber.Substring(0, (decimalPartNumber.Length - exp) + 1);
-                        //decimalPartNumber = decimalPartNumber.Substring((decimalPartNumber.Length - exp) + 1);
                         integerPartNumber = integerPartNumber + decimalPartNumber.Substring(0, exp - 1);
                         decimalPartNumber = decimalPartNumber.Substring(exp);
                         CheckIntegerNumber();
@@ -184,7 +194,7 @@ namespace Entities
                     {
                         integerPartNumber = integerPartNumber + decimalPartNumber;
                         decimalPartNumber = "";
-                        text = minus + integerPartNumber.TrimStart('0');
+                        Text = minus + integerPartNumber.TrimStart('0');
                     }
                 }
 
@@ -201,7 +211,6 @@ namespace Entities
                 }
                 else if (exp < integerPartNumber.Length)
                 {
-                    /*Revisar*/
                     decimalPartNumber = integerPartNumber.Substring((integerPartNumber.Length - exp)) + decimalPartNumber.TrimEnd('0');
                     integerPartNumber = integerPartNumber.Substring(0, (integerPartNumber.Length - exp));
                 }
@@ -232,9 +241,30 @@ namespace Entities
         private void CheckDecimalPart()
         {
             if (DecimalPartIsZero())
-                text = minus + integerPartNumber;
+                Text = minus + integerPartNumber;
             else
-                text = minus + integerPartNumber + "," + decimalPartNumber;
+                Text = minus + integerPartNumber + "," + decimalPartNumber;
+        }
+
+        private ArrayList GetFractionsPart(string text)
+        {
+            ArrayList fraction = new ArrayList();
+            fraction.Add(text.Substring(0, text.IndexOf("/")));
+            fraction.Add(text.Substring(text.IndexOf("/") + 1));
+            return fraction;
+        }
+
+        private void CheckFractions(ArrayList fraction)
+        {
+            if (fraction[1].ToString().Equals("1"))
+                Text = fraction[0].ToString();
+            else if (fraction[1].ToString().Equals("-1"))
+            {
+                if (fraction[0].ToString().Contains("-"))
+                    Text = fraction[0].ToString().Substring(fraction[0].ToString().IndexOf("-") + 1);
+                else
+                    Text = "-" + fraction[0].ToString();
+            }
         }
     }
 }

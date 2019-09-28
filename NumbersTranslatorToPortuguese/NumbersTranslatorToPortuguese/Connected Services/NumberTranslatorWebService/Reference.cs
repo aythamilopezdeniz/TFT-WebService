@@ -16,11 +16,10 @@ namespace NumbersTranslatorToPortuguese.NumberTranslatorWebService {
     public interface INumbersTranslatorWebService {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/INumbersTranslatorWebService/TranslateText", ReplyAction="http://tempuri.org/INumbersTranslatorWebService/TranslateTextResponse")]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(System.Collections.ArrayList))]
-        System.Collections.ArrayList TranslateText(string text);
+        string[][] TranslateText(string text);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/INumbersTranslatorWebService/TranslateText", ReplyAction="http://tempuri.org/INumbersTranslatorWebService/TranslateTextResponse")]
-        System.Threading.Tasks.Task<System.Collections.ArrayList> TranslateTextAsync(string text);
+        System.Threading.Tasks.Task<string[][]> TranslateTextAsync(string text);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -50,11 +49,11 @@ namespace NumbersTranslatorToPortuguese.NumberTranslatorWebService {
                 base(binding, remoteAddress) {
         }
         
-        public System.Collections.ArrayList TranslateText(string text) {
+        public string[][] TranslateText(string text) {
             return base.Channel.TranslateText(text);
         }
         
-        public System.Threading.Tasks.Task<System.Collections.ArrayList> TranslateTextAsync(string text) {
+        public System.Threading.Tasks.Task<string[][]> TranslateTextAsync(string text) {
             return base.Channel.TranslateTextAsync(text);
         }
     }
