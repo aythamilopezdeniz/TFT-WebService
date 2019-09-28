@@ -16,12 +16,12 @@ namespace NumbersTranslatorWebService.Entities
         private SortedList<string, string> alternativeTens;
         private SortedList<string, string> alternativeSpecials;
         private SortedList<string, string> alternativeHundreds;
-        private ArrayList digits { get; set; }
+        private ArrayList digits;
         private ArrayList sentence;
         private ArrayList alternativeSentence;
         private int ParamThousands;
         private int Iter;
-        private StringBuilder ParamMillions { get; set; }
+        private StringBuilder ParamMillions;
         private SortedList<string, int> millonsValues;
 
         public Ordinal(string dato)
@@ -158,8 +158,8 @@ namespace NumbersTranslatorWebService.Entities
             }
             phrase = CheckTextThousands(phrase);
             alternative = CheckTextThousands(alternative);
-            CheckTextMillons(phrase);
-            CheckTextMillons(alternative);
+            phrase = CheckTextMillons(phrase, new StringBuilder("sentence"));
+            alternative = CheckTextMillons(alternative, new StringBuilder("alternative"));
             ResetParameters();
             InsertSentence(sentence, phrase.ToString());
             InsertSentence(alternativeSentence, alternative.ToString());
@@ -180,34 +180,49 @@ namespace NumbersTranslatorWebService.Entities
             return phrase;
         }
 
-        private void CheckTextMillons(StringBuilder phrase)
+        private StringBuilder CheckTextMillons(StringBuilder phrase, StringBuilder type)
         {
-            string aux = "";
+            StringBuilder millonNumber = GetMillonNumber(phrase);
+            StringBuilder nameMillon = GetMillonName(millonNumber);
+            if (phrase.Equals(new StringBuilder("primeiro"))) phrase = new StringBuilder("");
+            CheckAppearTimesMillons(nameMillon, type);
+            return phrase;
+        }
+
+        private StringBuilder GetMillonNumber(StringBuilder phrase)
+        {
             if (!phrase.Equals(new StringBuilder("")) && ParamMillions.Length > 6)
             {
                 if (digits.Count.Equals(2))
-                {
-                    aux = ParamMillions.ToString().Substring(0, Iter - (digits[0].ToString().Length + digits[1].ToString().Length) + 1);
-                    CheckAppearTimesMillons(aux);
-                }
+                    return new StringBuilder(ParamMillions.ToString().Substring(0, Iter - (digits[0].ToString().Length + digits[1].ToString().Length) + 1));
                 else
-                {
-                    aux = ParamMillions.ToString().Substring(0, ParamMillions.Length - digits[0].ToString().Length + 1);
-                    CheckAppearTimesMillons(aux);
-                }
+                    return new StringBuilder(ParamMillions.ToString().Substring(0, ParamMillions.Length - digits[0].ToString().Length + 1));
             }
+            return new StringBuilder("");
         }
 
-        private void CheckAppearTimesMillons(string millons)
+        private StringBuilder GetMillonName(StringBuilder millonNumber)
         {
-            if (BigNumbers.ContainsKey(millons))
+            if (BigNumbers.ContainsKey(millonNumber.ToString()))
+                return new StringBuilder(BigNumbers[millonNumber.ToString()]);
+            return new StringBuilder("");
+        }
+
+        private void CheckAppearTimesMillons(StringBuilder nameMillon, StringBuilder type)
+        {
+            if (!nameMillon.Equals(new StringBuilder("")))
             {
-                StringBuilder name = new StringBuilder(BigNumbers[millons]);
-                InsertMillonsValues(name.ToString());
-                if (!sentence.Contains(name.ToString()))
-                    InsertSentence(sentence, name.ToString());
-                if (!alternativeSentence.Contains(name.ToString()))
-                    InsertSentence(alternativeSentence, name.ToString());
+                InsertMillonsValues(nameMillon.ToString());
+                if (type.Equals(new StringBuilder("sentence")))
+                {
+                    if (!sentence.Contains(nameMillon.ToString()))
+                        InsertSentence(sentence, nameMillon.ToString());
+                }
+                else if (type.Equals(new StringBuilder("alternative")))
+                {
+                    if (!alternativeSentence.Contains(nameMillon.ToString()))
+                        InsertSentence(alternativeSentence, nameMillon.ToString());
+                }
             }
         }
 
