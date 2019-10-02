@@ -12,10 +12,11 @@ namespace Entities
         private bool decimalNumber;
         private bool fractionalNumber;
         private bool scientificNotationNumber;
-        private string integerRegularExpression;
-        private string decimalRegularExpression;
-        private string fractionalRegularExpression;
-        private string scientificNotationRegularExpression;
+        private bool romanNumber;
+        private readonly string integerRegularExpression;
+        private readonly string decimalRegularExpression;
+        private readonly string fractionalRegularExpression;
+        private readonly string scientificNotationRegularExpression;
         private ArrayList exponentialNumber;
         private string integerPartNumber;
         private string decimalPartNumber;
@@ -29,6 +30,7 @@ namespace Entities
             decimalNumber = false;
             fractionalNumber = false;
             scientificNotationNumber = false;
+            romanNumber = false;
             integerRegularExpression = "^(\\+|-)?\\d+$";
             decimalRegularExpression = "^(\\+|-)?\\d+[\\.|,]{1}\\d+$";
             fractionalRegularExpression = "^(\\+|-)?\\d+\\/{1}[\\+|-]?\\d+$";
@@ -41,50 +43,78 @@ namespace Entities
 
         public void checkNumber()
         {
-            scientificNotationNumber = checkScientificNotationNumber(Text);
+            romanNumber = CheckRomanNumber(Text);
+            scientificNotationNumber = CheckScientificNotationNumber(Text);
             if (scientificNotationNumber.Equals(true))
             {
                 exponentialNumber = GetBaseAndExponentPart();
                 GetIntegerAndDecimalPart(exponentialNumber);
                 ConvertIntegerOrDecimalNumber();
             }
-            decimalNumber = checkDecimalNumber(Text);
+            decimalNumber = CheckDecimalNumber(Text);
             if (decimalNumber.Equals(true))
             {
                 GetIntegerAndDecimalPart(new ArrayList() { Text });
                 CheckDecimalPart();
             }
-            fractionalNumber = checkFractionalNumber(Text);
+            fractionalNumber = CheckFractionalNumber(Text);
             if (fractionalNumber.Equals(true))
             {
                 ArrayList denominator = GetFractionsPart(Text);
                 CheckFractions(denominator);
             }
-            integerNumber = checkIntegerNumber(Text);
-            decimalNumber = checkDecimalNumber(Text);
-            fractionalNumber = checkFractionalNumber(Text);
-            scientificNotationNumber = checkScientificNotationNumber(Text);
+            integerNumber = CheckIntegerNumber(Text);
+            decimalNumber = CheckDecimalNumber(Text);
+            fractionalNumber = CheckFractionalNumber(Text);
+            scientificNotationNumber = CheckScientificNotationNumber(Text);
+            romanNumber = CheckRomanNumber(Text);
             if (integerNumber.Equals(true) || decimalNumber.Equals(true) ||
-                fractionalNumber.Equals(true) || scientificNotationNumber.Equals(true))
+                fractionalNumber.Equals(true) || scientificNotationNumber.Equals(true) ||
+                romanNumber.Equals(true))
                 valideNumber = true;
         }
 
-        private bool checkIntegerNumber(string text)
+        private bool CheckRomanNumber(string numRomano)
+        {
+            ArrayList romanosBis = new ArrayList() { "M", "D", "C", "L", "X", "V", "I" };
+            int[] valorRomanosBis = new int[] { 1, 5, 10, 50, 100, 500, 1000 };
+            int numero = 0, posAnt = -1, pos, rep = 1;
+            romanosBis.Reverse();
+            numRomano = numRomano.ToUpper();
+            pos = romanosBis.IndexOf(numRomano[numRomano.Length - 1].ToString());
+            if (pos == -1) return false;
+            numero = valorRomanosBis[pos];
+            for (int i = numRomano.Length - 2; i >= 0; i--)
+            {
+                posAnt = pos;
+                pos = romanosBis.IndexOf(numRomano[i].ToString());
+
+                if (posAnt == pos) rep++;
+                else rep = 1;
+                if (pos < posAnt)
+                    numero -= valorRomanosBis[pos];
+                else numero += valorRomanosBis[pos];
+            }
+            Text = Convert.ToString(numero);
+            return true;
+        }
+
+        private bool CheckIntegerNumber(string text)
         {
             return Regex.Match(text, integerRegularExpression).Success;
         }
 
-        private bool checkDecimalNumber(string text)
+        private bool CheckDecimalNumber(string text)
         {
             return Regex.Match(text, decimalRegularExpression).Success;
         }
 
-        private bool checkFractionalNumber(string text)
+        private bool CheckFractionalNumber(string text)
         {
             return Regex.Match(text, fractionalRegularExpression).Success;
         }
 
-        private bool checkScientificNotationNumber(string text)
+        private bool CheckScientificNotationNumber(string text)
         {
             return Regex.Match(text, scientificNotationRegularExpression).Success;
         }
