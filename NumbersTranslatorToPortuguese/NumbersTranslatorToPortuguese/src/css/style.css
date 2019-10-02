@@ -105,3 +105,101 @@
 .panel-body {
     margin-left: -15px;
 }
+
+/*Responsive*/
+/*Microsoft Lumia 650*/
+@media screen and (min-device-width: 370px) and (max-device-height: 640px) and (-webkit-device-pixel-ratio: 1) {
+    .nav-link, #Translate, #Text, .icon-left-lang, .links-lang {
+        font-size: 2rem;
+    }
+
+    #alternativeTitle {
+        font-size: 1.2rem;
+    }
+
+    .box-lang {
+        right: -150px;
+    }
+
+        .box-lang:hover {
+            transform: translateX(-150px);
+        }
+}
+
+
+/*Galaxy S5*/
+@media screen and (min-device-width: 320px) and (max-device-height: 640px) and (-webkit-device-pixel-ratio: 3) {
+    .nav-link, #Translate, #Text, #number, #text-justify, #alternativeTitle, .icon-left-lang, .links-lang,
+    #myTabContent button {
+        font-size: 2rem;
+    }
+
+    .box-lang {
+        right: -150px;
+    }
+
+        .box-lang:hover {
+            transform: translateX(-150px);
+        }
+}
+
+/*iPhone 7*/
+@media only screen and (min-device-width: 375px) and (max-device-width: 1024px) and (-webkit-min-device-pixel-ratio: 1) {
+    /*.nav-link, #Translate, #Text, #number, #text-justify, #alternativeTitle, .icon-left-lang, .links-lang,
+    #myTabContent button {*/
+    .nav-link, #Translate, #Text, /*#number,*/ .icon-left-lang, .links-lang {
+        font-size: 2rem;
+    }
+
+    .box-lang {
+        right: -150px;
+    }
+
+        .box-lang:hover {
+            transform: translateX(-150px);
+        }
+
+    #number, #text-justify, .panel-heading #alternativeTitle {
+        font-size: 1.3rem;
+    }
+
+    /*.panel-heading #alternativeTitle {
+        font-size: 1.3rem;
+    }*/
+}
+/*iPhone 7+*/
+@media only screen and (min-device-width: 414px) and (max-device-width: 1024px) and (-webkit-min-device-pixel-ratio: 3) {
+    .nav-link, #Translate, #Text, #number, #text-justify, #alternativeTitle, .icon-left-lang, .links-lang, #myTabContent button {
+        font-size: 2rem;
+    }
+
+    .box-lang {
+        right: -150px;
+    }
+
+        .box-lang:hover {
+            transform: translateX(-150px);
+        }
+}
+
+/*Ipads*/
+@media only screen and (min-device-width: 768px) and (max-device-width: 1024px) and (-webkit-min-device-pixel-ratio: 1) {
+    .nav-link, #Translate, #Text, #number, #text-justify, #alternativeTitle, .icon-left-lang, .links-lang, #myTabContent button {
+        font-size: 1.2rem;
+    }
+
+    .box-lang {
+        right: -100px;
+    }
+
+        .box-lang:hover {
+            transform: translateX(-100px);
+        }
+}
+
+/*Laptops*/
+@media screen and (min-device-width: 940px) and (min-device-width: 1200px) and (max-device-width: 1600px) and (-webkit-min-device-pixel-ratio: 1) {
+    .nav-link, #Translate, #Text, #number, #text-justify, #alternativeTitle, .icon-left-lang, .links-lang, #myTabContent button {
+        font-size: 0.875rem;
+    }
+}

@@ -1,9 +1,9 @@
 ﻿using Entities;
-using NumbersTranslatorWebService.Entities;
-using System.Collections;
-using System.Collections.Generic;
 using System.Text;
+using System.Collections;
 using System.Threading.Tasks;
+using System.Collections.Generic;
+using NumbersTranslatorWebService.Entities;
 
 namespace NumbersTranslatorWebService
 {
@@ -45,8 +45,8 @@ namespace NumbersTranslatorWebService
                 Task.Run(() => DecimalNumber(treatment)),
                 Task.Run(() => OrdinalNumber(treatment)),
                 Task.Run(() => FractionalNumber(treatment)),
-                Task.Run(() => MultiplicativeNumber(treatment))/*,*/
-                //Task.Run(() => RomanNumber(treatment))
+                Task.Run(() => MultiplicativeNumber(treatment)),
+                Task.Run(() => RomanNumber(treatment))
             };
             Task[] tasks = (Task[]) taskList.ToArray(typeof(Task));
             Task.WaitAll(tasks);
