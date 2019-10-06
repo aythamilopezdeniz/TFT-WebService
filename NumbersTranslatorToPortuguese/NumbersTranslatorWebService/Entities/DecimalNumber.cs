@@ -229,9 +229,9 @@ namespace NumbersTranslatorWebService.Entities
                     else if (Int32.Parse(digits[0].ToString()) == 1)
                     {
                         if (Int32.Parse(digits[1].ToString()) < 100 && Int32.Parse(digits[1].ToString()) > 0)
-                            phrase.Append(" mil e");
+                            phrase = new StringBuilder(" mil e");
                         else if (Int32.Parse(digits[1].ToString()) >= 100 || Int32.Parse(digits[1].ToString()) == 0)
-                            phrase.Append("mil");
+                            phrase = new StringBuilder("mil");
                     }
                 }
             }
@@ -358,7 +358,7 @@ namespace NumbersTranslatorWebService.Entities
                     phrase.Append(new StringBuilder(item + " "));
             }
             if (phrase.Equals(new StringBuilder(""))) return "";
-            return (char.ToUpper(phrase[0]) + phrase.ToString().Substring(1)).Trim();
+            return phrase.ToString().Trim();
         }
 
         private bool IsSentencesEquals(string firstResult, string secondResult)

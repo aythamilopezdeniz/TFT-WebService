@@ -27,6 +27,7 @@ namespace NumbersTranslatorWebService.Entities
         private int ParamThousands;
         private StringBuilder ParamMillions;
         private SortedList<string, int> millonsValues;
+        private StringBuilder numberEdited;
 
         public Multiplicative(string dato)
         {
@@ -40,6 +41,7 @@ namespace NumbersTranslatorWebService.Entities
             ParamThousands = 0;
             ParamMillions = new StringBuilder("1");
             millonsValues = new SortedList<string, int>();
+            numberEdited = new StringBuilder("");
         }
 
         public override void Translate(Treatment treatment)
@@ -70,8 +72,9 @@ namespace NumbersTranslatorWebService.Entities
             if (treatment.GetIntegerNumber().Equals(true) &&
                 !IsMinusContains(treatment.GetText()))
             {
-                if (treatment.GetText().Length > 126) throw new InvalidNumber("1");
-                    TakeApartNumber(new StringBuilder(treatment.GetText()));
+                EditNumber(treatment.GetText());
+                if (numberEdited.Length > 126) throw new InvalidNumber("1");
+                    TakeApartNumber(numberEdited);
             }
         }
 
@@ -79,6 +82,14 @@ namespace NumbersTranslatorWebService.Entities
         {
             if (text.StartsWith("-")) return true;
             return false;
+        }
+
+        private void EditNumber(string text)
+        {
+            if (text.StartsWith("+"))
+                numberEdited = new StringBuilder(text.Substring(text.IndexOf("+") + 1));
+            else
+                numberEdited = new StringBuilder(text);
         }
 
         private void TakeApartNumber(StringBuilder number)
@@ -231,9 +242,9 @@ namespace NumbersTranslatorWebService.Entities
                     else if (Int32.Parse(digits[0].ToString()) == 1)
                     {
                         if (Int32.Parse(digits[1].ToString()) < 100 && Int32.Parse(digits[1].ToString()) > 0)
-                            phrase.Append(" mil e");
+                            phrase = new StringBuilder(" mil e");
                         else if (Int32.Parse(digits[1].ToString()) >= 100 || Int32.Parse(digits[1].ToString()) == 0)
-                            phrase.Append("mil");
+                            phrase = new StringBuilder("mil");
                     }
                 }
             }

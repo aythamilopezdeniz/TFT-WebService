@@ -1,9 +1,9 @@
-﻿using Entities;
+﻿using System;
+using Entities;
+using System.Text;
 using System.Collections;
 using System.Collections.Generic;
 using NumbersTranslatorWebService.RulesDB;
-using System.Text;
-using System;
 
 namespace NumbersTranslatorWebService.Entities
 {
@@ -27,7 +27,7 @@ namespace NumbersTranslatorWebService.Entities
         private SortedList<string, string> largeCardinal;
         private SortedList<string, string> specialAlternativeTensCardinal;
         private SortedList<string, string> largeAlternativeCardinal;
-        private StringBuilder numbers;
+        private StringBuilder numberEdited;
         private ArrayList digits;
         private int Iter;
         private int ParamThousands;
@@ -41,7 +41,7 @@ namespace NumbersTranslatorWebService.Entities
             Iter = 0;
             ParamThousands = 0;
             digits = new ArrayList();
-            numbers = new StringBuilder("");
+            numberEdited = new StringBuilder("");
             sentence = new ArrayList();
             alternativeSentence1 = new ArrayList();
             alternativeSentence2 = new ArrayList();
@@ -102,11 +102,11 @@ namespace NumbersTranslatorWebService.Entities
 
         private void DescomposeDenominatorNumber(StringBuilder number)
         {
-            ValidateNegativeNumber(number);
-            TransformNumeratorNumber(numbers);
+            ValidateNegativeOrPositiveNumber(number);
+            TransformNumeratorNumber(numberEdited);
         }
 
-        private void ValidateNegativeNumber(StringBuilder text)
+        private void ValidateNegativeOrPositiveNumber(StringBuilder text)
         {
             if (text.ToString().StartsWith("-"))
             {
@@ -122,10 +122,12 @@ namespace NumbersTranslatorWebService.Entities
                     InsertSentence(alternativeSentence1, "Menos");
                     InsertSentence(alternativeSentence2, "Menos");
                 }
-                numbers.Append(text.ToString().Substring(text.ToString().IndexOf("-") + 1));
+                numberEdited = new StringBuilder(text.ToString().Substring(text.ToString().IndexOf("-") + 1));
             }
+            else if (text.ToString().StartsWith("+"))
+                numberEdited = new StringBuilder(text.ToString().Substring(text.ToString().IndexOf("+") + 1));
             else
-                numbers.Append(text);
+                numberEdited = text;
         }
 
         private void TransformNumeratorNumber(StringBuilder number)

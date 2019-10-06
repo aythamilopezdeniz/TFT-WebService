@@ -4,18 +4,21 @@ using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 using NumbersTranslatorWebService.RulesDB;
+using System.Text;
 
 namespace NumbersTranslatorWebService.Entities
 {
     public class Roman : Number
     {
         private ArrayList sentence;
+        private StringBuilder numberEdited;
         private SortedList<int, string> romanNumbers;
 
         public Roman(string dato)
         {
             Initialize(dato);
             sentence = new ArrayList();
+            numberEdited = new StringBuilder("");
         }
 
         public override void Translate(Treatment treatment)
@@ -36,8 +39,12 @@ namespace NumbersTranslatorWebService.Entities
             if (treatment.GetIntegerNumber().Equals(true) && GetTypeNumber().Equals("Roman")
                 && !IsMinusContains(treatment.GetText()))
             {
-                long numero = Convert.ToInt64(treatment.GetText());
-                if (treatment.GetText().Length < 13 && numero < 4000000000000) TakeApartNumber(numero);
+                EditNumber(treatment.GetText());
+                if (numberEdited.Length <= 13)
+                {
+                    long numero = Convert.ToInt64(numberEdited.ToString());
+                    if (numero < 4000000000000) TakeApartNumber(numero);
+                }
             }
         }
 
@@ -45,6 +52,14 @@ namespace NumbersTranslatorWebService.Entities
         {
             if (text.StartsWith("-")) return true;
             return false;
+        }
+
+        private void EditNumber(string text)
+        {
+            if (text.StartsWith("+"))
+                numberEdited = new StringBuilder(text.Substring(text.IndexOf("+") + 1));
+            else
+                numberEdited = new StringBuilder(text);
         }
 
         private void TakeApartNumber(long number)

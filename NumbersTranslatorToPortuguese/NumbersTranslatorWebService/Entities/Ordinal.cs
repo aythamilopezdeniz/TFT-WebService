@@ -23,6 +23,7 @@ namespace NumbersTranslatorWebService.Entities
         private int Iter;
         private StringBuilder ParamMillions;
         private SortedList<string, int> millonsValues;
+        private StringBuilder numberEdited;
 
         public Ordinal(string dato)
         {
@@ -34,6 +35,7 @@ namespace NumbersTranslatorWebService.Entities
             Iter = 0;
             ParamMillions = new StringBuilder("1");
             millonsValues = new SortedList<string, int>();
+            numberEdited = new StringBuilder("");
         }
 
         public override void Translate(Treatment treatment)
@@ -60,8 +62,9 @@ namespace NumbersTranslatorWebService.Entities
             if (treatment.GetIntegerNumber().Equals(true) &&
                 !IsMinusContains(treatment.GetText()))
             {
+                EditNumber(treatment.GetText());
                 if (treatment.GetText().Length > 126) throw new InvalidNumber("1");
-                    TransforNumber(new StringBuilder(treatment.GetText()));
+                    TransforNumber(numberEdited);
             }
         }
 
@@ -69,6 +72,14 @@ namespace NumbersTranslatorWebService.Entities
         {
             if (text.StartsWith("-")) return true;
             return false;
+        }
+
+        private void EditNumber(string text)
+        {
+            if (text.StartsWith("+"))
+                numberEdited = new StringBuilder(text.Substring(text.IndexOf("+") + 1));
+            else
+                numberEdited = new StringBuilder(text);
         }
 
         private void TransforNumber(StringBuilder number)

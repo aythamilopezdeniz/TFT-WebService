@@ -98,11 +98,11 @@ namespace NumbersTranslatorWebService.Entities
 
         private void DescomposeIntegerNumber(string dato)
         {
-            ValidateNegativeNumber(dato);
+            ValidateNegativeOrPositiveNumber(dato);
             TransformIntegerNumber(numberEdited);
         }
 
-        private void ValidateNegativeNumber(string text)
+        private void ValidateNegativeOrPositiveNumber(string text)
         {
             if (text.StartsWith("-"))
             {
@@ -116,8 +116,10 @@ namespace NumbersTranslatorWebService.Entities
                     InsertSentence(sentence, "Menos");
                     InsertSentence(alternativeSentence, "Menos");
                 }
-                numberEdited.Append(text.Substring(text.IndexOf("-") + 1));
+                numberEdited = new StringBuilder(text.Substring(text.IndexOf("-") + 1));
             }
+            else if (text.StartsWith("+"))
+                numberEdited = new StringBuilder(text.Substring(text.IndexOf("+") + 1));
             else
                 numberEdited.Append(text);
         }
