@@ -86,9 +86,10 @@ namespace NumbersTranslatorWebService.Entities
             if (treatment.GetFractionalNumber().Equals(true) && GetTypeNumber().Equals("Fractional"))
             {
                 StringBuilder denominator = new StringBuilder(GetDenominator(treatment.GetText()));
-                if (denominator.Length > 126)
+                ValidateNegativeOrPositiveNumber(denominator);
+                if (numberEdited.Length > 126)
                     throw new InvalidNumber("1");
-                DescomposeDenominatorNumber(denominator);
+                TransformNumeratorNumber(numberEdited);
             }
         }
 
@@ -98,12 +99,6 @@ namespace NumbersTranslatorWebService.Entities
             if (number.Contains("/"))
                 denominator = number.Substring(number.IndexOf("/") + 1);
             return denominator;
-        }
-
-        private void DescomposeDenominatorNumber(StringBuilder number)
-        {
-            ValidateNegativeOrPositiveNumber(number);
-            TransformNumeratorNumber(numberEdited);
         }
 
         private void ValidateNegativeOrPositiveNumber(StringBuilder text)

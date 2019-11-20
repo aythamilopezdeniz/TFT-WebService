@@ -20,9 +20,7 @@ namespace NumbersTranslatorWebService.Entities
         private SortedList<string, int> millonsValues;
         private ArrayList sentence;
         private ArrayList alternativeSentence;
-        private ArrayList alternativeSentenceDecimal;
         private ArrayList digits;
-        private StringBuilder Zero { get; set; }
         private int ParamThousands { get; set; }
         private StringBuilder ParamMillions { get; set; }
         private int Iter { get; set; }
@@ -32,13 +30,11 @@ namespace NumbersTranslatorWebService.Entities
             Initialize(dato);
             sentence = new ArrayList();
             alternativeSentence = new ArrayList();
-            alternativeSentenceDecimal = new ArrayList();
             digits = new ArrayList();
             millonsValues = new SortedList<string, int>();
             ParamThousands = 0;
             ParamMillions = new StringBuilder("1");
             Iter = 0;
-            Zero = new StringBuilder("");
         }
 
         public override void Translate(Treatment treatment)

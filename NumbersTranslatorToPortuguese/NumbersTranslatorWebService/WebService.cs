@@ -373,37 +373,6 @@ namespace NumbersTranslatorWebService
                         list.Add(integerNumber.GetResults()[1] + " " + fractional.GetResults()[1]);
                     }
                 }
-                //else if (integerNumber.GetResults().Count.Equals(2) && fractional.GetResults().Count.Equals(1))
-                //{
-                //    if (integerNumber.GetResults()[0].Contains("Menos") && fractional.GetResults()[0].Contains("Menos"))
-                //    {
-                //        textNumerator = new StringBuilder(integerNumber.GetResults()[0].Replace("Menos ", ""));
-                //        textDenominator = new StringBuilder(fractional.GetResults()[0].Replace("Menos ", ""));
-                //        list.Add(CheckPluralResult("", textNumerator, textDenominator));
-                //        textNumerator = new StringBuilder(integerNumber.GetResults()[1].Replace("Menos ", ""));
-                //        list.Add(CheckPluralResult("", textNumerator, textDenominator));
-                //    }
-                //    else if (integerNumber.GetResults()[0].Contains("Menos") && !fractional.GetResults()[0].Contains("Menos"))
-                //    {
-                //        list.Add(CheckPluralResult("", new StringBuilder(integerNumber.GetResults()[0]), new StringBuilder(fractional.GetResults()[0])));
-                //        list.Add(CheckPluralResult("", new StringBuilder(integerNumber.GetResults()[1]), new StringBuilder(fractional.GetResults()[0])));
-                //    }
-                //    else if (!integerNumber.GetResults()[0].Contains("Menos") && fractional.GetResults()[0].Contains("Menos"))
-                //    {
-                //        textNumerator = new StringBuilder(char.ToLower(integerNumber.GetResults()[0].ToString()[0]) + integerNumber.GetResults()[0].Substring(1));
-                //        textDenominator = new StringBuilder(fractional.GetResults()[0].Replace("Menos ", ""));
-                //        list.Add(CheckPluralResult("Menos ", textNumerator, textDenominator));
-                //        textNumerator = new StringBuilder(char.ToLower(integerNumber.GetResults()[1].ToString()[0]) + integerNumber.GetResults()[1].Substring(1));
-                //        list.Add(CheckPluralResult("Menos ", textNumerator, textDenominator));
-                //    }
-                //    else
-                //    {
-                //        textNumerator = new StringBuilder(char.ToLower(integerNumber.GetResults()[0].ToString()[0]) + integerNumber.GetResults()[0].Substring(1));
-                //        list.Add(CheckPluralResult("", textNumerator, new StringBuilder(fractional.GetResults()[0])));
-                //        textNumerator = new StringBuilder(char.ToLower(integerNumber.GetResults()[1].ToString()[0]) + integerNumber.GetResults()[1].Substring(1));
-                //        list.Add(CheckPluralResult("", textNumerator, new StringBuilder(fractional.GetResults()[0])));
-                //    }
-                //}
                 else if (integerNumber.GetResults().Count.Equals(1) && fractional.GetResults().Count.Equals(4))
                 {
                     if (integerNumber.GetResults()[0].Contains("Menos") && fractional.GetResults()[0].Contains("Menos"))
@@ -517,31 +486,6 @@ namespace NumbersTranslatorWebService
                         list.Add(integerNumber.GetResults()[0] + " " + fractional.GetResults()[1]);
                     }
                 }
-                //else if (integerNumber.GetResults().Count.Equals(1) && fractional.GetResults().Count.Equals(1))
-                //{
-                //    if (integerNumber.GetResults()[0].Contains("Menos") && fractional.GetResults()[0].Contains("Menos"))
-                //    {
-                //        textNumerator = new StringBuilder(integerNumber.GetResults()[0].Replace("Menos ", ""));
-                //        textDenominator = new StringBuilder(fractional.GetResults()[0].Replace("Menos ", ""));
-                //        list.Add(CheckPluralResult("", textNumerator, textDenominator));
-                //    }
-                //    else if (integerNumber.GetResults()[0].Contains("Menos") && !fractional.GetResults()[0].Contains("Menos"))
-                //    {
-                //        textNumerator = new StringBuilder(integerNumber.GetResults()[0].Replace("Menos ", ""));
-                //        list.Add(CheckPluralResult("Menos ", textNumerator, new StringBuilder(fractional.GetResults()[0])));
-                //    }
-                //    else if (!integerNumber.GetResults()[0].Contains("Menos") && fractional.GetResults()[0].Contains("Menos"))
-                //    {
-                //        textNumerator = new StringBuilder(char.ToLower(integerNumber.GetResults()[0].ToString()[0]) + integerNumber.GetResults()[0].ToString().Substring(1));
-                //        textDenominator = new StringBuilder(fractional.GetResults()[0].Replace("Menos ", ""));
-                //        list.Add(CheckPluralResult("Menos ", textNumerator, textDenominator));
-                //    }
-                //    else
-                //    {
-                //        textNumerator = new StringBuilder(char.ToLower(integerNumber.GetResults()[0].ToString()[0]) + integerNumber.GetResults()[0].ToString().Substring(1));
-                //        list.Add(CheckPluralResult("", textNumerator, new StringBuilder(fractional.GetResults()[0])));
-                //    }
-                //}
             }
             if (list.Count > 0)
                 list.Insert(0, "3");

@@ -61,45 +61,24 @@ namespace NumbersTranslatorWebService.Entities
         {
             if (treatment.GetIntegerNumber().Equals(true) && GetTypeNumber().Equals("Cardinal"))
             {
-                if (treatment.GetText().Length > 126) throw new InvalidNumber("1");
-                DescomposeIntegerNumber(treatment.GetText());
+                ValidateNegativeOrPositiveNumber(treatment.GetText());
+                if (numberEdited.Length > 126) throw new InvalidNumber("1");
+                TransformIntegerNumber(numberEdited);
             }
             else if (treatment.GetDecimalNumber().Equals(true) && GetTypeNumber().Equals("Decimal"))
             {
-                string integerNumber = GetIntegerPart(treatment.GetText());
+                ValidateNegativeOrPositiveNumber(treatment.GetText());
+                string integerNumber = GetIntegerPart(numberEdited.ToString());
                 if (integerNumber.Length > 126) throw new InvalidNumber("1");
-                DescomposeIntegerNumber(integerNumber);
+                TransformIntegerNumber(new StringBuilder(integerNumber));
             }
             else if (treatment.GetFractionalNumber().Equals(true) && GetTypeNumber().Equals("Fractional"))
             {
-                string numerator = GetNumerator(treatment.GetText());
+                ValidateNegativeOrPositiveNumber(treatment.GetText());
+                string numerator = GetNumerator(numberEdited.ToString());
                 if (numerator.Length > 126) throw new InvalidNumber("1");
-                DescomposeIntegerNumber(numerator);
+                TransformIntegerNumber(new StringBuilder(numerator));
             }
-        }
-
-        private string GetIntegerPart(string number)
-        {
-            string integerNumber = "";
-            if (number.Contains("."))
-                integerNumber = number.Substring(0, number.IndexOf("."));
-            else if (number.Contains(","))
-                integerNumber = number.Substring(0, number.IndexOf(","));
-            return integerNumber;
-        }
-
-        private string GetNumerator(string number)
-        {
-            string numerator = "";
-            if (number.Contains("/"))
-                numerator = number.Substring(0, number.IndexOf("/"));
-            return numerator;
-        }
-
-        private void DescomposeIntegerNumber(string dato)
-        {
-            ValidateNegativeOrPositiveNumber(dato);
-            TransformIntegerNumber(numberEdited);
         }
 
         private void ValidateNegativeOrPositiveNumber(string text)
@@ -122,6 +101,24 @@ namespace NumbersTranslatorWebService.Entities
                 numberEdited = new StringBuilder(text.Substring(text.IndexOf("+") + 1));
             else
                 numberEdited.Append(text);
+        }
+
+        private string GetIntegerPart(string number)
+        {
+            string integerNumber = "";
+            if (number.Contains("."))
+                integerNumber = number.Substring(0, number.IndexOf("."));
+            else if (number.Contains(","))
+                integerNumber = number.Substring(0, number.IndexOf(","));
+            return integerNumber;
+        }
+
+        private string GetNumerator(string number)
+        {
+            string numerator = "";
+            if (number.Contains("/"))
+                numerator = number.Substring(0, number.IndexOf("/"));
+            return numerator;
         }
 
         private void TransformIntegerNumber(StringBuilder number)

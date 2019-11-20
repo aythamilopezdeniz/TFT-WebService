@@ -80,7 +80,7 @@ namespace NumbersTranslatorWebService.RulesDB
             SortedListHundredsNumbers.Add("300", "trezentos");
             SortedListHundredsNumbers.Add("400", "quatrocentos");
             SortedListHundredsNumbers.Add("500", "quinhentos");
-            SortedListHundredsNumbers.Add("600", "seisentos");
+            SortedListHundredsNumbers.Add("600", "seiscentos");
             SortedListHundredsNumbers.Add("700", "setecentos");
             SortedListHundredsNumbers.Add("800", "oitocentos");
             SortedListHundredsNumbers.Add("900", "novecentos");
