@@ -16,7 +16,7 @@
     <WcfConfigValidationEnabled>True</WcfConfigValidationEnabled>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <UseIISExpress>true</UseIISExpress>
-    <Use64BitIISExpress />
+    <Use64BitIISExpress>false</Use64BitIISExpress>
     <IISExpressSSLPort />
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
@@ -68,22 +68,24 @@
     <Compile Include="Entities\DecimalNumber.cs" />
     <Compile Include="Entities\Fractional.cs" />
     <Compile Include="Entities\IntegerNumber.cs" />
-    <Compile Include="Entities\InvalidNumber.cs" />
+    <Compile Include="InvalidNumber.cs" />
     <Compile Include="Entities\Multiplicative.cs" />
     <Compile Include="Entities\Number.cs" />
     <Compile Include="Entities\Ordinal.cs" />
     <Compile Include="Entities\Roman.cs" />
-    <Compile Include="Entities\Treatment.cs" />
+    <Compile Include="Treatment.cs" />
     <Compile Include="NumbersTranslatorWebService.svc.cs">
       <DependentUpon>NumbersTranslatorWebService.svc</DependentUpon>
     </Compile>
     <Compile Include="INumbersTranslatorWebService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RulesDB\CardinalRules.cs" />
+    <Compile Include="RulesDB\DecimalRules.cs" />
     <Compile Include="RulesDB\FractionalRules.cs" />
     <Compile Include="RulesDB\MultiplicativeRules.cs" />
     <Compile Include="RulesDB\OrdinalRules.cs" />
     <Compile Include="RulesDB\RomanRules.cs" />
+    <Compile Include="WebService.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

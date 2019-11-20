@@ -1,9 +1,9 @@
-﻿using Entities;
+﻿using System;
+using Entities;
+using System.Text;
 using System.Collections;
 using System.Collections.Generic;
 using NumbersTranslatorWebService.RulesDB;
-using System;
-using System.Text;
 
 namespace NumbersTranslatorWebService.Entities
 {
@@ -27,6 +27,7 @@ namespace NumbersTranslatorWebService.Entities
         private int ParamThousands;
         private StringBuilder ParamMillions;
         private SortedList<string, int> millonsValues;
+        private StringBuilder numberEdited;
 
         public Multiplicative(string dato)
         {
@@ -40,6 +41,7 @@ namespace NumbersTranslatorWebService.Entities
             ParamThousands = 0;
             ParamMillions = new StringBuilder("1");
             millonsValues = new SortedList<string, int>();
+            numberEdited = new StringBuilder("");
         }
 
         public override void Translate(Treatment treatment)
@@ -67,15 +69,27 @@ namespace NumbersTranslatorWebService.Entities
 
         private void DescomposeNumber(Treatment treatment)
         {
-            if (treatment.getIntegerNumber().Equals(true) &&
-                !IsMinusContains(treatment.getText()))
-                TakeApartNumber(new StringBuilder(treatment.getText()));
+            if (treatment.GetIntegerNumber().Equals(true) &&
+                !IsMinusContains(treatment.GetText()))
+            {
+                EditNumber(treatment.GetText());
+                if (numberEdited.Length > 126) throw new InvalidNumber("1");
+                    TakeApartNumber(numberEdited);
+            }
         }
 
         private bool IsMinusContains(string text)
         {
             if (text.StartsWith("-")) return true;
             return false;
+        }
+
+        private void EditNumber(string text)
+        {
+            if (text.StartsWith("+"))
+                numberEdited = new StringBuilder(text.Substring(text.IndexOf("+") + 1));
+            else
+                numberEdited = new StringBuilder(text);
         }
 
         private void TakeApartNumber(StringBuilder number)
@@ -113,9 +127,9 @@ namespace NumbersTranslatorWebService.Entities
                 ParamThousands++;
                 if (ParamMillions.Length < Iter) ParamMillions.Append("0");
                 if (!phrase.Equals(new StringBuilder("")) &&
-                    !number[i].ToString().Equals(new StringBuilder("0"))) phrase.Append(" e ");
+                    !number[i].ToString().Equals("0")) phrase.Append(" e ");
                 if (!alternative.Equals(new StringBuilder("")) &&
-                    !number[i].ToString().Equals(new StringBuilder("0"))) alternative.Append(" e ");
+                    !number[i].ToString().Equals("0")) alternative.Append(" e ");
                 if ((number.Length - 1 - i) > 1)
                 {
                     if (applyMultiplicativeTerm.Equals(true) && Iter.Equals(1) &&
@@ -136,8 +150,10 @@ namespace NumbersTranslatorWebService.Entities
                         else
                         {
                             if (hundreds.ContainsKey(number[i].ToString() + "00"))
+                            {
                                 phrase.Append(hundreds[number[i].ToString() + "00"]);
-                            alternative.Append(hundreds[number[i].ToString() + "00"]);
+                                alternative.Append(hundreds[number[i].ToString() + "00"]);
+                            }
                         }
                     }
                 }
@@ -206,8 +222,8 @@ namespace NumbersTranslatorWebService.Entities
             alternative = CheckTextThousands(alternative);
             CheckTextMillons(phrase);
             ResetParameters();
-            InsertSentence(phrase.ToString());
-            InsertAlternativeSentence(alternative.ToString());
+            InsertSentence(sentence, phrase.ToString());
+            InsertSentence(alternativeSentence, alternative.ToString());
         }
 
         private StringBuilder CheckTextThousands(StringBuilder phrase)
@@ -226,9 +242,9 @@ namespace NumbersTranslatorWebService.Entities
                     else if (Int32.Parse(digits[0].ToString()) == 1)
                     {
                         if (Int32.Parse(digits[1].ToString()) < 100 && Int32.Parse(digits[1].ToString()) > 0)
-                            phrase.Append(" mil e");
+                            phrase = new StringBuilder(" mil e");
                         else if (Int32.Parse(digits[1].ToString()) >= 100 || Int32.Parse(digits[1].ToString()) == 0)
-                            phrase.Append("mil");
+                            phrase = new StringBuilder("mil");
                     }
                 }
             }
@@ -238,7 +254,7 @@ namespace NumbersTranslatorWebService.Entities
         private void CheckTextMillons(StringBuilder phrase)
         {
             string aux = "";
-            if (!phrase.Equals(new StringBuilder("")))
+            if (!phrase.Equals(new StringBuilder("")) && ParamMillions.Length > 6)
             {
                 if (digits.Count.Equals(2))
                 {
@@ -262,7 +278,8 @@ namespace NumbersTranslatorWebService.Entities
                 InsertMillonsValues(name.ToString());
                 InsertMillonsValues(alternativeName.ToString());
                 if (!sentence.Contains(name.ToString()) && !sentence.Contains(CheckPlural(name.ToString())))
-                    InsertSentence(CheckPlural(name.ToString()));
+                    InsertSentence(sentence, CheckPlural(name.ToString()));
+                    //InsertSentence(CheckPlural(name.ToString()));
                 else if (sentence.Contains(name) && millonsValues[name.ToString()] > 1)
                 {
                     int pos = sentence.IndexOf(name.ToString());
@@ -271,7 +288,8 @@ namespace NumbersTranslatorWebService.Entities
                 }
                 if (!alternativeSentence.Contains(alternativeName.ToString()) &&
                     !alternativeSentence.Contains(CheckPlural(alternativeName.ToString())))
-                    InsertAlternativeSentence(CheckPlural(alternativeName.ToString()));
+                    InsertSentence(alternativeSentence, CheckPlural(alternativeName.ToString()));
+                    //InsertAlternativeSentence(CheckPlural(alternativeName.ToString()));
                 else if (alternativeSentence.Contains(alternativeName.ToString()) &&
                     millonsValues[alternativeName.ToString()] > 1)
                 {
@@ -324,27 +342,44 @@ namespace NumbersTranslatorWebService.Entities
             }
         }
 
-        private void InsertSentence(string phrase)
+        private void InsertSentence(ArrayList list, string phrase)
         {
-            sentence.Insert(0, phrase);
+            list.Insert(0, phrase);
         }
 
-        private void InsertAlternativeSentence(string phrase)
+        public override List<string> GetResults()
         {
-            alternativeSentence.Insert(0, phrase);
+            List<string> results = new List<string>();
+            string firtsResult = GetSentence(sentence);
+            string secondResult = GetSentence(alternativeSentence);
+            if (firtsResult.Equals("")) return new List<string>();
+            if (secondResult.Equals("")) return new List<string>() { firtsResult };
+            if (IsSentencesEquals(firtsResult, secondResult))
+                results.Add(firtsResult);
+            else
+            {
+                results.Add(firtsResult);
+                results.Add(secondResult);
+            }
+            return results;
         }
 
-        public override string GetSentence()
+        public string GetSentence(ArrayList list)
         {
             StringBuilder phrase = new StringBuilder("");
-            foreach (var item in sentence)
+            foreach (var item in list)
             {
-                if (!item.Equals(new StringBuilder("")))
+                if (!item.Equals(""))
                     phrase.Append(item + " ");
             }
             if (phrase.Equals(new StringBuilder(""))) return "";
-            if (Vezes.Equals(true)) phrase.Append(" vezes");
+            if (Vezes.Equals(true)) phrase.Append("vezes");
             return (char.ToUpper(phrase[0]) + phrase.ToString().Substring(1)).Trim();
+        }
+
+        private bool IsSentencesEquals(string firstResult, string secondResult)
+        {
+            return firstResult.Equals(secondResult);
         }
     }
 }
